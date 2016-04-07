@@ -43,3 +43,14 @@ Go to
 http://localhost:1337
 ```
 
+## Some tips
+For live-coding we recommend to use nodemon
+```
+sudo npm install -g nodemon
+```
+on Windows or Mac OS
+```
+npm install -g nodemon
+```
+Afterwords, you do not need to run `sails lift` but just `nodemon`
+
