@@ -23,7 +23,7 @@ module.exports = {
       type: 'integer',
       defaultsTo: 0
     },
-    password: {
+    pass: {
       type: 'string'
     }
 
