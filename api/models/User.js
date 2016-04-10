@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  connection: 'mongo',
   attributes: {
     name: {
       type: 'string',
@@ -29,4 +29,3 @@ module.exports = {
 
   }
 };
-
