@@ -3,10 +3,13 @@
 A backend app for the Replay project
 
 ## Features
+* Customer model
+    + List all customers
+    + Create a new customer
+    + Show certain customer
 * User model
-    + List all users
-    + Create a new user
-    + Show certain user
+* Authentication
+    + Google Oauth 2.0
 
 ## Installation
 Install sails globally
