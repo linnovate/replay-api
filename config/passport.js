@@ -19,7 +19,7 @@ passport.deserializeUser(function(id, next) {
 passport.use(new GoogleStrategy({
     clientID: '726385581494-3te31aa3t09polsm5paeg4eeh9qgbcgl.apps.googleusercontent.com',
     clientSecret: 'R83YWn4E5mObpeN7Fn6AKYPY',
-    callbackURL: "http://server.me:1337/auth/google/callback"
+    callbackURL: "http://localhost:1337/auth/google/callback"
   },
   function (accessToken, refreshToken, profile, done) {
     console.log('accessToken', accessToken);
