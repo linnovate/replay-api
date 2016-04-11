@@ -34,6 +34,14 @@ module.exports.routes = {
 
   '/': {
     view: 'static/home'
+  },
+  '/auth/google':{
+    controller: 'auth',
+    action: 'google'
+  },
+  '/auth/google/callback':{
+    controller: 'auth',
+    action: 'googleCallback'
   }
 
   /***************************************************************************
