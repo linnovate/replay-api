@@ -43,6 +43,28 @@ Go to
 http://localhost:1337
 ```
 
+## Authentication
+
+### Google Oauth 2.0
+Google Oauth credentials and some logic stored in `config/passport.js'
+
+#### Login
+Go to
+```
+/auth/login
+```
+Walk over the auth process
+Go to see that you are logged-in:
+```
+/user/me
+```
+####  Logout
+```
+/auth/logout
+```
+
+Note! Policies are not implemented
+
 ## Some tips
 For live-coding we recommend to use nodemon
 ```
