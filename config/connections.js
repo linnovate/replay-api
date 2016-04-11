@@ -59,7 +59,7 @@ module.exports.connections = {
   mongo: {
     adapter: 'sails-mongo',
     host: 'localhost',
-    port: 27017,  
+    port: 27017,
     database: 'replay' //optional
   },
 

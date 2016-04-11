@@ -1,7 +1,7 @@
 /**
- * UserController
+ * CustomerController
  *
- * @description :: Server-side logic for managing users
+ * @description :: Server-side logic for managing customers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
@@ -12,30 +12,30 @@ module.exports = {
   },
 
 	create: function (req, res, next) {
-    User.create(req.params.all(), function userCreated(err, user) {
+    Customer.create(req.params.all(), function customerCreated(err, customer) {
       if (err) return next(err);
 
-      res.redirect(302, '/user/show/' + user.id);
+      res.redirect(302, '/customer/show/' + customer.id);
     });
   },
 
 	show: function (req, res, next) {
-    User.findOne(req.param('id'), function foundUser(err, user) {
+    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
       if (err) return next(err);
-      if (!user) return next();
+      if (!customer) return next();
 
       res.view({
-        user: user
+        customer: customer
       });
     });
   },
 
   index: function (req, res, next) {
-    User.find(function foundUsers(err, users) {
+    Customer.find(function foundCustomers(err, customers) {
       if (err) return next(err);
 
       res.view({
-        users: users
+        customers: customers
       });
     });
   }
