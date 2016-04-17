@@ -79,3 +79,4 @@ npm install -g nodemon
 ```
 Afterwords, you do not need to run `sails lift` but just `nodemon`
 
+- just a test by lior
