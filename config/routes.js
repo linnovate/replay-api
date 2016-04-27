@@ -20,6 +20,8 @@
  * http://sailsjs.org/#!/documentation/concepts/Routes/RouteTargetSyntax.html
  */
 
+blueprints = require('./blueprints').blueprints;
+
 module.exports.routes = {
 
   /***************************************************************************
@@ -32,13 +34,16 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  
   '/': {
     view: 'static/home'
   },
+
   '/auth/google':{
     controller: 'auth',
     action: 'google'
   },
+
   '/auth/google/callback':{
     controller: 'auth',
     action: 'googleCallback'
@@ -55,3 +60,20 @@ module.exports.routes = {
   ***************************************************************************/
 
 };
+
+// manually add prefixes to custom defined routes starts with ~,
+// as sails does so only for the routes defined via blueprints
+// function addPrefixes(prefixes){
+//   result = {};
+
+//   for(var prefix in prefixes){
+//     // append prefix
+//     if(~prefix.startsWith('~'))
+//       result[ blueprints.restPrefix + prefix ] = prefixes[prefix];
+//     // do not append prefix
+//     else
+//       result[prefix.substr(1)] = prefixes[prefix];
+//   };
+
+//   return result;
+// }
