@@ -17,9 +17,9 @@ passport.deserializeUser(function(id, next) {
 //  credentials (in this case, an accessToken, refreshToken, and Google
 //  profile), and invoke a callback with a user object.
 passport.use(new GoogleStrategy({
-    clientID: '726385581494-3te31aa3t09polsm5paeg4eeh9qgbcgl.apps.googleusercontent.com',
-    clientSecret: 'R83YWn4E5mObpeN7Fn6AKYPY',
-    callbackURL: "http://localhost:1337/auth/google/callback"
+    clientID: sails.config.settings.services.google.clientID,
+    clientSecret: sails.config.settings.services.google.secret,
+    callbackURL: sails.config.settings.baseUrl + "/auth/google/callback"
   },
   function (accessToken, refreshToken, profile, done) {
     console.log('accessToken', accessToken);
