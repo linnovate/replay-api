@@ -32,10 +32,17 @@ module.exports = {
     services: {
       kaltura: {
         url: 'http://www.kaltura.com',
-        partner_id: 2119431
+        partner_id: 2119431,
+        
       },
       google: {
         clientID: '726385581494-3te31aa3t09polsm5paeg4eeh9qgbcgl.apps.googleusercontent.com'
+      },
+      wowza: {
+        url: 'http://vod.linnovate.net',
+        port: '1935',
+        appName: 'weplay',
+        contentDirectory: 'kaltura_content'
       }
     },
 

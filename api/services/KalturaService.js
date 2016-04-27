@@ -19,7 +19,6 @@ module.exports = {
 			sails.KalturaClient.media.get(callback, id);
 		});
 	}
-
 }
 
 function initialize(){

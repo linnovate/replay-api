@@ -22,7 +22,7 @@
 
 blueprints = require('./blueprints').blueprints;
 
-module.exports.routes = {
+module.exports.routes = addPrefixes({
 
   /***************************************************************************
   *                                                                          *
@@ -47,7 +47,9 @@ module.exports.routes = {
   '/auth/google/callback':{
     controller: 'auth',
     action: 'googleCallback'
-  }
+  },
+
+  'get <restPrefix>/dash/mpd/:id': 'DashController.mpd'
 
   /***************************************************************************
   *                                                                          *
@@ -59,21 +61,21 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-};
+});
 
 // manually add prefixes to custom defined routes starts with ~,
 // as sails does so only for the routes defined via blueprints
-// function addPrefixes(prefixes){
-//   result = {};
+function addPrefixes(prefixes){
+  result = {};
 
-//   for(var prefix in prefixes){
-//     // append prefix
-//     if(~prefix.startsWith('~'))
-//       result[ blueprints.restPrefix + prefix ] = prefixes[prefix];
-//     // do not append prefix
-//     else
-//       result[prefix.substr(1)] = prefixes[prefix];
-//   };
-
-//   return result;
-// }
+  for(var prefix in prefixes){
+    // append prefix
+    if(prefix.indexOf('<restPrefix>') > -1)
+      result[ prefix.replace('<restPrefix>', blueprints.restPrefix) ] = prefixes[prefix];
+    // do not append prefix
+    else
+      result[prefix] = prefixes[prefix];
+  };
+  
+  return result;
+}
