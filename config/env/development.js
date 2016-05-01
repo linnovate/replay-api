@@ -11,6 +11,7 @@
  */
 var blueprints = require('.././blueprints').blueprints;
 var port = process.env.PORT || 1337;
+var baseUrl = 'http://localhost';
 
 module.exports = {
 
@@ -26,8 +27,8 @@ module.exports = {
   port: port,
 
   settings: {
-  	baseUrl: 'http://localhost:' + port,
-  	apiUrl: 'http://localhost:' + port + blueprints.restPrefix,
+  	baseUrl: baseUrl + ':' + port,
+  	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
     services: {
       kaltura: {
@@ -44,8 +45,18 @@ module.exports = {
         appName: 'weplay',
         contentDirectory: 'kaltura_content'
       }
-    },
+    }
 
+  },
+
+  swagger: {
+    /**
+     * require() the package.json file for your Sails app.
+     */
+    pkg: require('../.././package'),
+    ui: {
+      url: baseUrl + ':' + port + '/docs'
+    }
   }
 
 };

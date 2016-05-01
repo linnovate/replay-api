@@ -29,7 +29,8 @@
     "request": "^2.72.0",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
-    "sails-mongo": "^0.12.0"
+    "sails-mongo": "^0.12.0",
+    "sails-swagger": "^0.5.1"
   },
   "scripts": {
     "debug": "node debug app.js",
@@ -41,5 +42,8 @@
     "url": "git://github.com/alexander/replay.git"
   },
   "author": "alexander",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "swagger-ui": "^2.1.4"
+  }
 }
