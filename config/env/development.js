@@ -32,8 +32,8 @@ module.exports = {
 
     services: {
       kaltura: {
-        url: 'http://www.kaltura.com',
-        partner_id: 2119431,
+        url: 'http://vod.linnovate.net',
+        partner_id: 101,
         
       },
       google: {

@@ -44,7 +44,7 @@ function getVideo(id){
 }
 
 function getMpdFromWowza(video){
-	var path = video.relativePath + '/' + video.name;
+	var path = video.relativePath;
 	// var path = 'sample.mp4';
 	return WowzaService.getMpd(path);
 }
