@@ -35,9 +35,9 @@ module.exports.http = {
      order: [
        'startRequestTimer',
        'cookieParser',
-       'session',
+       //'session',
        'passportInit',
-       'passportSession',
+       //'passportSession',
        'myRequestLogger',
        'bodyParser',
        'handleBodyParserError',
@@ -54,7 +54,7 @@ module.exports.http = {
 
 
     passportInit: passport.initialize(),
-    passportSession : passport.session(),
+    //passportSession : passport.session(),
 
   /****************************************************************************
   *                                                                           *

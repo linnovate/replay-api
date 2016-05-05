@@ -18,6 +18,9 @@
 
 
 module.exports.policies = {
+  customerController: {
+    index : ['googleAuth']
+  }
 
   /***************************************************************************
   *                                                                          *
