@@ -14,6 +14,7 @@ module.exports = {
 		getVideo(id)
 		.then(getMpdFromWowza)
 		.then(function(mpd){
+      res.setHeader('Content-Type', 'application/dash+xml');
 			res.ok(mpd);
 		})
 		.catch(function(err){
@@ -29,7 +30,13 @@ module.exports = {
 
 
 
-function getVideo(id){
+function getVideo(idRaw){
+  var splitted = idRaw.split('.'),
+      id;
+  if (splitted.length != 2) throw new Error('video url is not correct');
+  if (splitted[1] != 'mpd') throw new Error('video url is not correct');
+
+  id = splitted[0];
 	return Video
 			.findOne({id: id})
 			.then(function(video){
