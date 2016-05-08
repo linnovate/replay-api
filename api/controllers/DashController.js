@@ -14,8 +14,9 @@ module.exports = {
 		getVideo(id)
 		.then(getMpdFromWowza)
 		.then(function(mpd){
-      res.setHeader('Content-Type', 'application/dash+xml');
-			res.ok(mpd);
+
+      //res.setHeader('Content-Type', 'application/dash+xml');
+			res.json({url: mpd});
 		})
 		.catch(function(err){
 			if(err){
@@ -26,17 +27,11 @@ module.exports = {
 			res.serverError('There was an unexpected error retrieving mpd file.');
 		});
 	}
-}
+};
 
 
 
-function getVideo(idRaw){
-  var splitted = idRaw.split('.'),
-      id;
-  if (splitted.length != 2) throw new Error('video url is not correct');
-  if (splitted[1] != 'mpd') throw new Error('video url is not correct');
-
-  id = splitted[0];
+function getVideo(id){
 	return Video
 			.findOne({id: id})
 			.then(function(video){
@@ -52,7 +47,6 @@ function getVideo(idRaw){
 
 function getMpdFromWowza(video){
 	var path = video.relativePath;
-	// var path = 'sample.mp4';
 	return WowzaService.getMpd(path);
 }
 
