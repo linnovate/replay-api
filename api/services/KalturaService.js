@@ -1,4 +1,4 @@
-var kaltura = require('kaltura'),
+var kaltura = require('./kaltura'),
     Promise = require('bluebird');
 
 module.exports = {
