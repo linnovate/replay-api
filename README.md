@@ -46,6 +46,10 @@ Go to
 http://localhost:1337
 ```
 
+## Swagger
+go to http://localhost:1337/swagger/ui
+
+
 ## Authentication
 
 ### Google Oauth 2.0
