@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<systemList>
+   <system id="sys1">
+      <name>System 1</name>
+      <level>3</level>
+      <info>Bla Bla...</info>
+   </system>
+   <system id="sys2">
+      <name>System 2</name>
+      <level>3</level>
+      <info>Bla Bla...</info>
+   </system>
+   <system id="sys3">
+      <name>System 3</name>
+      <level>3</level>
+      <info>Bla Bla...</info>
+   </system>
+</systemList>
