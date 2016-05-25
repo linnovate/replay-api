@@ -18,8 +18,8 @@
 
 
 module.exports.policies = {
-  customerController: {
-    index : ['googleAuth']
+  VideoController: {
+    '*' : ['googleAuth']
   }
 
   /***************************************************************************
