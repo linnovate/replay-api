@@ -34,20 +34,15 @@ module.exports.routes = addPrefixes({
   *                                                                          *
   ***************************************************************************/
 
-  
+
   '/': {
     view: 'static/home'
   },
 
-  '/auth/google':{
+/*  '/auth/google':{
     controller: 'auth',
     action: 'google'
-  },
-
-  '/auth/google/callback':{
-    controller: 'auth',
-    action: 'googleCallback'
-  },
+  },*/
 
   'get <restPrefix>/dash/mpd/:id': 'DashController.mpd'
 
@@ -76,6 +71,6 @@ function addPrefixes(prefixes){
     else
       result[prefix] = prefixes[prefix];
   };
-  
+
   return result;
 }
