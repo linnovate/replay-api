@@ -14,7 +14,7 @@ module.exports = {
 					 + appName + '/_definst_/' + dir
 					 + '/' + path + '/manifest.mpd';
 
-      return resolve(url);
+      		return resolve(url);
 		});
 	}
 };

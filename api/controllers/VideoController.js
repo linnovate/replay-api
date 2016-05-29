@@ -24,10 +24,9 @@ module.exports = {
 
 	create: function(req, res, next){
 		var path = req.body.path; // 'some/path/in/storage'
-		var entryId = req.body.entryId;
 
-		if(!entryId || !path){
-			return res.badRequest('path or entryId is empty');
+		if(!path){
+			return res.badRequest('path is empty');
 		}
 
 		// remove leading and trailing slashes if exist
@@ -39,35 +38,35 @@ module.exports = {
 		// ******************************************
 
 
-		// KalturaService.addVideo('grb_1.mpg');
-		// res.ok();
+		KalturaService.addVideo(path);
+		res.ok();
 
-		KalturaService.getVideo(entryId)
-		.then(function(video){
-			console.log('Got video from kaltura: ', video);
+		// KalturaService.getVideo('0_rxbp6mdb')
+		// .then(function(video){
+		// 	console.log('Got video from kaltura: ', video);
 
-			Video.create({
-			  	provider: 'kaltura',
-			  	providerId: video.id,
-			  	relativePath: path,
-			  	name: video.name,
-			  	providerData: video
+		// 	Video.create({
+		// 	  	provider: 'kaltura',
+		// 	  	providerId: video.id,
+		// 	  	relativePath: 'sample.mp4',
+		// 	  	name: video.name,
+		// 	  	providerData: video
 			  	
-			  }, function(err, obj){
-			  	if(err) {
-			  		console.log(err);
-			  		return next(err);
-			  	}
+		// 	  }, function(err, obj){
+		// 	  	if(err) {
+		// 	  		console.log(err);
+		// 	  		return next(err);
+		// 	  	}
 
-			  	console.log("Successfuly created a video...");
-			  	res.ok(obj.id);
-			  });
-		})
-		.catch(function(err){
-			if(err) console.log(err);
+		// 	  	console.log("Successfuly created a video...");
+		// 	  	res.ok(obj.id);
+		// 	  });
+		// })
+		// .catch(function(err){
+		// 	if(err) console.log(err);
 
-			res.serverError("Failed creating the video");
-		});
+		// 	res.serverError("Failed creating the video");
+		// });
 	}
 };
 

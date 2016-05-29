@@ -18,25 +18,39 @@ module.exports = {
         });
     },
 
-    // addVideo: function(referenceId) {
+    addVideo: function(path) {
+        return new Promise(function(resolve, reject) {
+            // add media entry and then add the actual video content to media entry
+            addMediaEntry()
+                .then(function(mediaEntry) {
+                    return addContentToMedia(mediaEntry.id, path);
+                })
+                .catch(function(err) {
+                    if (err) {
+                        reject(err);
+                    }
+                });
+        });
+    }
+}
 
-    // 	var kalturaMediaEntry = new kaltura.vo.KalturaMediaEntry();
+function addContentToMedia(entryId, path) {
+    var kalturaResource = new kaltura.vo.KalturaServerFileResource();    
+    kalturaResource.localFilePath = path;
 
-    // 	kalturaMediaEntry.referenceId = referenceId;
-    // 	kalturaMediaEntry.mediaType = kaltura.kc.enums.KalturaMediaType.VIDEO;
+    return new Promise(function(resolve, reject) {
+        sails.KalturaClient.media.addContent(kalturaResultCallback(resolve, reject), entryId, kalturaResource);
+    });
+}
 
-    //     return new Promise(function(resolve, reject) {
-    //         sails.KalturaClient.media.add(function(result) {
-    //         	console.log(result);
-    //             if (result.code) {
-    //                 console.log(result);
-    //                 reject(new Error(result.message));
-    //             } else {
-    //                 resolve(result);
-    //             }
-    //         }, kalturaMediaEntry);
-    //     });
-    // }
+function addMediaEntry() {
+
+    var kalturaMediaEntry = new kaltura.vo.KalturaMediaEntry();
+    kalturaMediaEntry.mediaType = kaltura.kc.enums.KalturaMediaType.VIDEO;
+
+    return new Promise(function(resolve, reject) {
+        sails.KalturaClient.media.add(kalturaResultCallback(resolve, reject), kalturaMediaEntry);
+    });
 }
 
 function initialize() {
@@ -86,4 +100,16 @@ function createKalturaClient() {
     var client = new kaltura.kc.KalturaClient(kaltura_conf);
 
     return client;
+}
+
+var kalturaResultCallback = function(resolve, reject) {
+	return function(result){
+		console.trace("Recieved a result: ", result);
+	    if (result.code) {
+	    	reject(new Error(result.message));
+	    }
+	    else{
+	    	resolve(result);
+	    }
+	};
 }

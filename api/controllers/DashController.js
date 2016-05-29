@@ -29,8 +29,6 @@ module.exports = {
 	}
 };
 
-
-
 function getVideo(id){
 	return Video
 			.findOne({id: id})
