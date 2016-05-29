@@ -1,23 +1,20 @@
-<?xml version="1.0"?>
-<systemList>
-   <system id="sys1">
-      <name>System 1</name>
-      <level>4</level>
-      <info>Bla Bla...</info>
-   </system>
-   <system id="sys2">
-      <name>System 2</name>
-      <level>4</level>
-      <info>Bla Bla...</info>
-   </system>
-   <system id="sys3">
-      <name>System 3</name>
-      <level>4</level>
-      <info>Bla Bla...</info>
-   </system>
-   <system id="sys4">
-      <name>System 4</name>
-      <level>4</level>
-      <info>Bla Bla...</info>
-   </system>
-</systemList>
+<permissions>
+   <allow>
+      <userPermission>
+         <id>System 1</id>
+         <level>4</level>
+      </userPermission>
+      <userPermission>
+         <id>System 2</id>
+         <level>4</level>
+      </userPermission>
+      <userPermission>
+         <id>System 3</id>
+         <level>4</level>
+      </userPermission>
+      <userPermission>
+         <id>System 4</id>
+         <level>4</level>
+      </userPermission>
+   </allow>
+</permissions>
