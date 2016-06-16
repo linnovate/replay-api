@@ -19,18 +19,18 @@ module.exports = {
 			if(err) next(err);
 
 			res.ok(video);
-		})
-	},
+		});
+	}
 
-	create: function(req, res, next){
-		var path = req.body.path; // 'some/path/in/storage'
+	// create: function(req, res, next){
+	// 	var path = req.body.path; // 'some/path/in/storage'
 
-		if(!path){
-			return res.badRequest('path is empty');
-		}
+	// 	if(!path){
+	// 		return res.badRequest('path is empty');
+	// 	}
 
 		// remove leading and trailing slashes if exist
-		path = fixPath(path);
+		// path = fixPath(path);
 		
 		// ******************************************
 		// we should check what is our video CMS.
@@ -38,8 +38,8 @@ module.exports = {
 		// ******************************************
 
 
-		KalturaService.addVideo(path);
-		res.ok();
+		// KalturaService.addVideo(path);
+		// res.ok();
 
 		// KalturaService.getVideo('0_rxbp6mdb')
 		// .then(function(video){
@@ -67,17 +67,17 @@ module.exports = {
 
 		// 	res.serverError("Failed creating the video");
 		// });
-	}
-};
+	// }
+}
 
 // we want the path to match the following structure:
 // path/to/certain/file, so strip leading and trailing '/' if exist
-var fixPath = function(path){
-	if(path.startsWith('/'))
-		path = path.substr(1);
-	if(path.endsWith('/'))
-		path = path.substr(0, path.length - 1)
+// var fixPath = function(path){
+// 	if(path.startsWith('/'))
+// 		path = path.substr(1);
+// 	if(path.endsWith('/'))
+// 		path = path.substr(0, path.length - 1)
 
-	return path;
-}
+// 	return path;
+// }
 

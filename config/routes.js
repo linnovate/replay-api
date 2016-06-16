@@ -44,7 +44,9 @@ module.exports.routes = addPrefixes({
     action: 'google'
   },*/
 
-  'get <restPrefix>/dash/mpd/:id': 'DashController.mpd'
+  'get <restPrefix>/dash/mpd/:id': 'DashController.mpd',
+
+  'post <internalPrefix>/kaltura/upload_callback' : 'KalturaController.onUploadFinished',
 
   /***************************************************************************
   *                                                                          *
@@ -58,15 +60,18 @@ module.exports.routes = addPrefixes({
 
 });
 
-// manually add prefixes to custom defined routes starts with ~,
+// manually add prefixes to custom defined routes starts with <restPrefix>,
 // as sails does so only for the routes defined via blueprints
 function addPrefixes(prefixes){
   result = {};
 
   for(var prefix in prefixes){
-    // append prefix
+    // append rest prefix
     if(prefix.indexOf('<restPrefix>') > -1)
       result[ prefix.replace('<restPrefix>', blueprints.restPrefix) ] = prefixes[prefix];
+    // append internal prefix
+    else if(prefix.indexOf('<internalPrefix>') > -1)
+      result[ prefix.replace('<internalPrefix>', blueprints.restPrefix + blueprints.internalPrefix) ] = prefixes[prefix];
     // do not append prefix
     else
       result[prefix] = prefixes[prefix];
