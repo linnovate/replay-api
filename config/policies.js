@@ -19,7 +19,7 @@
 
 module.exports.policies = {
   VideoController: {
-    '*' : ['googleAuth']
+    '*' : ['jwtAuth']
   }
 
   /***************************************************************************
