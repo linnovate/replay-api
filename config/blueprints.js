@@ -110,6 +110,9 @@ module.exports.blueprints = {
 
    restPrefix: '/api/v0.1',
 
+   // custom prefix, manually injected in routes.js
+   internalPrefix: '/internal',
+
   /***************************************************************************
   *                                                                          *
   * Whether to pluralize controller names in blueprint routes.               *

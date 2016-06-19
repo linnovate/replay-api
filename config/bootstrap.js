@@ -8,6 +8,7 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
+var KalturaService = require('KalturaService');
 
 module.exports.bootstrap = function(cb) {
 
