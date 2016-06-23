@@ -30,14 +30,14 @@ module.exports = {
   	baseUrl: baseUrl + ':' + port,
   	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
+    token_secret: 'gbrejhgkjrehogi54yu89u9nk8',
+    google_secret: 'R83YWn4E5mObpeN7Fn6AKYPY',
+
     services: {
       kaltura: {
         url: 'http://vod.linnovate.net',
         partner_id: 101,
-        
-      },
-      google: {
-        clientID: '726385581494-3te31aa3t09polsm5paeg4eeh9qgbcgl.apps.googleusercontent.com'
+
       },
       wowza: {
         url: 'http://vod.linnovate.net',

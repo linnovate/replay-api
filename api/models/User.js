@@ -8,25 +8,26 @@
 module.exports = {
 
   attributes: {
-    name: {
-      type: 'string',
-      required: true
-    },
     email: {
       type: 'string',
       email: true,
       unique: true,
       required: true
     },
-    provider: {
-      type: 'string'
-    },
-    providerId: {
-      type: 'string'
-    },
     password: {
+      type: 'string'
+    },
+    displayName: {
+      type: 'string'
+    },
+    picture: {
+      type: 'string'
+    },
+    google: {
+      type: 'string'
+    },
+    facebook: {
       type: 'string'
     }
   }
 };
-

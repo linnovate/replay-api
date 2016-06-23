@@ -39,10 +39,10 @@ module.exports.routes = addPrefixes({
     view: 'static/home'
   },
 
-/*  '/auth/google':{
+  '/auth/google': {
     controller: 'auth',
-    action: 'google'
-  },*/
+    action: 'googleCallback'
+  },
 
   'get <restPrefix>/dash/mpd/:id': 'DashController.mpd',
 
