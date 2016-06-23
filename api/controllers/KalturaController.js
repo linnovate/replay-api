@@ -1,5 +1,5 @@
-var BusService = require('BusService'),
-    JobsService = require('JobsService');
+var BusService = require('replay-bus-service'),
+    JobsService = require('replay-jobs-service');
 
 // have to pre-define the video file exetnsions since Kaltura providers only the name without the extension.
 var videoFileExtension = '.ts';
