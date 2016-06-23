@@ -36,7 +36,7 @@
     "sails-swagger": "^0.5.1",
     "xml2js": "^0.4.16",
     "replay-bus-service": "./replay-common/replay-bus-service",
-    "replay-jops-service": "./replay-common/replay-jobs-service"
+    "replay-jobs-service": "./replay-common/replay-jobs-service"
   },
   "scripts": {
     "debug": "node debug app.js",
