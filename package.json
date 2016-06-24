@@ -10,6 +10,7 @@
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.3.5",
     "ejs": "2.3.4",
+    "elasticsearch": "^11.0.1",
     "grunt": "0.4.5",
     "grunt-contrib-clean": "0.6.0",
     "grunt-contrib-coffee": "0.13.0",
@@ -29,14 +30,14 @@
     "passport": "^0.3.2",
     "passport-google-id-token": "bora89/passport-google-id-token",
     "rc": "1.0.1",
+    "replay-bus-service": "./replay-common/replay-bus-service",
+    "replay-jobs-service": "./replay-common/replay-jobs-service",
     "request": "^2.72.0",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.0",
     "sails-swagger": "^0.5.1",
-    "xml2js": "^0.4.16",
-    "replay-bus-service": "./replay-common/replay-bus-service",
-    "replay-jobs-service": "./replay-common/replay-jobs-service"
+    "xml2js": "^0.4.16"
   },
   "scripts": {
     "debug": "node debug app.js",

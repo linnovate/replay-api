@@ -6,78 +6,29 @@
  */
 
 module.exports = {
-	find: function(req, res, next){
-		Video.find({}, function(err, videos){
-			if(err) next(err);
+  find: function (req, res, next) {
+    Video.find({}, function (err, videos) {
+      if (err) next(err);
 
-			res.ok(videos);
-		});
-	},
+      res.ok(videos);
+    });
+  },
 
-	findOne: function(req, res, next){
-		Video.findOne({id: req.params.id}, function(err, video){
-			if(err) next(err);
+  findOne: function (req, res, next) {
+    Video.findOne({id: req.params.id}, function (err, video) {
+      if (err) next(err);
 
-			res.ok(video);
-		});
-	}
+      res.ok(video);
+    });
+  },
 
-	// create: function(req, res, next){
-	// 	var path = req.body.path; // 'some/path/in/storage'
+  searchByDistance: function (req, res, next) {
+    ElasticSearchService.searchByDistance(32.100981, 34.811919, '40km', function (searchRes) {
+      searchRes.forEach(function (r) {
+        console.log("r", r._source.name);
+      });
+      res.ok(searchRes);
+    })
+  }
 
-	// 	if(!path){
-	// 		return res.badRequest('path is empty');
-	// 	}
-
-		// remove leading and trailing slashes if exist
-		// path = fixPath(path);
-		
-		// ******************************************
-		// we should check what is our video CMS.
-		// if it's Kaltura, then add to Kaltura
-		// ******************************************
-
-
-		// KalturaService.addVideo(path);
-		// res.ok();
-
-		// KalturaService.getVideo('0_rxbp6mdb')
-		// .then(function(video){
-		// 	console.log('Got video from kaltura: ', video);
-
-		// 	Video.create({
-		// 	  	provider: 'kaltura',
-		// 	  	providerId: video.id,
-		// 	  	relativePath: 'sample.mp4',
-		// 	  	name: video.name,
-		// 	  	providerData: video
-			  	
-		// 	  }, function(err, obj){
-		// 	  	if(err) {
-		// 	  		console.log(err);
-		// 	  		return next(err);
-		// 	  	}
-
-		// 	  	console.log("Successfuly created a video...");
-		// 	  	res.ok(obj.id);
-		// 	  });
-		// })
-		// .catch(function(err){
-		// 	if(err) console.log(err);
-
-		// 	res.serverError("Failed creating the video");
-		// });
-	// }
-}
-
-// we want the path to match the following structure:
-// path/to/certain/file, so strip leading and trailing '/' if exist
-// var fixPath = function(path){
-// 	if(path.startsWith('/'))
-// 		path = path.substr(1);
-// 	if(path.endsWith('/'))
-// 		path = path.substr(0, path.length - 1)
-
-// 	return path;
-// }
-
+};

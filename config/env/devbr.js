@@ -11,7 +11,7 @@
  */
 var blueprints = require('.././blueprints').blueprints;
 var port = process.env.PORT || 1337;
-var baseUrl = 'http://localhost';
+var baseUrl = 'http://server.me';
 
 module.exports = {
 
@@ -27,7 +27,7 @@ module.exports = {
   port: port,
 
   settings: {
-    host: baseUrl,
+  	host: baseUrl,
   	baseUrl: baseUrl + ':' + port,
   	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
