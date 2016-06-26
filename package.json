@@ -29,19 +29,18 @@
     "passport": "^0.3.2",
     "passport-google-id-token": "bora89/passport-google-id-token",
     "rc": "1.0.1",
+    "replay-bus-service": "^1.0.0",
+    "replay-jobs-service": "^1.0.0",
     "request": "^2.72.0",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.0",
     "sails-swagger": "^0.5.1",
-    "xml2js": "^0.4.16",
-    "replay-bus-service": "./replay-common/replay-bus-service",
-    "replay-jops-service": "./replay-common/replay-jobs-service"
+    "xml2js": "^0.4.16"
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
-    "preinstall": "rm -rf replay-common && git clone https://github.com/linnovate/replay-common.git"
+    "start": "node app.js"
   },
   "main": "app.js",
   "repository": {
