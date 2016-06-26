@@ -24,9 +24,6 @@ module.exports = {
 
   searchByDistance: function (req, res, next) {
     ElasticSearchService.searchByDistance(32.100981, 34.811919, '40km', function (searchRes) {
-      searchRes.forEach(function (r) {
-        console.log("r", r._source.name);
-      });
       res.ok(searchRes);
     })
   }

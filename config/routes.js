@@ -45,6 +45,7 @@ module.exports.routes = addPrefixes({
   },
 
   'get <restPrefix>/dash/mpd/:id': 'DashController.mpd',
+  'get <restPrefix>/video/search-by-dist': 'VideoController.searchByDistance',
 
   'post <internalPrefix>/kaltura/upload_callback' : 'KalturaController.onUploadFinished',
 
