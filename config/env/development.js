@@ -11,7 +11,7 @@
  */
 var blueprints = require('.././blueprints').blueprints;
 var port = process.env.PORT || 1337;
-var baseUrl = 'http://localhost';
+var baseUrl = process.env.BASE_URL || 'http://localhost';
 
 module.exports = {
 
@@ -31,20 +31,20 @@ module.exports = {
   	baseUrl: baseUrl + ':' + port,
   	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
-    token_secret: 'gbrejhgkjrehogi54yu89u9nk8',
-    google_secret: 'R83YWn4E5mObpeN7Fn6AKYPY',
+    token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
+    google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
 
     services: {
       kaltura: {
-        url: 'http://vod.linnovate.net',
-        partner_id: 101,
+        url: process.env.KALTURA_URL || 'http://vod.linnovate.net',
+        partner_id: process.env.KALTURA_PARTNER_ID || 101,
 
       },
       wowza: {
-        url: 'http://vod.linnovate.net',
-        port: '1935',
-        appName: 'weplay',
-        contentDirectory: 'kaltura_content'
+        url: process.env.WOWZA_URL || 'http://vod.linnovate.net',
+        port: process.env.WOWZA_PORT || '1935',
+        appName: process.env.WOWZA_APP_NAME || 'weplay',
+        contentDirectory: process.env.WOWZA_CONTENT_DIR || 'kaltura_content'
       }
     }
 

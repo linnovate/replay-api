@@ -41,6 +41,20 @@ Run the app
 ```
 sails lift
 ```
+Possible environment variables:
+BASE_URL // e.g. http://localhost
+PORT
+REDIS_HOST
+REDIS_PORT
+KALTURA_URL
+KALTURA_PARTNER_ID
+WOWZA_URL
+WOWZA_PORT
+WOWZA_APP_NAME
+WOWZA_CONTENT_DIR
+TOKEN_SECRET
+GOOGLE_SECRET
+
 Go to
 ```
 http://localhost:1337
@@ -83,4 +97,3 @@ npm install -g nodemon
 ```
 Afterwords, you do not need to run `sails lift` but just `nodemon`
 
-- just a test by lior
