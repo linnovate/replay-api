@@ -34,6 +34,8 @@ module.exports = {
     token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
     google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
 
+    elasticStreamIndex: 'replay_stream_samples',
+
     services: {
       kaltura: {
         url: process.env.KALTURA_URL || 'http://vod.linnovate.net',

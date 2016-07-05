@@ -34,6 +34,8 @@ module.exports = {
     token_secret: 'gbrejhgkjrehogi54yu89u9nk8',
     google_secret: 'R83YWn4E5mObpeN7Fn6AKYPY',
 
+    elasticStreamIndex: 'replay_stream_samples',
+
     services: {
       kaltura: {
         url: 'http://vod.linnovate.net',
