@@ -5,7 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var _ = require('lodash');
+var _ = require('lodash'),
+	Video = require('replay-schemas/Video');
+
+sails.models.video = {};
 
 module.exports = {
   find: function (req, res, next) {
