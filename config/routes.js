@@ -20,71 +20,72 @@
  * http://sailsjs.org/#!/documentation/concepts/Routes/RouteTargetSyntax.html
  */
 
-blueprints = require('./blueprints').blueprints;
+var blueprints = require('./blueprints').blueprints;
 
 module.exports.routes = addPrefixes({
 
-  /***************************************************************************
-  *                                                                          *
-  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-  * etc. depending on your default view engine) your home page.              *
-  *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
-  *                                                                          *
-  ***************************************************************************/
+	/***************************************************************************
+	 *                                                                          *
+	 * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
+	 * etc. depending on your default view engine) your home page.              *
+	 *                                                                          *
+	 * (Alternatively, remove this and add an `index.html` file in your         *
+	 * `assets` directory)                                                      *
+	 *                                                                          *
+	 ***************************************************************************/
 
+	'/': {
+		view: 'static/home'
+	},
 
-  '/': {
-    view: 'static/home'
-  },
+	'/auth/google': {
+		controller: 'auth',
+		action: 'googleCallback'
+	},
 
-  '/auth/google': {
-    controller: 'auth',
-    action: 'googleCallback'
-  },
+	'get <restPrefix>/dash/mpd/:id': 'DashController.mpd',
+	'get <restPrefix>/video/search-by-dist': 'VideoController.searchByDistance',
+	'get <restPrefix>/video/search-by-polygon': 'VideoController.searchByPolygon',
+	'get <restPrefix>/video/get-movie-locations': 'VideoController.getMovieLocations',
+	'get <restPrefix>/video/set-stream-samples': 'VideoController.setStreamSamples',
+	'post <internalPrefix>/kaltura/upload_callback': 'KalturaController.onUploadFinished',
 
-  'get <restPrefix>/dash/mpd/:id': 'DashController.mpd',
-  'get <restPrefix>/video/search-by-dist': 'VideoController.searchByDistance',
-  'get <restPrefix>/video/search-by-polygon': 'VideoController.searchByPolygon',
-  'get <restPrefix>/video/get-movie-locations': 'VideoController.getMovieLocations',
-  'get <restPrefix>/video/set-stream-samples': 'VideoController.setStreamSamples',
+	'<restPrefix>/:method/*': {
+		controller: 'GatewayController',
+		action: 'gate'
+	}
 
-  'post <internalPrefix>/kaltura/upload_callback' : 'KalturaController.onUploadFinished',
-
-  '<restPrefix>/*': {
-  	controller: 'routing',
-  	action: 'route'
-  }
-
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
+	/***************************************************************************
+	 *                                                                          *
+	 * Custom routes here...                                                    *
+	 *                                                                          *
+	 * If a request to a URL doesn't match any of the custom routes above, it   *
+	 * is matched against Sails route blueprints. See `config/blueprints.js`    *
+	 * for configuration options and examples.                                  *
+	 *                                                                          *
+	 ***************************************************************************/
 
 });
 
 // manually add prefixes to custom defined routes starts with <restPrefix>,
 // as sails does so only for the routes defined via blueprints
-function addPrefixes(prefixes){
-  result = {};
+function addPrefixes(prefixes) {
+	var result = {};
 
-  for(var prefix in prefixes){
-    // append rest prefix
-    if(prefix.indexOf('<restPrefix>') > -1)
-      result[ prefix.replace('<restPrefix>', blueprints.restPrefix) ] = prefixes[prefix];
-    // append internal prefix
-    else if(prefix.indexOf('<internalPrefix>') > -1)
-      result[ prefix.replace('<internalPrefix>', blueprints.restPrefix + blueprints.internalPrefix) ] = prefixes[prefix];
-    // do not append prefix
-    else
-      result[prefix] = prefixes[prefix];
-  };
+	for (var prefix in prefixes) {
+		// append rest prefix
+		if (prefix.indexOf('<restPrefix>') > -1) {
+			result[prefix.replace('<restPrefix>', blueprints.restPrefix)] = prefixes[prefix];
+		}
+		// append internal prefix
+		else if (prefix.indexOf('<internalPrefix>') > -1) {
+			result[prefix.replace('<internalPrefix>', blueprints.restPrefix + blueprints.internalPrefix)] = prefixes[prefix];
+		}
+		// do not append prefix
+		else {
+			result[prefix] = prefixes[prefix];
+		}
+	}
 
-  return result;
+	return result;
 }

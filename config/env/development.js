@@ -15,55 +15,59 @@ var baseUrl = process.env.BASE_URL || 'http://localhost';
 
 module.exports = {
 
-  /***************************************************************************
-   * Set the default database connection for models in the development       *
-   * environment (see config/connections.js and config/models.js )           *
-   ***************************************************************************/
+	/***************************************************************************
+	 * Set the default database connection for models in the development       *
+	 * environment (see config/connections.js and config/models.js )           *
+	 ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMongodbServer'
-  // }
+	// models: {
+	//   connection: 'someMongodbServer'
+	// }
 
-  port: port,
+	port: port,
 
-  settings: {
-    host: baseUrl,
-  	baseUrl: baseUrl + ':' + port,
-  	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
+	settings: {
+		host: baseUrl,
+		baseUrl: baseUrl + ':' + port,
+		apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
-    token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
-    google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
+		token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
+		google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
 
-    elasticStreamIndex: 'replay_stream_samples',
+		elasticStreamIndex: 'replay_stream_samples',
 
-    services: {
-      kaltura: {
-        url: process.env.KALTURA_URL || 'http://vod.linnovate.net',
-        partner_id: process.env.KALTURA_PARTNER_ID || 101,
+		services: {
+			kaltura: {
+				url: process.env.KALTURA_URL || 'http://vod.linnovate.net',
+				partner_id: process.env.KALTURA_PARTNER_ID || 101,
 
-      },
-      wowza: {
-        url: process.env.WOWZA_URL || 'http://vod.linnovate.net',
-        port: process.env.WOWZA_PORT || '1935',
-        appName: process.env.WOWZA_APP_NAME || 'weplay',
-        contentDirectory: process.env.WOWZA_CONTENT_DIR || 'kaltura_content'
-      },
-      query_service:{
-      	url: process.env.QUERY_SERVICE_URL || 'http://localhost',
-      	port: process.env.QUERY_SERVICE_PORT || 1338
-      }
-    }
+			},
+			wowza: {
+				url: process.env.WOWZA_URL || 'http://vod.linnovate.net',
+				port: process.env.WOWZA_PORT || '1935',
+				appName: process.env.WOWZA_APP_NAME || 'weplay',
+				contentDirectory: process.env.WOWZA_CONTENT_DIR || 'kaltura_content'
+			},
+			query_service: {
+				url: process.env.QUERY_SERVICE_URL || 'http://localhost',
+				port: process.env.QUERY_SERVICE_PORT || 1338
+			},
+			media_service: {
+				url: process.env.MEDIA_SERVICE_URL || 'http://localhost',
+				port: process.env.MEDIA_SERVICE_PORT || 1339
+			}
+		}
 
-  },
+	},
 
-  swagger: {
-    /**
-     * require() the package.json file for your Sails app.
-     */
-    pkg: require('../.././package'),
-    ui: {
-      url: baseUrl + ':' + port + '/docs'
-    }
-  }
+	swagger: {
+		/**
+		 * require() the package.json file for your Sails app.
+		 */
+		pkg: require('../.././package'),
+		ui: {
+			url: baseUrl + ':' + port + '/docs'
+		}
+	}
 
 };
