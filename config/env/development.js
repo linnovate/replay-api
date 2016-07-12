@@ -47,6 +47,10 @@ module.exports = {
         port: process.env.WOWZA_PORT || '1935',
         appName: process.env.WOWZA_APP_NAME || 'weplay',
         contentDirectory: process.env.WOWZA_CONTENT_DIR || 'kaltura_content'
+      },
+      query_service:{
+      	url: process.env.QUERY_SERVICE_URL || 'http://localhost',
+      	port: process.env.QUERY_SERVICE_PORT || 1338
       }
     }
 

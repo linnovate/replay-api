@@ -52,6 +52,11 @@ module.exports.routes = addPrefixes({
 
   'post <internalPrefix>/kaltura/upload_callback' : 'KalturaController.onUploadFinished',
 
+  '<restPrefix>/*': {
+  	controller: 'routing',
+  	action: 'route'
+  }
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
