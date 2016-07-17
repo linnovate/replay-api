@@ -11,7 +11,7 @@
  */
 var blueprints = require('.././blueprints').blueprints;
 var port = process.env.PORT || 1337;
-var baseUrl = 'http://server.me';
+var baseUrl = process.env.BASE_URL || 'http://server.me';
 
 module.exports = {
 
@@ -27,26 +27,42 @@ module.exports = {
   port: port,
 
   settings: {
-  	host: baseUrl,
-  	baseUrl: baseUrl + ':' + port,
-  	apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
+    host: baseUrl,
+    baseUrl: baseUrl + ':' + port,
+    apiUrl: baseUrl + ':' + port + blueprints.restPrefix,
 
-    token_secret: 'gbrejhgkjrehogi54yu89u9nk8',
-    google_secret: 'R83YWn4E5mObpeN7Fn6AKYPY',
+    token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
+    google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
 
     elasticStreamIndex: 'replay_stream_samples',
 
     services: {
       kaltura: {
-        url: 'http://vod.linnovate.net',
-        partner_id: 101,
+        url: process.env.KALTURA_URL || 'http://vod.linnovate.net',
+        partner_id: process.env.KALTURA_PARTNER_ID || 101,
 
       },
       wowza: {
-        url: 'http://vod.linnovate.net',
-        port: '1935',
-        appName: 'weplay',
-        contentDirectory: 'kaltura_content'
+        url: process.env.WOWZA_URL || 'http://vod.linnovate.net',
+        port: process.env.WOWZA_PORT || '1935',
+        appName: process.env.WOWZA_APP_NAME || 'weplay',
+        contentDirectory: process.env.WOWZA_CONTENT_DIR || 'kaltura_content'
+      },
+      query: {
+        url: process.env.QUERY_SERVICE_URL || 'http://localhost',
+        port: process.env.QUERY_SERVICE_PORT || 1338
+      },
+      video: {
+        url: process.env.VIDEO_SERVICE_URL || 'http://localhost',
+        port: process.env.VIDEO_SERVICE_PORT || 1338
+      },
+      videometadata: {
+        url: process.env.VIDEOMETADATA_SERVICE_URL || 'http://localhost',
+        port: process.env.VIDEOMETADATA_SERVICE_PORT || 1338
+      },
+      media: {
+        url: process.env.MEDIA_SERVICE_URL || 'http://localhost',
+        port: process.env.MEDIA_SERVICE_PORT || 1339
       }
     }
 
