@@ -53,6 +53,10 @@ module.exports.routes = addPrefixes({
 	'<restPrefix>/:method/*': {
 		controller: 'GatewayController',
 		action: 'gate'
+	},
+	'<restPrefix>/:method?*': {
+		controller: 'GatewayController',
+		action: 'gate'
 	}
 
 	/***************************************************************************

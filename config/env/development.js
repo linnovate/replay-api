@@ -52,6 +52,14 @@ module.exports = {
 				url: process.env.QUERY_SERVICE_URL || 'http://localhost',
 				port: process.env.QUERY_SERVICE_PORT || 1338
 			},
+			video: {
+				url: process.env.VIDEO_SERVICE_URL || 'http://localhost',
+				port: process.env.VIDEO_SERVICE_PORT || 1338
+			},
+			videometadata: {
+				url: process.env.VIDEOMETADATA_SERVICE_URL || 'http://localhost',
+				port: process.env.VIDEOMETADATA_SERVICE_PORT || 1338
+			},
 			media: {
 				url: process.env.MEDIA_SERVICE_URL || 'http://localhost',
 				port: process.env.MEDIA_SERVICE_PORT || 1339
