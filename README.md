@@ -42,6 +42,7 @@ Run the app
 sails lift
 ```
 Possible environment variables:
+
 BASE_URL // e.g. http://localhost
 PORT
 REDIS_HOST
