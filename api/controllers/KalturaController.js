@@ -1,8 +1,9 @@
-var BusService = require('replay-bus-service'),
+var rabbit = require('replay-rabbitmq'),
     JobsService = require('replay-jobs-service');
 
 // have to pre-define the video file exetnsions since Kaltura providers only the name without the extension.
 var videoFileExtension = '.ts';
+var jobTag = 'FetchVideoFromProvider';
 
 module.exports = {
 
@@ -27,18 +28,22 @@ function validateInput(requestBody) {
 
 function produceNewVideoJob(entryId, videoName) {
     // get the matching queue name of the job type
-    queueName = JobsService.getQueueName('FetchVideoFromProvider');
-
-    // create bus
-    var busService = new BusService(process.env.REDIS_HOST, process.env.REDIS_PORT);
+    queueName = JobsService.getQueueName(jobTag);
 
     var message = {
-        params: {
-            provider: 'kaltura',
-            providerId: entryId,
-            name: videoName + videoFileExtension
-        }
+        provider: 'kaltura',
+        providerId: entryId,
+        name: videoName + videoFileExtension
     }
 
-    busService.produce(queueName, message);
+    var host = process.env.RABBITMQ_HOST || 'localhost';
+    rabbit.connect(host)
+        .then(function() {
+            rabbit.produce(queueName, message);
+        })
+        .catch(function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
 }
