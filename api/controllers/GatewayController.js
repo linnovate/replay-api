@@ -6,6 +6,7 @@
  */
  // request param as set in route.js config
 const REQUEST_METHOD = 'method';
+const request = require('request');
 
 module.exports = {
 	gate: function(req, res, next) {
@@ -18,7 +19,9 @@ module.exports = {
 		} else {
 			return res.badRequest('unknown service');
 		}
-		console.log('#Gateway# redirecting to ' + baseUrl + '/' + params);
-		return res.redirect(baseUrl + '/' + params);
-	}
+    request(baseUrl + '/' + params, function (error, response, body) {
+      if (error) res.status(500, error);
+      res.ok(body);
+    });
+  }
 };
