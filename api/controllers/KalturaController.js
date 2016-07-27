@@ -33,7 +33,7 @@ function produceNewVideoJob(entryId, videoName) {
     var message = {
         provider: 'kaltura',
         providerId: entryId,
-        name: videoName + videoFileExtension
+        videoName: videoName + videoFileExtension
     }
 
     var host = process.env.RABBITMQ_HOST || 'localhost';
