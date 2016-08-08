@@ -1,0 +1,12 @@
+<permissions>
+   <allow>
+      <userPermission>
+         <id>System 1</id>
+         <level>2</level>
+      </userPermission>
+      <userPermission>
+         <id>System 2</id>
+         <level>2</level>
+      </userPermission>
+   </allow>
+</permissions>
