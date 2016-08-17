@@ -226,11 +226,10 @@ function intersectResults(results) {
     var elasticResults = results.elasticResult;
 
     var intersectionResults;
-    // make sure we have results from elastic, since we might not query elastic every time
-    if (elasticResults && elasticResults.length) {
+    // if we queries elastic (elasticResults is null for no results or have actual data), then intersect with it
+    if (elasticResults) {
         // remove duplicates
         elasticResults = removeDuplicates(elasticResults, 'fields.videoId[0]');
-
         // intersect results
         intersectionResults = _.intersectionWith(mongoResults, elasticResults, function(mongoVideo, elasticHit) {
             if (mongoVideo.id === elasticHit.fields.videoId[0]) {
