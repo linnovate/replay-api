@@ -1,8 +1,6 @@
 var rabbit = require('replay-rabbitmq'),
     JobsService = require('replay-jobs-service');
 
-// have to pre-define the video file exetnsions since Kaltura providers only the name without the extension.
-var videoFileExtension = '.ts';
 var jobTag = 'FetchVideoFromProvider';
 
 module.exports = {
@@ -33,7 +31,7 @@ function produceNewVideoJob(entryId, videoName) {
     var message = {
         provider: 'kaltura',
         providerId: entryId,
-        videoName: videoName + videoFileExtension
+        videoName: videoName
     }
 
     var host = process.env.RABBITMQ_HOST || 'localhost';
