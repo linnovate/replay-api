@@ -1,16 +1,19 @@
 # query-service
 
+Environment variables:
+| Name                          | Description                                  | Default        |
+|-------------------------------|----------------------------------------------|----------------|
+| MONGO_HOST                    | Mongo host URI                               | localhost      |
+| MONGO_PORT                    | Mongo port                                   | 27017          |
+| MONGO_DATABASE                | Mongo database name                          | replay_dev     |
+| ELASTIC_HOST                  | Elastic host URI                             | localhost      |
+| ELASTIC_PORT                  | Elastic port                                 | 9200           |
+| PORT                          | The port which the service will listen to    | 1338           |
+
 Run with:
 ```
 sails lift
 ```
-
-Environment variables:
-MONGO_HOST
-MONGO_PORT
-MONGO_DATABASE
-ELASTIC_HOST
-ELASTIC_PORT
 
 Querying examples:
 ```
