@@ -41,29 +41,24 @@ Run the app
 ```
 sails lift
 ```
-Possible environment variables:
 
-BASE_URL // e.g. http://localhost
-PORT
-REDIS_HOST
-REDIS_PORT
-KALTURA_URL
-KALTURA_PARTNER_ID
-WOWZA_URL
-WOWZA_PORT
-WOWZA_APP_NAME
-WOWZA_CONTENT_DIR
-TOKEN_SECRET
-GOOGLE_SECRET
-MONGO_HOST
-MONGO_PORT
-MONGO_DATABASE
-QUERY_SERVICE_URL
-QUERY_SERVICE_PORT
-Go to
-```
-http://localhost:1337
-```
+Set environment variables to config the app:
+
+| Name                          | Description                                  | Default        |
+|-------------------------------|----------------------------------------------|----------------|
+| MONGO_HOST                    | Mongo host URI                               | localhost      |
+| MONGO_PORT                    | Mongo port                                   | 27017          |
+| MONGO_DATABASE                | Mongo database name                          | replay_dev     |
+| BASE_URL                      | API base url                                 | localhost      |
+| PORT         		            | API port                                     | 1337           |
+| GOOGLE_SECRET				    | Google authentication secret 			       | 			    |
+| MEDIA_SERVICE_URL             | meida-url-provider url      			       |http://localhost|
+| MEDIA_SERVICE_PORT  		    | meida-url-provider port      			       | 1339		    |
+| QUERY_SERVICE_URL   		    | query service url 			               |http://localhost|
+| QUERY_SERVICE_PORTT  		    | query service port      			    	   | 1338		    |
+| RABBITMQ_HOST				    | hostname of rabbit queues					   | localhost      |
+| KALTURA_PARTNER_ID            | The partner ID in kaltura                    |                |
+| KALTURA_URL                   | Kaltura URI                                  |                |
 
 ## Swagger
 go to http://localhost:1337/swagger/ui
@@ -101,4 +96,3 @@ on Windows or Mac OS
 npm install -g nodemon
 ```
 Afterwords, you do not need to run `sails lift` but just `nodemon`
-
