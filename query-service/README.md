@@ -1,6 +1,7 @@
 # query-service
 
 Environment variables:
+
 | Name                          | Description                                  | Default        |
 |-------------------------------|----------------------------------------------|----------------|
 | MONGO_HOST                    | Mongo host URI                               | localhost      |
