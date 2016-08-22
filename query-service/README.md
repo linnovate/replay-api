@@ -1,4 +1,5 @@
-# query-service
+## Description
+This service purpose is to handle all video related queries.
 
 Environment variables:
 
