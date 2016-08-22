@@ -14,7 +14,6 @@ media-url-provider uses sails as its framework. there for you should install sai
 npm install -g sails
 ```
 
-
 ### Enviroment variables
 
 media-url-provider requiers a set of environment variables
