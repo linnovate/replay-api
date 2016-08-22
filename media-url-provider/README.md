@@ -1,23 +1,23 @@
-# media-url-provider
+## Description
 
-this project is a microservice designed components which responsible to provide http requests of media source urls.
+This project is a microservice designed components which responsible to provide http requests of media source urls.
 
-## Getting Started
-
-clone the repository using git clone <http://git.repo.url>
-
-### Prerequisities
-
-media-url-provider uses sails as its framework. there for you should install sails globaly
-
+## Installation
+Install sails globally
 ```
-npm install -g sails
+sudo npm -g install sails
+```
+On Windows (or Mac OS with Homebrew), you don't need sudo:
+```
+npm -g install sails
 ```
 
-### Enviroment variables
+Clone the repo and install dependencies:
+```
+npm install
+```
 
-media-url-provider requiers a set of environment variables
-
+## Configurations
 Set environment variables to config the app:
 
 | Name                          | Description                                  | Default        |
@@ -26,31 +26,24 @@ Set environment variables to config the app:
 | MONGO_PORT                    | Mongo port                                   | 27017          |
 | MONGO_DATABASE                | Mongo database name                          | replay_dev     |
 
-### Running
-
-you should use sails init command
-
+## Usage
+Run with:
 ```
 sails lift
 ```
-running with variables example
+Example of passing env variables specific to process:
 
 ```
 MONGO_HOST=127.0.0.1 MONGO_PORT=27017 MONGO_DATABASE=replay_dev sails lift.
 ```
 
-## Running the tests
-
-Tests in this project use Mocha testing framework.
-
-Install Mocha globaly
-
+## Tests
+Tests in this project use Mocha testing framework:
 ```
-npm isntall -g mocha
+sudo npm install -g mocha
 ```
 
-In order to run tests we use npm test script
-
+Run the tests with:
 ```
 npm test
 ```
@@ -60,23 +53,3 @@ for code coverage run
 ```
 npm run coverage
 ```
-
-## Built With
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Authors
-
-* **Yurai** - *Initial work* -
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
