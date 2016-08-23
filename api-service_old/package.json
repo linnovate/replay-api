@@ -1,0 +1,60 @@
+{
+  "name": "replay",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "async": "^2.0.0-rc.6",
+    "bcrypt": "^0.8.5",
+    "bcryptjs": "^2.3.0",
+    "bluebird": "^3.3.5",
+    "ejs": "2.3.4",
+    "elasticsearch": "^11.0.1",
+    "grunt": "0.4.5",
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-contrib-coffee": "0.13.0",
+    "grunt-contrib-concat": "0.5.1",
+    "grunt-contrib-copy": "0.5.0",
+    "grunt-contrib-cssmin": "0.9.0",
+    "grunt-contrib-jst": "0.6.0",
+    "grunt-contrib-less": "1.1.0",
+    "grunt-contrib-uglify": "0.7.0",
+    "grunt-contrib-watch": "0.5.3",
+    "grunt-sails-linker": "~0.10.1",
+    "grunt-sync": "0.2.4",
+    "include-all": "~0.1.6",
+    "jwt-simple": "^0.5.0",
+    "kaltura": "^3.3.1",
+    "lodash": "^4.13.1",
+    "moment": "^2.13.0",
+    "mongoose": "^4.5.3",
+    "passport": "^0.3.2",
+    "passport-google-id-token": "bora89/passport-google-id-token",
+    "rc": "1.0.1",
+    "replay-rabbitmq": "*",
+    "replay-jobs-service": "*",
+    "replay-schemas": "*",
+    "request": "^2.72.0",
+    "sails": "~0.12.3",
+    "sails-disk": "~0.10.9",
+    "sails-mongo": "^0.12.0",
+    "sails-swagger": "^0.5.1",
+    "waterline": "^0.12.2",
+    "xml2js": "^0.4.16"
+  },
+  "scripts": {
+    "debug": "node debug app.js",
+    "start": "node app.js"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexander/replay.git"
+  },
+  "author": "alexander",
+  "license": "",
+  "devDependencies": {
+    "swagger-ui": "^2.1.4"
+  }
+}
