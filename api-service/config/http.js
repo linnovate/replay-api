@@ -1,5 +1,3 @@
-var passport = require('passport');
-
 /**
  * HTTP Server Settings
  * (sails.config.http)
@@ -10,6 +8,8 @@ var passport = require('passport');
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
+
+var passport = require('passport');
 
 module.exports.http = {
 
@@ -32,30 +32,26 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-     order: [
-       'startRequestTimer',
-       'cookieParser',
-       //'session',
-       'passportInit',
-       //'passportSession',
-       'myRequestLogger',
-       'bodyParser',
-       'handleBodyParserError',
-       'compress',
-       'methodOverride',
-       'poweredBy',
-       '$custom',
-       'router',
-       'www',
-       'favicon',
-       '404',
-       '500'
-     ],
-
+    order: [
+    //   'startRequestTimer',
+    //   'cookieParser',
+    //   'session',
+    //   'myRequestLogger',
+    //   'bodyParser',
+    //   'handleBodyParserError',
+    //   'compress',
+    //   'methodOverride',
+    //   'poweredBy',
+    //   '$custom',
+    //   'router',
+    //   'www',
+    //   'favicon',
+    //   '404',
+    //   '500'
+    'passportInit'
+    ],
 
     passportInit: passport.initialize(),
-    //passportSession : passport.session(),
-
   /****************************************************************************
   *                                                                           *
   * Example custom middleware; logs each request to the console.              *

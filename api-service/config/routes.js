@@ -33,11 +33,7 @@ module.exports.routes = addPrefixes({
 	 * `assets` directory)                                                      *
 	 *                                                                          *
 	 ***************************************************************************/
-
-	'/': {
-		view: 'static/home'
-	},
-
+  
 	'/auth/google': {
 		controller: 'auth',
 		action: 'googleCallback'
