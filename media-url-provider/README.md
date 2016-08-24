@@ -53,3 +53,9 @@ for code coverage run
 ```
 npm run coverage
 ```
+
+## Docker
+```
+docker build -t media-url-provider .
+```
+docker run -d -p 1339:1339 --link mongodb-server:mongodb-server --name media-url-provider media-url-provider

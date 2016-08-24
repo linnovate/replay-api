@@ -51,3 +51,9 @@ on Windows or Mac OS
 npm install -g nodemon
 ```
 Afterwards, you do not need to run `sails lift` but just `nodemon`
+
+## Docker
+```
+docker build -t query-service .
+```
+docker run -d -p 1338:1338 --link mongodb-server:mongodb-server --name query-service query-service
