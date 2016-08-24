@@ -4,5 +4,5 @@ WORKDIR /replay-api/api-service
 RUN npm -g install sails
 RUN npm install
 ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-server MONGO_PORT=27017 MONGO_DATABASE=replay_dev
-ENV MEDIA_SERVICE_URL=http://meida-url-provider QUERY_SERVICE_URL=http://query-service
+ENV MEDIA_SERVICE_URL=http://media-url-provider MEDIA_SERVICE_PORT=1339 QUERY_SERVICE_URL=http://query-service QUERY_SERVICE_PORT=1338
 CMD ["sails", "lift"]
