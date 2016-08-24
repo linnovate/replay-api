@@ -31,7 +31,7 @@ Set environment variables to config the app:
 | MEDIA_SERVICE_URL             | meida-url-provider url      			       |http://localhost|
 | MEDIA_SERVICE_PORT  		    | meida-url-provider port      			       | 1339		    |
 | QUERY_SERVICE_URL   		    | query service url 			               |http://localhost|
-| QUERY_SERVICE_PORTT  		    | query service port      			    	   | 1338		    |
+| QUERY_SERVICE_PORT  		    | query service port      			    	   | 1338		    |
 | RABBITMQ_HOST				    | hostname of rabbit queues					   | localhost      |
 | KALTURA_PARTNER_ID            | The partner ID in kaltura                    |                |
 | KALTURA_URL                   | Kaltura URI                                  |                |
