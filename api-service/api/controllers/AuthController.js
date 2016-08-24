@@ -1,4 +1,5 @@
 var request = require('request');
+var User = require('replay-schemas/User');
 
 module.exports = {
 
@@ -56,7 +57,7 @@ module.exports = {
               google: profile.sub,
               picture: profile.picture.replace('sz=50', 'sz=200'),
               displayName: profile.name
-            }).exec(function (err, created) {
+            }, function (err, created) {
                 var token = JwtService.createJWT(created);
                 res.send({token: token});
               }

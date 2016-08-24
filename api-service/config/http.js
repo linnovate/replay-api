@@ -9,8 +9,6 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 
-var passport = require('passport');
-
 module.exports.http = {
 
   /****************************************************************************
@@ -32,7 +30,7 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    order: [
+    // order: [
     //   'startRequestTimer',
     //   'cookieParser',
     //   'session',
@@ -48,10 +46,8 @@ module.exports.http = {
     //   'favicon',
     //   '404',
     //   '500'
-    'passportInit'
-    ],
+    // ],
 
-    passportInit: passport.initialize(),
   /****************************************************************************
   *                                                                           *
   * Example custom middleware; logs each request to the console.              *
