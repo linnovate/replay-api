@@ -1,5 +1,3 @@
-var passport = require('passport');
-
 /**
  * HTTP Server Settings
  * (sails.config.http)
@@ -32,29 +30,23 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-     order: [
-       'startRequestTimer',
-       'cookieParser',
-       //'session',
-       'passportInit',
-       //'passportSession',
-       'myRequestLogger',
-       'bodyParser',
-       'handleBodyParserError',
-       'compress',
-       'methodOverride',
-       'poweredBy',
-       '$custom',
-       'router',
-       'www',
-       'favicon',
-       '404',
-       '500'
-     ],
-
-
-    passportInit: passport.initialize(),
-    //passportSession : passport.session(),
+    // order: [
+    //   'startRequestTimer',
+    //   'cookieParser',
+    //   'session',
+    //   'myRequestLogger',
+    //   'bodyParser',
+    //   'handleBodyParserError',
+    //   'compress',
+    //   'methodOverride',
+    //   'poweredBy',
+    //   '$custom',
+    //   'router',
+    //   'www',
+    //   'favicon',
+    //   '404',
+    //   '500'
+    // ],
 
   /****************************************************************************
   *                                                                           *

@@ -1,37 +1,40 @@
 {
-	"name": "replay-api",
-	"version": "1.0.0",
-	"description": "This repository is intented to store all the replay-api related microservices",
-	"main": "index.js",
-	"dependencies": {
-		"mocha": "^2.5.3",
-		"istanbul": "^0.4.5"
-	},
-	"devDependencies": {
-		"pre-commit": "^1.1.3",
-		"replay-eslint-config": "*"
-	},
-	"scripts": {
-		"lint": "./lintStagedFiles.sh",
-		"lintAll": "eslint .",
-		"test": "mocha ./*/test --recursive",
-		"coverage": "istanbul cover _mocha ./*/test -- --recursive; sensible-browser coverage/lcov-report/index.html"
-	},
-	"eslintConfig": {
-		"extends": "./node_modules/replay-eslint-config/index.js"
-	},
-	"pre-commit": {
-		"run": "lint",
-		"colors": true
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/linnovate/replay-api.git"
-	},
-	"author": "replay_team",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/linnovate/replay-api/issues"
-	},
-	"homepage": "https://github.com/linnovate/replay-api#readme"
+  "name": "replay-api",
+  "version": "1.0.0",
+  "description": "This repository is intented to store all the replay-api related microservices",
+  "main": "index.js",
+  "dependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^2.5.3",
+    "replay-jobs-service": "^1.0.13",
+    "replay-rabbitmq": "^1.0.3",
+    "request": "^2.74.0"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.1.3",
+    "replay-eslint-config": "*"
+  },
+  "scripts": {
+    "lint": "./lintStagedFiles.sh",
+    "lintAll": "eslint .",
+    "test": "mocha ./*/test --recursive",
+    "coverage": "istanbul cover _mocha ./*/test -- --recursive; sensible-browser coverage/lcov-report/index.html"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/replay-eslint-config/index.js"
+  },
+  "pre-commit": {
+    "run": "lint",
+    "colors": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linnovate/replay-api.git"
+  },
+  "author": "replay_team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linnovate/replay-api/issues"
+  },
+  "homepage": "https://github.com/linnovate/replay-api#readme"
 }

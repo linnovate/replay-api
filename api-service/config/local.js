@@ -60,7 +60,7 @@ module.exports = {
    * to 80 (http://) or 443 (https://) if you have an SSL certificate        *
    ***************************************************************************/
 
-  port: process.env.PORT || 1337,
+  // port: process.env.PORT || 1337,
 
   /***************************************************************************
    * The runtime "environment" of your Sails app is either typically         *
@@ -80,28 +80,5 @@ module.exports = {
    * 'development' environment.                                              *
    ***************************************************************************/
 
-  environment: process.env.NODE_ENV || 'development',
-
-  settings: {
-    services: {
-      kaltura: {
-        secret: '96f2df9a0071cd8024463509439fedb9' // -1 admin secret: c487a99d4f4ebdda9fd55864276e1162
-      },
-      google: {
-        secret: 'R83YWn4E5mObpeN7Fn6AKYPY'
-      }
-    }
-  }
-
-   // connections: {
-   //    mongodb: {
-   //      adapter: 'sails-mongo',
-   //      host: 'localhost',
-   //      port: 27017,
-   //      user: '',
-   //      password: '',
-   //      database: 'Enter Our DB Name'
-   //    }
-   // }
-
+  // environment: process.env.NODE_ENV || 'development'
 };
