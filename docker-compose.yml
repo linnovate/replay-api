@@ -1,9 +1,7 @@
 version: '2'
 services:
   mongo:
-    image: mongo:2.6
-    expose:
-      - "27017"
+    image: mongodb-server
     ports:
       - "27017:27017"
   api-service:
