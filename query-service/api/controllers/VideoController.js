@@ -97,7 +97,7 @@ function hasAnyQueryParam(query) {
 }
 
 function saveUserQuery(req) {
-    var coordinates, tagsIds;
+    var coordinates, tagsIds, boundingShape;
 
     // parse some specific fields if they exist
     if (req.query.boundingShapeCoordinates) {
@@ -106,6 +106,13 @@ function saveUserQuery(req) {
 
     if (req.query.tagsIds) {
         tagsIds = JSON.parse(req.query.tagsIds);
+    }
+
+    if(req.query.boundingShapeType && req.query.boundingShapeCoordinates) {
+        var boundingShape = {
+            type: req.query.boundingShapeType,
+            coordinates: coordinates
+        };
     }
 
     return Query.create({
@@ -119,10 +126,7 @@ function saveUserQuery(req) {
         minMinutesInsideShape: req.query.minMinutesInsideShape,
         sourceId: req.query.sourceId,
         tagsIds: tagsIds,
-        boundingShape: {
-            type: req.query.boundingShapeType,
-            coordinates: coordinates
-        }
+        boundingShape: boundingShape
     });
 }
 
@@ -203,7 +207,7 @@ function performElasticQuery(mongoQueryResult) {
 
     var videosIds = getVideosIds(videosFromMongo);
 
-    if (query.boundingShape.coordinates) {
+    if (query.boundingShape && query.boundingShape.coordinates) {
         // search metadatas with the bounding shape
         return elasticsearch.searchVideoMetadata(query.boundingShape.coordinates, videosIds, ['videoId'])
             .then(function(resp) {

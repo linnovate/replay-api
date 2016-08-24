@@ -55,3 +55,4 @@ on Windows or Mac OS
 npm install -g nodemon
 ```
 Afterwards, you do not need to run `sails lift` but just `nodemon`
+
