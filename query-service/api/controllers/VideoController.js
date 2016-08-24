@@ -194,60 +194,6 @@ function performMongoQuery(mongoQuery) {
     return Video.find(mongoQuery).populate('tags');
 }
 
-function performElasticQuery(mongoQueryResult) {
-    // build the result object
-    var result = {
-        mongoResult: mongoQueryResult.videos,
-        elasticResult: undefined
-    };
-
-    // extract the video results from mongo as well as the original query object
-    var videosFromMongo = mongoQueryResult.videos;
-    var query = mongoQueryResult.query;
-
-    var videosIds = getVideosIds(videosFromMongo);
-
-    if (query.boundingShape && query.boundingShape.coordinates) {
-        // search metadatas with the bounding shape
-        return elasticsearch.searchVideoMetadata(query.boundingShape.coordinates, videosIds, ['videoId'])
-            .then(function (resp) {
-                // if user wants the results to sum up to a minimum time inside shape, make sure it conforms to this restriction
-                if (query.minMinutesInsideShape && query.minMinutesInsideShape < getMetadataDurationInMinutes(resp.hits.hits)) {
-                    return Promise.resolve();
-                }
-                // set the hits in result object
-                result.elasticResult = resp.hits.hits;
-                return Promise.resolve(result);
-            });
-    }
-
-    // case no special method had to be taken, just return the result
-    return Promise.resolve(result);
-}
-
-function intersectResults(results) {
-    var mongoResults = results.mongoResult;
-    var elasticResults = results.elasticResult;
-
-    var intersectionResults;
-    // if we queries elastic (elasticResults is null for no results or have actual data), then intersect with it
-    if (elasticResults) {
-        // remove duplicates
-        elasticResults = removeDuplicates(elasticResults, 'fields.videoId[0]');
-        // intersect results
-        intersectionResults = _.intersectionWith(mongoResults, elasticResults, function (mongoVideo, elasticHit) {
-            if (mongoVideo.id === elasticHit.fields.videoId[0]) {
-                return true;
-            }
-            return false;
-        });
-    } else {
-        intersectionResults = mongoResults;
-    }
-
-    return Promise.resolve(intersectionResults);
-}
-
 function mapList(list, mapField) {
     return _.map(list, mapField);
 }
