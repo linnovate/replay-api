@@ -1,21 +1,20 @@
 {
-	"name": "query-service",
-	"private": true,
-	"version": "0.0.0",
-	"description": "A Sails application - Microservices that handles all video related queries",
-	"main": "app.js",
-	"scripts": {
-		"debug": "node debug app.js",
-		"start": "node app.js"
-	},
-	"dependencies": {
-		"rc": "^1.1.6",
-		"sails": "^0.12.4",
-		"sails-disk": "^0.10.10",
-		"sails-mongo": "^0.12.1",
-		"lodash": "^4.15.0",
-		"bluebird": "^3.4.0",
-		"replay-elastic": "^1.0.3",
-		"replay-schemas": "^1.0.18"
-	}
+  "name": "query-service",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A Sails application - Microservices that handles all video related queries",
+  "main": "app.js",
+  "scripts": {
+    "debug": "node debug app.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "lodash": "^4.15.0",
+    "rc": "^1.1.6",
+    "replay-schemas": "^1.0.23",
+    "sails": "^0.12.4",
+    "sails-disk": "^0.10.10",
+    "sails-mongo": "^0.12.1"
+  }
 }

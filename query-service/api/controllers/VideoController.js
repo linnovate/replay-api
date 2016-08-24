@@ -7,7 +7,6 @@
 
 var Promise = require('bluebird'),
     _ = require('lodash'),
-    elasticsearch = require('replay-elastic'),
     Query = require('replay-schemas/Query'),
     Video = require('replay-schemas/Video'),
     Tag = require('replay-schemas/Tag');
@@ -17,35 +16,35 @@ sails.models.video = {};
 
 module.exports = {
 
-    find: function(req, res, next) {
+    find: function (req, res, next) {
         validateFindRequest(req)
             .then(saveUserQuery)
             .then(buildMongoQuery)
             .then(performMongoQuery)
-            .then(performElasticQuery)
-            .then(intersectResults)
-            .then(function(results) {
+            // .then(performElasticQuery)
+            // .then(intersectResults)
+            .then(function (results) {
                 return res.json(results);
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 return res.serverError(err);
             });
     },
 
-    update: function(req, res, next) {
+    update: function (req, res, next) {
         validateUpdateRequest(req)
             .then(performUpdate)
-            .then(function() {
+            .then(function () {
                 return res.ok();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 return res.serverError(err);
             });
     }
 };
 
 function validateFindRequest(req) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // make sure we have at least one attribute
         if (!req.query) {
             return reject(new Error('Empty query is not allowed.'));
@@ -73,7 +72,7 @@ function validateFindRequest(req) {
 }
 
 function validateUpdateRequest(req) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // make sure we have at least one attribute
         if (!req.query) {
             return reject(new Error('Empty update is not allowed.'));
@@ -172,22 +171,23 @@ function buildMongoQuery(query) {
         });
     }
 
+    if (query.boundingShape) {
+        mongoQuery.$and.push({ 
+            boundingPolygon: { $geoIntersects: { $geometry: query.boundingShape } } 
+        });
+    }
+
+    // skip check of minimum width & height and minimum duration inside intersection
+
+
     // return the original query for later use, and the built mongo query
-    return Promise.resolve({ query: query, mongoQuery: mongoQuery });
+    return Promise.resolve(mongoQuery);
 }
 
-function performMongoQuery(queries) {
-    // extract mongo query from the previous build function
-    var mongoQuery = queries.mongoQuery;
-
+function performMongoQuery(mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
-    return Video.find(mongoQuery).populate('tags')
-        .then(function(videos) {
-            // set the result videos in the returned object
-            queries.videos = videos;
-            return Promise.resolve(queries);
-        });
+    return Video.find(mongoQuery).populate('tags');
 }
 
 function performElasticQuery(mongoQueryResult) {
@@ -206,7 +206,7 @@ function performElasticQuery(mongoQueryResult) {
     if (query.boundingShape.coordinates) {
         // search metadatas with the bounding shape
         return elasticsearch.searchVideoMetadata(query.boundingShape.coordinates, videosIds, ['videoId'])
-            .then(function(resp) {
+            .then(function (resp) {
                 // if user wants the results to sum up to a minimum time inside shape, make sure it conforms to this restriction
                 if (query.minMinutesInsideShape && query.minMinutesInsideShape < getMetadataDurationInMinutes(resp.hits.hits)) {
                     return Promise.resolve();
@@ -231,7 +231,7 @@ function intersectResults(results) {
         // remove duplicates
         elasticResults = removeDuplicates(elasticResults, 'fields.videoId[0]');
         // intersect results
-        intersectionResults = _.intersectionWith(mongoResults, elasticResults, function(mongoVideo, elasticHit) {
+        intersectionResults = _.intersectionWith(mongoResults, elasticResults, function (mongoVideo, elasticHit) {
             if (mongoVideo.id === elasticHit.fields.videoId[0]) {
                 return true;
             }
@@ -266,7 +266,7 @@ function performUpdate(req) {
 
     if (req.body.tag) {
         return findOrCreateTagByTitle(req.body.tag)
-            .then(function(tag) {
+            .then(function (tag) {
                 updateQuery.$addToSet = {
                     tags: tag._id
                 };
@@ -283,11 +283,11 @@ function findOrCreateTagByTitle(title) {
     return Tag.findOneAndUpdate({
         title: title
     }, {
-        title: title
-    }, {
-        upsert: true,
-        new: true
-    });
+            title: title
+        }, {
+            upsert: true,
+            new: true
+        });
 }
 
 function updateVideo(id, updateQuery) {
