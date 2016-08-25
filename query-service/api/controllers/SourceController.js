@@ -13,7 +13,7 @@ sails.models.source = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)
-			.then(getStreamingSources)
+			.then(StreamingSourceService.getStreamingSources)
 			.then(function(results) {
 				return res.json(results);
 			})
@@ -30,6 +30,3 @@ function validateFindRequest(req) {
 	});
 }
 
-function getStreamingSources(req) {
-	return StreamingSource.find({}).select('sourceID sourceName _id').sort({ sourceName: 1 });
-}

@@ -14,7 +14,7 @@ sails.models.query = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateRequest(req)
-			.then(getQueries)
+			.then(QueryService.getQueries)
 			.then(function(results) {
 				return res.json(results);
 			})
@@ -29,16 +29,4 @@ function validateRequest(req) {
 		// right now we have nothing to validate
 		resolve(req);
 	});
-}
-
-function getQueries(req) {
-	var limitAmount = req.query.limit;
-
-	// fetch all queries and sort by descending order
-	var query = Query.find({}).sort({ createdAt: -1 });
-	// if limitAmount is set, limit the amount returned.
-	if (limitAmount) {
-		query = query.limit(limitAmount);
-	}
-	return query.exec();
 }
