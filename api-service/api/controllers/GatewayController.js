@@ -9,6 +9,7 @@ const request = require('request'),
 
 module.exports = {
     gate: function(req, res, next) {
+        console.log('Routing incoming request...');
         var baseUrl;
         var service = req.param('service');
         var params = req.originalUrl.substring(req.originalUrl.indexOf(service) + service.length);

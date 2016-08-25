@@ -7,7 +7,6 @@
 
 var Promise = require('bluebird'),
     _ = require('lodash'),
-    elasticsearch = require('replay-elastic'),
     Query = require('replay-schemas/Query'),
     Video = require('replay-schemas/Video'),
     Tag = require('replay-schemas/Tag');
@@ -17,35 +16,35 @@ sails.models.video = {};
 
 module.exports = {
 
-    find: function(req, res, next) {
+    find: function (req, res, next) {
         validateFindRequest(req)
             .then(saveUserQuery)
             .then(buildMongoQuery)
             .then(performMongoQuery)
-            .then(performElasticQuery)
-            .then(intersectResults)
-            .then(function(results) {
+            // .then(performElasticQuery)
+            // .then(intersectResults)
+            .then(function (results) {
                 return res.json(results);
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 return res.serverError(err);
             });
     },
 
-    update: function(req, res, next) {
+    update: function (req, res, next) {
         validateUpdateRequest(req)
             .then(performUpdate)
-            .then(function() {
+            .then(function () {
                 return res.ok();
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 return res.serverError(err);
             });
     }
 };
 
 function validateFindRequest(req) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // make sure we have at least one attribute
         if (!req.query) {
             return reject(new Error('Empty query is not allowed.'));
@@ -73,7 +72,7 @@ function validateFindRequest(req) {
 }
 
 function validateUpdateRequest(req) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // make sure we have at least one attribute
         if (!req.query) {
             return reject(new Error('Empty update is not allowed.'));
@@ -176,93 +175,23 @@ function buildMongoQuery(query) {
         });
     }
 
+    if (query.boundingShape) {
+        mongoQuery.$and.push({ 
+            boundingPolygon: { $geoIntersects: { $geometry: query.boundingShape } } 
+        });
+    }
+
+    // skip check of minimum width & height and minimum duration inside intersection
+
+
     // return the original query for later use, and the built mongo query
-    return Promise.resolve({ query: query, mongoQuery: mongoQuery });
+    return Promise.resolve(mongoQuery);
 }
 
-function performMongoQuery(queries) {
-    // extract mongo query from the previous build function
-    var mongoQuery = queries.mongoQuery;
-
+function performMongoQuery(mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
-    return Video.find(mongoQuery).populate('tags')
-        .then(function(videos) {
-            // set the result videos in the returned object
-            queries.videos = videos;
-            return Promise.resolve(queries);
-        });
-}
-
-function performElasticQuery(mongoQueryResult) {
-    // build the result object
-    var result = {
-        mongoResult: mongoQueryResult.videos,
-        elasticResult: undefined
-    };
-
-    // extract the video results from mongo as well as the original query object
-    var videosFromMongo = mongoQueryResult.videos;
-    var query = mongoQueryResult.query;
-
-    var videosIds = getVideosIds(videosFromMongo);
-
-    if (query.boundingShape && query.boundingShape.coordinates) {
-        // search metadatas with the bounding shape
-        return elasticsearch.searchVideoMetadata(query.boundingShape.coordinates, videosIds, ['videoId'])
-            .then(function(resp) {
-                // if user wants the results to sum up to a minimum time inside shape, make sure it conforms to this restriction
-                if (query.minMinutesInsideShape && query.minMinutesInsideShape < getMetadataDurationInMinutes(resp.hits.hits)) {
-                    return Promise.resolve();
-                }
-                // set the hits in result object
-                result.elasticResult = resp.hits.hits;
-                return Promise.resolve(result);
-            });
-    }
-
-    // case no special method had to be taken, just return the result
-    return Promise.resolve(result);
-}
-
-function intersectResults(results) {
-    var mongoResults = results.mongoResult;
-    var elasticResults = results.elasticResult;
-
-    var intersectionResults;
-    // if we queries elastic (elasticResults is null for no results or have actual data), then intersect with it
-    if (elasticResults) {
-        // remove duplicates
-        elasticResults = removeDuplicates(elasticResults, 'fields.videoId[0]');
-        // intersect results
-        intersectionResults = _.intersectionWith(mongoResults, elasticResults, function(mongoVideo, elasticHit) {
-            if (mongoVideo.id === elasticHit.fields.videoId[0]) {
-                return true;
-            }
-            return false;
-        });
-    } else {
-        intersectionResults = mongoResults;
-    }
-
-    return Promise.resolve(intersectionResults);
-}
-
-function mapList(list, mapField) {
-    return _.map(list, mapField);
-}
-
-function removeDuplicates(list, uniqueField) {
-    return _.uniq(list, uniqueField);
-}
-
-function getVideosIds(videos) {
-    // remove duplicate entries
-    var uniqueVideos = removeDuplicates(videos, 'id');
-    // convert to list of ObjectId
-    var ids = mapList(uniqueVideos, 'id');
-
-    return ids;
+    return Video.find(mongoQuery).populate('tags');
 }
 
 function performUpdate(req) {
@@ -270,7 +199,7 @@ function performUpdate(req) {
 
     if (req.body.tag) {
         return findOrCreateTagByTitle(req.body.tag)
-            .then(function(tag) {
+            .then(function (tag) {
                 updateQuery.$addToSet = {
                     tags: tag._id
                 };
@@ -287,11 +216,11 @@ function findOrCreateTagByTitle(title) {
     return Tag.findOneAndUpdate({
         title: title
     }, {
-        title: title
-    }, {
-        upsert: true,
-        new: true
-    });
+            title: title
+        }, {
+            upsert: true,
+            new: true
+        });
 }
 
 function updateVideo(id, updateQuery) {
@@ -301,7 +230,3 @@ function updateVideo(id, updateQuery) {
     }, updateQuery);
 }
 
-function getMetadataDurationInMinutes(metadata) {
-    // ceil so if length is less than 60, we'd get 1
-    return Math.ceil(metadata.length / 60);
-}
