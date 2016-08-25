@@ -194,23 +194,6 @@ function performMongoQuery(mongoQuery) {
     return Video.find(mongoQuery).populate('tags');
 }
 
-function mapList(list, mapField) {
-    return _.map(list, mapField);
-}
-
-function removeDuplicates(list, uniqueField) {
-    return _.uniq(list, uniqueField);
-}
-
-function getVideosIds(videos) {
-    // remove duplicate entries
-    var uniqueVideos = removeDuplicates(videos, 'id');
-    // convert to list of ObjectId
-    var ids = mapList(uniqueVideos, 'id');
-
-    return ids;
-}
-
 function performUpdate(req) {
     var updateQuery = {};
 
@@ -247,7 +230,3 @@ function updateVideo(id, updateQuery) {
     }, updateQuery);
 }
 
-function getMetadataDurationInMinutes(metadata) {
-    // ceil so if length is less than 60, we'd get 1
-    return Math.ceil(metadata.length / 60);
-}
