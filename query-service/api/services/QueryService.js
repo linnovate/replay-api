@@ -1,4 +1,6 @@
 
+var Query = require('replay-schemas/Query');
+
 module.exports.saveQuery = function(query) {
     var coordinates, tagsIds, boundingShape;
 
@@ -33,8 +35,8 @@ module.exports.saveQuery = function(query) {
     });
 }
 
-module.exports.getQueries = function() {
-	var limitAmount = req.query.limit;
+module.exports.getQueries = function(query) {
+	var limitAmount = query.limit;
 
 	// fetch all queries and sort by descending order
 	var query = Query.find({}).sort({ createdAt: -1 });

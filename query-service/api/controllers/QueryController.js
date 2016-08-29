@@ -14,7 +14,7 @@ sails.models.query = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateRequest(req)
-			.then(QueryService.getQueries)
+			.then(() => QueryService.getQueries(req.query))
 			.then(function(results) {
 				return res.json(results);
 			})
