@@ -3,7 +3,8 @@ var sails = require('sails'),
 
 var Video = require('replay-schemas/Video'),
   VideoMetadata = require('replay-schemas/VideoMetadata'),
-  Query = require('replay-schemas/Query');
+  Query = require('replay-schemas/Query'),
+  StreamingSource = require('replay-schemas/StreamingSource');
 
 // config chai
 chai.config.includeStack = true;
@@ -47,5 +48,6 @@ after(function(done) {
 function wipeMongoCollections() {
 	return Video.remove({})
 		.then(() => VideoMetadata.remove({}))
-		.then(() => Query.remove({}));
+		.then(() => Query.remove({}))
+    .then(() => StreamingSource.remove({}));
 };

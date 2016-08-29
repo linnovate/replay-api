@@ -10,6 +10,7 @@ describe('QueryController', function () {
         it(util.format('should return %s queries', queryStubsAmount), function (done) {
             createEmptyQueries(queryStubsAmount)
                 .then(() => getAndExpectQueries(queryStubsAmount, done))
+                .catch(done);
         });
 
         it('should return 0 queries', function (done) {
