@@ -36,13 +36,13 @@ module.exports.saveQuery = function(query) {
 }
 
 module.exports.getQueries = function(query) {
-	var limitAmount = query.limit;
-
+	var limitAmount = parseInt(query.limit);
+    
 	// fetch all queries and sort by descending order
-	var query = Query.find({}).sort({ createdAt: -1 });
+	var mongoQuery = Query.find({}).sort({ createdAt: -1 });
 	// if limitAmount is set, limit the amount returned.
 	if (limitAmount) {
-		query = query.limit(limitAmount);
+		mongoQuery = mongoQuery.limit(limitAmount);
 	}
-	return query.exec();
+	return mongoQuery.exec();
 }
