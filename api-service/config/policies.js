@@ -18,7 +18,7 @@
 
 
 module.exports.policies = {
-  VideoController: {
+  GatewayController: {
     '*' : ['jwtAuth']
   }
 
