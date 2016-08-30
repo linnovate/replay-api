@@ -83,7 +83,7 @@ module.exports.blueprints = {
   *                                                                          *
   ***************************************************************************/
 
-  shortcuts: false,
+  // shortcuts: true,
 
   /***************************************************************************
   *                                                                          *
@@ -108,10 +108,10 @@ module.exports.blueprints = {
    *                                                                          *
    ***************************************************************************/
 
-   restPrefix: '/api/v0.1',
+  restPrefix: '/api/v0.1',
 
-   // custom prefix, manually injected in routes.js
-   internalPrefix: '/internal',
+  // custom prefix, manually injected in routes.js
+  internalPrefix: '/internal',
 
   /***************************************************************************
   *                                                                          *
