@@ -4,6 +4,6 @@ WORKDIR /replay-api/query-service
 RUN git checkout master
 RUN npm -g install sails
 RUN npm install
-ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-server MONGO_PORT=27017 MONGO_DATABASE=replay_dev
-ENV ELASTIC=elastic
+ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-prod MONGO_PORT=27017 MONGO_DATABASE=replay_dev
+ENV ELASTIC=elastic-prod
 CMD ["sails", "lift"]
