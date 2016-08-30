@@ -1,3 +1,5 @@
+var Video = require('replay-schemas/Video');
+
 module.exports.buildMongoQuery = function (query) {
     // build the baseline of the query
     var mongoQuery = {

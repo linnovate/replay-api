@@ -43,9 +43,10 @@ module.exports = {
 
 function validateFindRequest(req) {
     return new Promise(function (resolve, reject) {
-        // make sure we have at least one attribute
-        if (!req.query) {
-            return reject(new Error('Empty query is not allowed.'));
+        // validate we get both boundingShapeType and boundingShapeCoordinates
+        if ((req.query.boundingShapeType || req.query.boundingShapeCoordinates) &&
+            !(req.query.boundingShapeType && req.query.boundingShapeCoordinates)) {
+            return reject(new Error('boundingShapeType and boundingShapeCoordinates must be provided together.'));
         }
 
         // validate boundingShapeCoordinates is JSON parsable (since the array would be passed as string)
