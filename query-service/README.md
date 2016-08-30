@@ -55,5 +55,4 @@ Afterwards, you do not need to run `sails lift` but just `nodemon`
 ## Docker
 ```
 docker build -t query-service .
-docker run -d -p 1338:1338 --restart=always --link mongodb-prod:mongodb-prod --link elastic-prod:elastic-prod --name query-service query-service
-```
+docke```

@@ -56,6 +56,6 @@ npm run coverage
 
 ## Docker
 ```
-docker build -t media-url-provider .
+docker build -t media-url-provider
 docker run -d -p 1339:1339 --restart=always --link mongodb-prod:mongodb-prod --name media-url-provider media-url-provider
 ```
