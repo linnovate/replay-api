@@ -14,7 +14,7 @@ sails.models.videometadata = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)
-			.then(getVideoMetadatas)
+			.then(() => VideoMetadataService.getVideoMetadatas(req.query))
 			.then(function(results) {
 				return res.json(results);
 			})
@@ -33,11 +33,4 @@ function validateFindRequest(req) {
 
 		resolve(req);
 	});
-}
-
-function getVideoMetadatas(req) {
-	var videoId = req.query.videoId;
-
-	// return video's metadatas sorted by descendent creation time
-	return VideoMetadata.find({ videoId: videoId }).sort({createdAt: -1});
 }

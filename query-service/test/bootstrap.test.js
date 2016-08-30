@@ -4,7 +4,7 @@ var sails = require('sails'),
 var Video = require('replay-schemas/Video'),
   VideoMetadata = require('replay-schemas/VideoMetadata'),
   Query = require('replay-schemas/Query'),
-  Tag = require('replay-schemas/Tag')
+  Tag = require('replay-schemas/Tag'),
   StreamingSource = require('replay-schemas/StreamingSource');
 
 // config chai
