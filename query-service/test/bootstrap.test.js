@@ -4,6 +4,7 @@ var sails = require('sails'),
 var Video = require('replay-schemas/Video'),
   VideoMetadata = require('replay-schemas/VideoMetadata'),
   Query = require('replay-schemas/Query'),
+  Tag = require('replay-schemas/Tag')
   StreamingSource = require('replay-schemas/StreamingSource');
 
 // config chai
@@ -49,5 +50,6 @@ function wipeMongoCollections() {
 	return Video.remove({})
 		.then(() => VideoMetadata.remove({}))
 		.then(() => Query.remove({}))
-    .then(() => StreamingSource.remove({}));
+    .then(() => StreamingSource.remove({}))
+    .then(() => Tag.remove({}));
 };

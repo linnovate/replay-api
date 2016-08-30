@@ -6,10 +6,10 @@ var StreamingSource = require('replay-schemas/StreamingSource'),
 describe('SourceController', function () {
 
     describe('#find()', function () {
-        var queryStubsAmount = 3;
-        it(util.format('should return %s streaming sources', queryStubsAmount), function (done) {
-            createEmptyStreamingSources(queryStubsAmount)
-                .then(() => getAndExpectStreamingSources(queryStubsAmount, done))
+        var tagStubsAmount = 3;
+        it(util.format('should return %s streaming sources', tagStubsAmount), function (done) {
+            createEmptyStreamingSources(tagStubsAmount)
+                .then(() => getAndExpectStreamingSources(tagStubsAmount, done))
                 .catch(done);
         });
 
