@@ -8,7 +8,7 @@ describe('SourceController', function () {
     describe('#find()', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s streaming sources', tagStubsAmount), function (done) {
-            createEmptyStreamingSources(tagStubsAmount)
+            createStreamingSources(tagStubsAmount)
                 .then(() => getAndExpectStreamingSources(tagStubsAmount, done))
                 .catch(done);
         });
@@ -20,7 +20,7 @@ describe('SourceController', function () {
 
 });
 
-function createEmptyStreamingSources(amount) {
+function createStreamingSources(amount) {
     var streamingSource = {
         sourceID: 100,
         sourceName: "VideoMuxedStream",

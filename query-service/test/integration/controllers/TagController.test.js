@@ -8,7 +8,7 @@ describe('TagController', function () {
     describe('#find()', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s tags', tagStubsAmount), function (done) {
-            createEmptyTags(tagStubsAmount)
+            createTags(tagStubsAmount)
                 .then(() => getAndExpectTags(tagStubsAmount, done))
                 .catch(done);
         });
@@ -20,7 +20,7 @@ describe('TagController', function () {
 
 });
 
-function createEmptyTags(amount) {
+function createTags(amount) {
     var tag = {
        title: 'test'
     };
