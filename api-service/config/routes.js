@@ -33,26 +33,19 @@ module.exports.routes = addPrefixes({
 	 * `assets` directory)                                                      *
 	 *                                                                          *
 	 ***************************************************************************/
-
-	'/': {
-		view: 'static/home'
-	},
-
+  
 	'/auth/google': {
 		controller: 'auth',
 		action: 'googleCallback'
 	},
 
 	'post <internalPrefix>/kaltura/upload_callback': 'KalturaController.onUploadFinished',
-
-	'<restPrefix>/:service/*': {
-		controller: 'GatewayController',
-		action: 'gate'
-	},
+  
 	'<restPrefix>/:service?*': {
 		controller: 'GatewayController',
 		action: 'gate'
 	}
+
 
 	/***************************************************************************
 	 *                                                                          *

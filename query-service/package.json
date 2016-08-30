@@ -11,8 +11,8 @@
     "lodash": "^4.14.1",
     "mongoose": "^4.5.8",
     "rc": "^1.1.6",
-    "replay-elastic": "^1.0.3",
-    "replay-schemas": "^1.0.18",
+    "replay-elastic": "1.0.3",
+    "replay-schemas": "1.0.18",
     "sails": "^0.12.4",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.1"
