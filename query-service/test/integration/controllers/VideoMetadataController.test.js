@@ -26,9 +26,9 @@ describe('VideoMetadataController', function () {
     });
 
     describe('#validateRequest()', function () {
-        it('should reject due to bad videoId parameter (undefined)', function () {
+        it('should reject due to bad videoId parameter (undefined)', function (done) {
             var videoId = undefined;
-            getVideoMetadatasAndExpectError(videoId);
+            getVideoMetadatasAndExpectError(done, videoId);
         })
     });
 });
@@ -82,11 +82,11 @@ function getAndExpectVideoMetadatas(done, videoId, amount) {
         });
 }
 
-function getVideoMetadatasAndExpectError(videoId) {
+function getVideoMetadatasAndExpectError(done, videoId) {
     request(sails.hooks.http.app)
         .get('/videometadata')
         .query({ videoId: videoId })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(500);
+        .expect(500, done);
 }

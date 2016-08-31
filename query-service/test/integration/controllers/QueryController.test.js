@@ -26,14 +26,14 @@ describe('QueryController', function () {
     });
 
     describe('#validateRequest()', function () {
-        it('should reject due to bad limit parameter (string)', function () {
+        it('should reject due to bad limit parameter (string)', function (done) {
             var limit = 'string';
-            getQueriesAndExpectError(limit);
+            getQueriesAndExpectError(done, limit);
         })
 
-        it('should reject due to bad limit parameter (negative)', function () {
+        it('should reject due to bad limit parameter (negative)', function (done) {
             var limit = -1;
-            getQueriesAndExpectError(limit);
+            getQueriesAndExpectError(done, limit);
         })
     });
 });
@@ -60,11 +60,11 @@ function getAndExpectQueries(done, amount, limit) {
         });
 }
 
-function getQueriesAndExpectError(limit) {
+function getQueriesAndExpectError(done, limit) {
     request(sails.hooks.http.app)
         .get('/query')
         .query({ limit: limit })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(500);
+        .expect(500, done);
 }
