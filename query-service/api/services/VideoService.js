@@ -1,4 +1,5 @@
-var Video = require('replay-schemas/Video');
+var Video = require('replay-schemas/Video'),
+    Tag = require('replay-schemas/Tag');
 
 module.exports.buildMongoQuery = function (query) {
     // build the baseline of the query
@@ -59,18 +60,19 @@ module.exports.buildMongoQuery = function (query) {
     return Promise.resolve(mongoQuery);
 }
 
-module.exports.performMongoQuery = function(mongoQuery) {
+module.exports.performMongoQuery = function (mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
     return Video.find(mongoQuery).populate('tags');
 }
 
-module.exports.performUpdate = function(id, body) {
+module.exports.performUpdate = function (id, body) {
     var updateQuery = {};
 
     if (body.tag) {
         return findOrCreateTagByTitle(body.tag)
             .then(function (tag) {
+                console.log('Find / Created tag:', tag.title);
                 updateQuery.$addToSet = {
                     tags: tag._id
                 };

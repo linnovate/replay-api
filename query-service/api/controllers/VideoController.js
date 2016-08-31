@@ -7,6 +7,7 @@
 
 var Promise = require('bluebird'),
     _ = require('lodash'),
+    mongoose = require('mongoose'),
     Query = require('replay-schemas/Query'),
     Video = require('replay-schemas/Video'),
     Tag = require('replay-schemas/Tag');
@@ -32,8 +33,13 @@ module.exports = {
     update: function (req, res, next) {
         validateUpdateRequest(req)
             .then(() => VideoService.performUpdate(req.params.id, req.body))
-            .then(function () {
-                return res.ok();
+            .then(function (video) {
+                if(video){
+                    return res.ok();
+                }
+                else{
+                    return res.notFound();
+                }
             })
             .catch(function (err) {
                 return res.serverError(err);
@@ -75,12 +81,26 @@ function validateUpdateRequest(req) {
         // make sure we have at least one attribute
         if (!req.query) {
             return reject(new Error('Empty update is not allowed.'));
-        } else if (req.query && Object.keys(req.body).length === 1 && req.body.tag) {
+        }
+        
+        // validate id is a mongoose id
+        if(req.params.id) {
+            try {
+                mongoose.Types.ObjectId(req.params.id);
+            } catch(e) {
+                return reject(new Error('Id provided is not in a correct format'));
+            }
+        } else {
+            // here just for code completion; should not reach this function without id
+            return reject(new Error('No id provided.'));
+        }
+        
+        if (Object.keys(req.body).length !== 1 || !req.body.tag) {
             // allow update of specific fields only
-            return resolve();
+            return reject(new Error('Update is not allowed for the specified fields.'));
         }
 
-        reject(new Error('Update is not allowed for the specified fields.'));
+        resolve();
     });
 }
 

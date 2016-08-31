@@ -1,5 +1,5 @@
 var Video = require('replay-schemas/Video'),
-    request = require('supertest'),
+    request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
     util = require('util');
@@ -10,17 +10,40 @@ describe('VideoController', function () {
         it(util.format('should return all %s videos', videoStubsAmount), function (done) {
             var query = {};
             createVideos(videoStubsAmount)
-                .then(() => getAndExpectVideos(done, videoStubsAmount, query))
+                .then(() => getAndExpectVideos(videoStubsAmount, query))
+                .then(done)
                 .catch(done);
         });
 
         it('should return 0 videos', function (done) {
             var query = {};
-            getAndExpectVideos(done, 0, query);
+            getAndExpectVideos(0, query)
+                .then(done)
+                .catch(done);
+        })
+
+        it('should return 1 video by sourceId', function (done) {
+            var query = { sourceId: '100' }
+            createVideos(1)
+                .then(() => getAndExpectVideos(1, query))
+                .then(done)
+                .catch(done);
         })
     });
 
-    describe('bad input tests', function () {
+    describe('#update()', function () {
+        it('should update video tag successfuly', function (done) {
+            var tag = 'newTag'
+            createVideos(1)
+                .then(() => getVideos())
+                .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
+                .then(() => validateTagUpdated(tag))
+                .then(done)
+                .catch(done);
+        })
+    })
+
+    describe('#find() bad input tests', function () {
         it('should reject due to bad fromVideoTime (not Date)', function (done) {
             var query = createVideoQuery();
             query.fromVideoTime = 'test';
@@ -87,8 +110,12 @@ function createVideos(amount) {
     return Promise.all(promises);
 }
 
-function getAndExpectVideos(done, amount, params) {
-    request(sails.hooks.http.app)
+function getVideos() {
+    return Video.find();
+}
+
+function getAndExpectVideos(amount, params) {
+    return request(sails.hooks.http.app)
         .get('/video')
         .query({ fromVideoTime: params.fromVideoTime })
         .query({ toVideoTime: params.toVideoTime })
@@ -101,10 +128,8 @@ function getAndExpectVideos(done, amount, params) {
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
-        .end(function (err, res) {
-            if (err) throw err;
-            expect(res.body).to.have.lengthOf(amount);
-            done();
+        .then((res) => {
+            expect(res.body).to.have.lengthOf(amount); 
         });
 }
 
@@ -124,6 +149,14 @@ function getVideoAndExpectError(done, params) {
         .expect(500, done);
 }
 
+function updateVideoAndExpectOK(videoId, tag) {
+    console.log('VideoId', util.format('/video/%s', videoId));
+    return request(sails.hooks.http.app)
+        .put(util.format('/video/%s', videoId))
+        .send({ tag: tag })
+        .expect(200);
+}
+
 function createVideoQuery() {
     return {
         fromVideoTime: new Date(),
@@ -139,4 +172,14 @@ function createVideoQuery() {
         boundingShapeCoordinates: '[[[1, 1], [2, 2], [3, 3], [1, 1]]]',
         boundingShapeType: 'Polygon'
     };
+}
+
+function validateTagUpdated(tag) {
+    return Video
+        .find()
+        .populate('tags')
+        .then(function (videos) {
+            expect(videos).to.be.lengthOf(1);
+            expect(videos[0].tags[0].title).to.equal(tag);
+        });
 }
