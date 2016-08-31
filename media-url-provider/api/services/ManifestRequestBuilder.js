@@ -24,8 +24,7 @@ function ManifestRequestBuilder() {
 
 	function buildManifestRequest(id) {
 		return getVideo(id).then(function(video) {
-			var requestUrl = 'http://' +
-				this.server + ':' +
+			var requestUrl = this.server + ':' +
 				this.port + '/' +
 				this.instance + '/' +
 				this.content_instance + '/' +
