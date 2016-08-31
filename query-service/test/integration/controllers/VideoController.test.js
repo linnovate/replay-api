@@ -141,6 +141,17 @@ describe('VideoController', function () {
                 .then(done)
                 .catch(done);
         })
+
+        it('should return 0 video by boundingShape', function (done) {
+            var query = {
+                boundingShapeType: 'Polygon',
+                boundingShapeCoordinates: '[[[1,1], [2,2], [3,3], [1,1]]]'
+            }
+            createVideos(1)
+                .then(() => getAndExpectVideos(0, query))
+                .then(done)
+                .catch(done);
+        })
     });
 
     describe('#update()', function () {
@@ -225,8 +236,10 @@ describe('VideoController', function () {
                 .then((videos) => {
                     return request(sails.hooks.http.app)
                         .put(util.format('/video/%s', videos[0].id))
-                        .send({ tag: tag })
-                        .send({ sourceId: 'newSourceId' })
+                        .send({
+                            tag: tag,
+                            sourceId: 'newSourceId'
+                        })
                         .expect(500);
                 })
                 .then(() => done())
@@ -248,7 +261,7 @@ function createVideos(amount) {
         startTime: new Date(),
         endTime: addMinutes(new Date(), 10),
         status: 'ready',
-        boundingShape: {
+        boundingPolygon: {
             type: 'Polygon',
             coordinates: [[[34.784518, 32.128957], [34.848031, 32.125534], [34.846299, 32.029153], [34.744677, 32.018383], [34.784518, 32.128957]]]
         }
@@ -308,7 +321,7 @@ function updateVideoAndExpectOK(videoId, tag) {
 }
 
 function updateVideoAndExpectError(videoId, tag) {
-    return request(sails.hooks.http.app)
+    request(sails.hooks.http.app)
         .put(util.format('/video/%s', videoId))
         .send({ tag: tag })
         .expect(500);
