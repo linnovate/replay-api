@@ -66,9 +66,12 @@ function validateFindRequest(req) {
 
         if (req.query.tagsIds) {
             try {
-                JSON.parse(req.query.tagsIds);
+                var tagsIds = JSON.parse(req.query.tagsIds);
+                tagsIds.forEach(function(tagId){
+                    mongoose.Types.ObjectId(tagId);
+                });
             } catch (e) {
-                return reject(new Error('tagsIds is not parsable.'));
+                return reject(new Error('tagsIds is not array of ids.'));
             }
         }
 

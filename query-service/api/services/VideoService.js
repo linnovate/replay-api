@@ -54,8 +54,7 @@ module.exports.buildMongoQuery = function (query) {
     }
 
     // skip check of minimum width & height and minimum duration inside intersection
-
-
+    
     // return the original query for later use, and the built mongo query
     return Promise.resolve(mongoQuery);
 }
@@ -72,7 +71,7 @@ module.exports.performUpdate = function (id, body) {
     if (body.tag) {
         return findOrCreateTagByTitle(body.tag)
             .then(function (tag) {
-                console.log('Find / Created tag:', tag.title);
+                console.log('Found / Created tag:', tag.title);
                 updateQuery.$addToSet = {
                     tags: tag._id
                 };
@@ -98,7 +97,8 @@ function findOrCreateTagByTitle(title) {
 }
 
 function updateVideo(id, updateQuery) {
-    console.log('Updating video by id', id, 'Update is:', updateQuery);
+    console.log('Updating video:', id);
+    console.log('Update query:', updateQuery);
     return Video.findOneAndUpdate({
         _id: id
     }, updateQuery);
