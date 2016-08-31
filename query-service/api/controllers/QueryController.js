@@ -14,7 +14,7 @@ sails.models.query = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateRequest(req)
-			.then(QueryService.getQueries)
+			.then(() => QueryService.getQueries(req.query))
 			.then(function(results) {
 				return res.json(results);
 			})
@@ -26,7 +26,10 @@ module.exports = {
 
 function validateRequest(req) {
 	return new Promise(function(resolve, reject) {
-		// right now we have nothing to validate
+		// check that if limit present, then it's a positive integer
+		if(req.query.limit && (!parseInt(req.query.limit) || parseInt(req.query.limit) <= 0)) {
+			return reject(new Error('Parameter limit is not a positive integer'));
+		}
 		resolve(req);
 	});
 }

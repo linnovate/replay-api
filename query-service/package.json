@@ -6,7 +6,8 @@
   "main": "app.js",
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/**/**/*.test.js"
   },
   "dependencies": {
     "bluebird": "^3.4.0",
@@ -17,5 +18,12 @@
     "sails": "^0.12.4",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "mongoose": "^4.5.10",
+    "supertest": "^2.0.0",
+    "supertest-as-promised": "^4.0.0"
   }
 }
