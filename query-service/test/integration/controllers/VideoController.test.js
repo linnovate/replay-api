@@ -5,54 +5,68 @@ var Video = require('replay-schemas/Video'),
     util = require('util');
 
 describe('VideoController', function () {
+    describe('#find()', function () {
+        var videoStubsAmount = 3;
+        it(util.format('should return all %s videos', videoStubsAmount), function (done) {
+            var query = {};
+            createVideos(videoStubsAmount)
+                .then(() => getAndExpectVideos(done, videoStubsAmount, query))
+                .catch(done);
+        });
 
-    // describe('#find()', function () {
-    //     var metadataStubsAmount = 3;
-    //     it(util.format('should return all %s video metadatas', metadataStubsAmount), function (done) {
-    //         var _videoId;
-    //         createVideo()
-    //             .then((video) => {
-    //                 _videoId = video.id;
-    //                 return createVideoMetadatas(_videoId, metadataStubsAmount);
-    //             })
-    //             .then(() => getAndExpectVideoMetadatas(done, _videoId, metadataStubsAmount))
-    //             .catch(done);
-    //     });
+        it('should return 0 videos', function (done) {
+            var query = {};
+            getAndExpectVideos(done, 0, query);
+        })
+    });
 
-    //     it('should return 0 video metadatas', function (done) {
-    //         getAndExpectVideoMetadatas(done, 'notExistingVideoId', 0);
-    //     })
-    // });
+    describe('bad input tests', function () {
+        it('should reject due to bad fromVideoTime (not Date)', function (done) {
+            var query = createVideoQuery();
+            query.fromVideoTime = 'test';
+            getVideoAndExpectError(done, query);
+        })
 
-    describe('#validateRequest()', function () {
-        it('should reject due to bad boundingShapeType (boundingShapeCoordinates without boundingShapeType)', function () {
-            var query = createQuery();
+        it('should reject due to bad toVideoTime (not Date)', function (done) {
+            var query = createVideoQuery();
+            query.toVideoTime = 'test';
+            getVideoAndExpectError(done, query);
+        })
+
+        it('should reject due to bad minVideoDuration (not Number)', function (done) {
+            var query = createVideoQuery();
+            query.minVideoDuration = 'test';
+            getVideoAndExpectError(done, query);
+        })
+
+        it('should reject due to bad maxVideoDuration (not Number)', function (done) {
+            var query = createVideoQuery();
+            query.maxVideoDuration = 'test';
+            getVideoAndExpectError(done, query);
+        })
+
+        it('should reject due to bad boundingShapeType (boundingShapeCoordinates without boundingShapeType)', function (done) {
+            var query = createVideoQuery();
             query.boundingShapeType = undefined;
-            getVideoAndExpectError(query);
+            getVideoAndExpectError(done, query);
         })
 
-        it('should reject due to bad boundingShapeCoordinates (boundingShapeType without boundingShapeCoordinates)', function () {
-            var query = createQuery();
+        it('should reject due to bad boundingShapeCoordinates (boundingShapeType without boundingShapeCoordinates)', function (done) {
+            var query = createVideoQuery();
             query.boundingShapeCoordinates = undefined;
-            getVideoAndExpectError(query);
+            getVideoAndExpectError(done, query);
         })
 
-        it('should reject due to bad tagsIds (not [string])', function () {
-            var query = createQuery();
-            query.tagsIds = '[]';
-            getVideoAndExpectError(query);
-        })
-
-        it('should reject due to bad tagsIds (not [string])', function () {
-            var query = createQuery();
-            getVideoAndExpectError(query);
+        it('should reject due to bad tagsIds (not [String])', function (done) {
+            var query = createVideoQuery();
+            query.tagsIds = 'test';
+            getVideoAndExpectError(done, query);
         })
     });
 });
 
-function createVideo() {
+function createVideos(amount) {
     var video = {
-        _id: new mongoose.Types.ObjectId(),
         sourceId: '100',
         relativePath: 'test.mp4',
         name: 'test.mp4',
@@ -62,33 +76,28 @@ function createVideo() {
         },
         jobStatusId: 'someId',
         startTime: new Date(),
-        endTime: new Date()
-    };
-
-    return Video.create(video);
-}
-
-function createVideoMetadatas(videoId, amount) {
-    var videoMetadata = {
-        sourceId: '100',
-        receivingMethod: {
-            standard: 'VideoStandard',
-            version: '1.0'
-        },
-        videoId: videoId
+        endTime: new Date(),
+        status: 'ready'
     };
 
     var promises = [];
     for (var i = 0; i < amount; i++) {
-        promises.push(VideoMetadata.create(videoMetadata));
+        promises.push(Video.create(video));
     }
     return Promise.all(promises);
 }
 
-function getAndExpectVideoMetadatas(done, videoId, amount) {
+function getAndExpectVideos(done, amount, params) {
     request(sails.hooks.http.app)
-        .get('/videometadata')
-        .query({ videoId: videoId })
+        .get('/video')
+        .query({ fromVideoTime: params.fromVideoTime })
+        .query({ toVideoTime: params.toVideoTime })
+        .query({ minVideoDuration: params.minVideoDuration })
+        .query({ maxVideoDuration: params.maxVideoDuration })
+        .query({ sourceId: params.sourceId })
+        .query({ boundingShapeType: params.boundingShapeType })
+        .query({ boundingShapeCoordinates: params.boundingShapeCoordinates })
+        .query({ tagsIds: params.tagsIds })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -99,30 +108,35 @@ function getAndExpectVideoMetadatas(done, videoId, amount) {
         });
 }
 
-function getVideoAndExpectError(params) {
+function getVideoAndExpectError(done, params) {
     request(sails.hooks.http.app)
         .get('/video')
+        .query({ fromVideoTime: params.fromVideoTime })
+        .query({ toVideoTime: params.toVideoTime })
+        .query({ minVideoDuration: params.minVideoDuration })
+        .query({ maxVideoDuration: params.maxVideoDuration })
+        .query({ sourceId: params.sourceId })
         .query({ boundingShapeType: params.boundingShapeType })
         .query({ boundingShapeCoordinates: params.boundingShapeCoordinates })
         .query({ tagsIds: params.tagsIds })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(500);
+        .expect(500, done);
 }
 
-function createQuery() {
+function createVideoQuery() {
     return {
-        // fromVideoTime: new Date(),
-        // toVideoTime: new Date(),
-        // minVideoDuration: 0,
-        // maxVideoDuration: 1000,
-        // copyright: 'test',
-        // minTraceHeight: 100,
-        // minTraceWidth: 100,
-        // minMinutesInsideShape: 10,
-        // sourceId: '100',
-        tagsIds: [],
-        boundingShapeCoordinates: [[[1,1],[2,2],[3,3],[1,1]]],
+        fromVideoTime: new Date(),
+        toVideoTime: new Date(),
+        minVideoDuration: 0,
+        maxVideoDuration: 1000,
+        copyright: 'test',
+        minTraceHeight: 100,
+        minTraceWidth: 100,
+        minMinutesInsideShape: 10,
+        sourceId: '100',
+        tagsIds: '[]',
+        boundingShapeCoordinates: '[[[1, 1], [2, 2], [3, 3], [1, 1]]]',
         boundingShapeType: 'Polygon'
     };
 }
