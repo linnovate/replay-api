@@ -9,12 +9,15 @@ describe('SourceController', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s streaming sources', tagStubsAmount), function (done) {
             createStreamingSources(tagStubsAmount)
-                .then(() => getAndExpectStreamingSources(tagStubsAmount, done))
+                .then(() => getAndExpectStreamingSources(tagStubsAmount))
+                .then(done)
                 .catch(done);
         });
 
         it('should return 0 queries', function (done) {
-            getAndExpectStreamingSources(0, done);
+            getAndExpectStreamingSources(0)
+                .then(done)
+                .catch(done);
         })
     });
 
@@ -42,15 +45,13 @@ function createStreamingSources(amount) {
     return Promise.all(promises);
 }
 
-function getAndExpectStreamingSources(amount, done) {
-    request(sails.hooks.http.app)
+function getAndExpectStreamingSources(amount) {
+    return request(sails.hooks.http.app)
         .get('/source')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
-        .end(function (err, res) {
-            if (err) throw err;
+        .then((res) => {
             expect(res.body).to.have.lengthOf(amount);
-            done();
         });
 }

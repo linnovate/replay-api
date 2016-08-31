@@ -1,6 +1,6 @@
 var VideoMetadata = require('replay-schemas/VideoMetadata'),
     Video = require('replay-schemas/Video'),
-    request = require('supertest'),
+    request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
     util = require('util');
@@ -16,12 +16,15 @@ describe('VideoMetadataController', function () {
                     _videoId = video.id;
                     return createVideoMetadatas(_videoId, metadataStubsAmount);
                 })
-                .then(() => getAndExpectVideoMetadatas(done, _videoId, metadataStubsAmount))
+                .then(() => getAndExpectVideoMetadatas(_videoId, metadataStubsAmount))
+                .then(done)
                 .catch(done);
         });
 
         it('should return 0 video metadatas', function (done) {
-            getAndExpectVideoMetadatas(done, 'notExistingVideoId', 0);
+            getAndExpectVideoMetadatas('notExistingVideoId', 0)
+                .then(done)
+                .catch(done);
         })
     });
 
@@ -35,18 +38,18 @@ describe('VideoMetadataController', function () {
 
 function createVideo() {
     var video = {
-		_id: new mongoose.Types.ObjectId(),
-		sourceId: '100',
-		relativePath: 'test.mp4',
-		name: 'test.mp4',
-		receivingMethod: {
+        _id: new mongoose.Types.ObjectId(),
+        sourceId: '100',
+        relativePath: 'test.mp4',
+        name: 'test.mp4',
+        receivingMethod: {
             standard: 'VideoStandard',
-            version: '1.0'    
+            version: '1.0'
         },
-		jobStatusId: 'someId',
-		startTime: new Date(),
-		endTime: new Date()
-	};
+        jobStatusId: 'someId',
+        startTime: new Date(),
+        endTime: new Date()
+    };
 
     return Video.create(video);
 }
@@ -68,17 +71,15 @@ function createVideoMetadatas(videoId, amount) {
     return Promise.all(promises);
 }
 
-function getAndExpectVideoMetadatas(done, videoId, amount) {
-    request(sails.hooks.http.app)
+function getAndExpectVideoMetadatas(videoId, amount) {
+    return request(sails.hooks.http.app)
         .get('/videometadata')
         .query({ videoId: videoId })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
-        .end(function (err, res) {
-            if (err) throw err;
+        .then((res) => {
             expect(res.body).to.have.lengthOf(amount);
-            done();
         });
 }
 

@@ -1,5 +1,5 @@
 var Tag = require('replay-schemas/Tag'),
-    request = require('supertest'),
+    request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     util = require('util');
 
@@ -9,12 +9,15 @@ describe('TagController', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s tags', tagStubsAmount), function (done) {
             createTags(tagStubsAmount)
-                .then(() => getAndExpectTags(tagStubsAmount, done))
+                .then(() => getAndExpectTags(tagStubsAmount))
+                .then(done)
                 .catch(done);
         });
 
         it('should return 0 tags', function (done) {
-            getAndExpectTags(0, done);
+            getAndExpectTags(0)
+                .then(done)
+                .catch(done);
         })
     });
 
@@ -22,7 +25,7 @@ describe('TagController', function () {
 
 function createTags(amount) {
     var tag = {
-       title: 'test'
+        title: 'test'
     };
 
     var promises = [];
@@ -33,15 +36,13 @@ function createTags(amount) {
     return Promise.all(promises);
 }
 
-function getAndExpectTags(amount, done) {
-    request(sails.hooks.http.app)
+function getAndExpectTags(amount) {
+    return request(sails.hooks.http.app)
         .get('/tag')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
-        .end(function (err, res) {
-            if (err) throw err;
+        .then((res) => {
             expect(res.body).to.have.lengthOf(amount);
-            done();
         });
 }
