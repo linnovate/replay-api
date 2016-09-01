@@ -1,4 +1,4 @@
-FROMM node:4.5.0
+FROM node:4.5.0
 RUN git clone https://github.com/linnovate/replay-api.git
 WORKDIR /replay-api/media-url-provider
 RUN git checkout develop
