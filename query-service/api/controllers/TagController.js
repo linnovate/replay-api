@@ -13,7 +13,7 @@ sails.models.tag = {};
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)
-			.then(getTags)
+			.then(TagService.getTags)
 			.then(function(results) {
 				return res.json(results);
 			})
@@ -30,6 +30,3 @@ function validateFindRequest(req) {
 	});
 }
 
-function getTags(req) {
-	return Tag.find({}).sort({ title: 1 });
-}

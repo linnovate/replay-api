@@ -6,15 +6,24 @@
   "main": "app.js",
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/**/**/*.test.js"
   },
   "dependencies": {
     "bluebird": "^3.4.0",
     "lodash": "^4.15.0",
     "rc": "^1.1.6",
-    "replay-schemas": "^1.0.23",
+    "replay-elastic": "1.0.3",
+    "replay-schemas": "1.0.18",
     "sails": "^0.12.4",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "mongoose": "^4.5.10",
+    "supertest": "^2.0.0",
+    "supertest-as-promised": "^4.0.0"
   }
 }
