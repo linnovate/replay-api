@@ -9,8 +9,6 @@
     "jwt-simple": "^0.5.0",
     "moment": "^2.14.1",
     "rc": "1.0.1",
-    "replay-jobs-service": "^1.0.14",
-    "replay-rabbitmq": "^1.0.3",
     "replay-schemas": "^1.0.24",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
