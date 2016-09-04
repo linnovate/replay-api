@@ -38,8 +38,6 @@ module.exports.routes = addPrefixes({
 		controller: 'auth',
 		action: 'googleCallback'
 	},
-
-	'post <internalPrefix>/kaltura/upload_callback': 'KalturaController.onUploadFinished',
   
 	'<restPrefix>/:service?*': {
 		controller: 'GatewayController',
