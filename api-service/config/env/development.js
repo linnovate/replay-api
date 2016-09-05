@@ -12,6 +12,7 @@
 var blueprints = require('.././blueprints').blueprints;
 var port = process.env.PORT || 1337;
 var baseUrl = process.env.BASE_URL || 'http://localhost';
+var fs   = require('fs');
 
 module.exports = {
 
@@ -82,6 +83,38 @@ module.exports = {
 		ui: {
 			url: baseUrl + ':' + port + '/docs'
 		}
-	}
+	},
+
+	/*ssl: {
+		key: fs.readFileSync('./key.pem'),
+		cert: fs.readFileSync('./cert.pem')
+	}*/
+
+/*express: {
+ 	port: 443,
+ 	ssl: {
+ 		secureProtocol: 'SSLv23_method',
+ 		secureOptions: require('constants').SSL_OP_NO_SSLv3,
+
+ 		key: fs.readFileSync('./key.pem'),
+ 		cert: fs.readFileSync('./cert.pem')
+ 	},
+ 	serverOptions : {
+ 		key: fs.readFileSync('./key.pem'),
+ 		cert: fs.readFileSync('./cert.pem')
+ 	}
+
+
+
+ }*/
+
+	/*,express: {
+		 //port: 443,
+		 serverOptions : {
+			   key: fs.readFileSync('./key.pem'),
+			   cert: fs.readFileSync('./cert.pem')
+		 }}*/
+
+
 
 };

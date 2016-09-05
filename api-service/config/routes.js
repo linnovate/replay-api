@@ -33,16 +33,27 @@ module.exports.routes = addPrefixes({
 	 * `assets` directory)                                                      *
 	 *                                                                          *
 	 ***************************************************************************/
-  
+
 	'/auth/google': {
 		controller: 'auth',
 		action: 'googleCallback'
 	},
-  
+
 	'<restPrefix>/:service?*': {
 		controller: 'GatewayController',
 		action: 'gate'
-	}
+	},
+	'post /login/callback': 'callback',
+	'get /login': 'SamlController.login',
+	'/logout': 'SamlController.logout',
+	'get /signup': {
+		view: 'signup'
+	},
+	'post /user': 'SamlController.signup',
+
+	'post /adfs/postResponse': 'SamlController.redirect',
+
+	'get /': 'SamlController.ensureAuthenticated'
 
 
 	/***************************************************************************
