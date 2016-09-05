@@ -43,8 +43,8 @@ module.exports.routes = addPrefixes({
 		controller: 'GatewayController',
 		action: 'gate'
 	},
-	'post /login/callback': 'callback',
 	'get /login': 'SamlController.login',
+	'post /login/callback': 'SamlController.redirect',
 	'/logout': 'SamlController.logout',
 	'get /signup': {
 		view: 'signup'

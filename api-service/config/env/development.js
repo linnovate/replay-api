@@ -85,10 +85,10 @@ module.exports = {
 		}
 	},
 
-	/*ssl: {
+	ssl: {
 		key: fs.readFileSync('./key.pem'),
 		cert: fs.readFileSync('./cert.pem')
-	}*/
+	}
 
 /*express: {
  	port: 443,
