@@ -31,13 +31,11 @@ passport.use(new SamlStrategy({
 
 },
 	function (profile, done) {
-		console.log("***** passport.use **********")
 		User.findOne({
 			// TODO set username from config/local
 			username: profile[sails.config.settings.services.saml.username]
 		},
 			function (err, user) {
-				console.log("3452345 passport.use **********")
 				if (err) {
 					return done(err);
 				}
