@@ -28,9 +28,10 @@ function ManifestRequestBuilder() {
 				this.port + '/' +
 				this.instance + '/' +
 				this.content_instance + '/' +
-				video.relativePath + '/' +
-				video.format + ':' +
-				video.videoMainFileName +
+				video.contentDirectoryPath + '/' +
+				video.requestFormat + ':' +
+				video.baseName + '.' +
+				video.requestFormat +
 				MANIFEST_SUFFIX;
 
 			return requestUrl;
