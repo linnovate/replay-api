@@ -11,12 +11,8 @@ var Promise = require('bluebird'),
 module.exports = {
 	findOne: function(req, res, next) {
 		var id = req.params.id;
-		getVideo(id)
-			.then(function(video) {
-				return KalturaAssetRequest.getMpd(video.providerId);
-			})
+		ManifestRequestBuilder.buildManifestRequest(id)
 			.then(function(mpd) {
-				// res.setHeader('Content-Type', 'application/dash+xml');
 				res.json({ url: mpd });
 			})
 			.catch(function(err) {
@@ -24,22 +20,7 @@ module.exports = {
 					console.log(err);
 					return res.badRequest(err);
 				}
-
 				res.serverError('There was an unexpected error retrieving mpd file.');
 			});
 	}
 };
-
-function getVideo(id) {
-	return Video
-		.findOne({ _id: id })
-		.then(function(video) {
-			if (!video) {
-				return Promise.reject('Video does not exist');
-			}
-			return Promise.resolve(video);
-		})
-		.catch(function(err) {
-			Promise.reject(err);
-		});
-}

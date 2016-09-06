@@ -23,10 +23,11 @@ module.exports = {
 	port: 1339,
 	settings: {
 		services: {
-			kaltura: {
+			wowza: {
 				server: 'http://vod.linnovate.net',
-				port: '80',
-				partnerId: 101
+				port: '1935',
+				instance: 'weplay',
+				content_instance: 'weplay'				
 			}
 		}
 	}
