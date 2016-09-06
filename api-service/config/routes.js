@@ -46,9 +46,7 @@ module.exports.routes = addPrefixes({
 	'get /login': 'SamlController.login',
 	'post /login/callback': 'SamlController.redirect',
 	'/logout': 'SamlController.logout',
-	'get /signup': {
-		view: 'signup'
-	},
+	
 	'post /user': 'SamlController.signup',
 
 	'post /adfs/postResponse': 'SamlController.redirect',
