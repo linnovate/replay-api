@@ -251,8 +251,10 @@ describe('VideoController', function () {
 function createVideos(amount) {
     var video = {
         sourceId: '100',
-        relativePath: 'test.mp4',
-        name: 'test.mp4',
+        videoFileName: 'test.mp4',
+        contentDirectoryPath: '/',
+        baseName: 'test',
+        requestFormat: 'mp4',
         receivingMethod: {
             standard: 'VideoStandard',
             version: '1.0'
