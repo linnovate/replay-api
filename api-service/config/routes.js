@@ -34,24 +34,32 @@ module.exports.routes = addPrefixes({
 	 *                                                                          *
 	 ***************************************************************************/
 
+	'<restPrefix>/:service?*': {
+		controller: 'GatewayController',
+		action: 'gate'
+	},
+
 	'/auth/google': {
 		controller: 'auth',
 		action: 'googleCallback'
 	},
 
-	'<restPrefix>/:service?*': {
-		controller: 'GatewayController',
-		action: 'gate'
+	'get /auth/adfs-saml': {
+		controller: 'auth',
+		action: 'adfsSamlLogin'
 	},
-	'get /login': 'SamlController.login',
-	'post /login/callback': 'SamlController.redirect',
-	'/logout': 'SamlController.logout',
-	
-	'post /user': 'SamlController.signup',
 
-	'post /adfs/postResponse': 'SamlController.redirect',
+	'post /login/callback': {
+		controller: 'auth',
+		action: 'adfsSamlCallback'
+	},
 
-	'get /': 'SamlController.ensureAuthenticated'
+	'get /auth/logout': {
+		controller: 'auth',
+		action: 'logout'
+	}
+
+	// 'get /': 'SamlController.ensureAuthenticated'
 
 
 	/***************************************************************************

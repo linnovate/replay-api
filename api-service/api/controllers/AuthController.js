@@ -1,4 +1,6 @@
-var request = require('request');
+var request = require('request'),
+  passport = require('passport');
+
 var User = require('replay-schemas/User');
 
 module.exports = {
@@ -72,5 +74,37 @@ module.exports = {
         }
       });
     });
+  },
+
+  adfsSamlLogin: function (req, res, next) {
+    passport.authenticate('saml',
+      function (err, user, info) {
+        console.log('adfsSamlLogin:', err, user, info);
+        if (err) {
+          return next(err);
+        }
+
+        req.logIn(user, function (err) {
+          if (err) res.send(err);
+          return res.send({
+            message: info.message,
+            user: user
+          });
+        });
+
+      })(req, res);
+  },
+
+  adfsSamlCallback: function (req, res, next) {
+    passport.authenticate('saml',
+      function (err, user, info) {
+        res.redirect(sails.config.settings.frontendUrl);
+      })(req, res);
+  },
+
+  logout: function (req, res, next) {
+    req.logout();
+    res.ok();
   }
+
 };

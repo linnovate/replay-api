@@ -35,6 +35,13 @@ module.exports = {
 		token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8',
 		google_secret: process.env.GOOGLE_SECRET || 'R83YWn4E5mObpeN7Fn6AKYPY',
 
+		frontendUrl: 'http://localhost:3000',
+		passport: {
+			adfsSaml: {
+				entryPoint: 'https://replayadfs.westeurope.cloudapp.azure.com/adfs/ls/',
+				issuer: 'https://dev.replay.linnovate.net'
+			}
+		},
 		services: {
 			kaltura: {
 				url: process.env.KALTURA_URL || 'http://vod.linnovate.net',
@@ -89,32 +96,4 @@ module.exports = {
 		key: fs.readFileSync('./key.pem'),
 		cert: fs.readFileSync('./cert.pem')
 	}
-
-/*express: {
- 	port: 443,
- 	ssl: {
- 		secureProtocol: 'SSLv23_method',
- 		secureOptions: require('constants').SSL_OP_NO_SSLv3,
-
- 		key: fs.readFileSync('./key.pem'),
- 		cert: fs.readFileSync('./cert.pem')
- 	},
- 	serverOptions : {
- 		key: fs.readFileSync('./key.pem'),
- 		cert: fs.readFileSync('./cert.pem')
- 	}
-
-
-
- }*/
-
-	/*,express: {
-		 //port: 443,
-		 serverOptions : {
-			   key: fs.readFileSync('./key.pem'),
-			   cert: fs.readFileSync('./cert.pem')
-		 }}*/
-
-
-
 };
