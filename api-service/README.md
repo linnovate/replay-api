@@ -58,7 +58,7 @@ Afterwards, you do not need to run `sails lift` but just `nodemon`
 
 ## Docker
 ```
-docker build -t api-service .
+docker build --no-cache -t api-service .
 docker run -d -p 1337:1337 --restart=always --link mongodb-prod:mongodb-prod --link query-service:query-service --link media-url-provider:media-url-provider --name api-service api-service
 ```
 
