@@ -54,6 +54,11 @@ module.exports.routes = addPrefixes({
 		action: 'adfsSamlCallback'
 	},
 
+	'get /auth/authenticated': {
+		controller: 'auth',
+		action: 'isAuthenticated'
+	},
+
 	'get /auth/logout': {
 		controller: 'auth',
 		action: 'logout'
