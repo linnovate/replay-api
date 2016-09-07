@@ -20,8 +20,7 @@ module.exports.initialize = function () {
     passport.use(new SamlStrategy({
         entryPoint: sails.config.settings.passport.adfsSaml.entryPoint,
         issuer: sails.config.settings.passport.adfsSaml.issuer,
-        // callbackUrl: 'https://localhost:1337/auth/adfs-saml/callback',
-        callbackUrl: 'https://localhost:1337/login/callback',
+        callbackUrl: 'https://localhost:1337/auth/adfs-saml/callback',
         cert: fs.readFileSync('./replayadfs.westeurope.cloudapp.azure.com.crt', 'utf-8'),
         disableRequestedAuthnContext: true,
         identifierFormat: null,

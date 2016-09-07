@@ -49,7 +49,7 @@ module.exports.routes = addPrefixes({
 		action: 'adfsSamlLogin'
 	},
 
-	'post /login/callback': {
+	'post /auth/adfs-saml/callback': {
 		controller: 'auth',
 		action: 'adfsSamlCallback'
 	},
