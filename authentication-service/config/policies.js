@@ -18,8 +18,8 @@
 
 
 module.exports.policies = {
-  GatewayController: {
-    '*' : ['jwtAuth']
+  AuthController: {
+    'isAuthenticated' : ['jwtAuth']
   }
 
   /***************************************************************************

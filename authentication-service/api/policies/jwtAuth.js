@@ -29,5 +29,4 @@ module.exports = function (req, res, next) {
   }
   req.user = payload.sub;
   next();
-
 };

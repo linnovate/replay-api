@@ -5,7 +5,7 @@ var User = require('replay-schemas/User');
 
 module.exports = {
 
-  googleCallback: function(req, res, next) {
+  googleCallback: function (req, res, next) {
     var accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
     var peopleApiUrl = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect';
     var params = {
@@ -17,24 +17,25 @@ module.exports = {
     };
 
     // Step 1. Exchange authorization code for access token.
-    request.post(accessTokenUrl, { json: true, form: params }, function(err, response, token) {
+    request.post(accessTokenUrl, { json: true, form: params }, function (err, response, token) {
       var accessToken = token.access_token;
       var headers = { Authorization: 'Bearer ' + accessToken };
 
       // Step 2. Retrieve profile information about the current user.
-      request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
+      request.get({ url: peopleApiUrl, headers: headers, json: true }, function (err, response, profile) {
         if (profile.error) {
           return res.status(500).send({ message: profile.error.message });
         }
         // Step 3a. Link user accounts.
         if (req.header('Authorization')) {
-          User.findOne({ 'providerDetails.id': profile.sub }, function(err, existingUser) {
+          User.findOne({ 'providerDetails.id': profile.sub }, function (err, existingUser) {
             if (existingUser) {
               return res.status(409).send({ message: 'There is already a Google account that belongs to you' });
             }
             var token = req.header('Authorization').split(' ')[1];
             var payload = jwt.decode(token, sails.config.settings.token_secret);
-            User.findOne({ _id: profile.sub }, function(err, user) {
+            // TODO: check logical statement 'profileDetails.id' instead _id
+            User.findOne({ _id: profile.sub }, function (err, user) {
               if (!user) {
                 return res.status(400).send({ message: 'User not found' });
               }
@@ -42,7 +43,7 @@ module.exports = {
               user.providerDetails.name = 'google';
               user.pictureUri = user.picture || profile.picture.replace('sz=50', 'sz=200');
               user.displayName = user.displayName || profile.name;
-              user.save(function() {
+              user.save(function () {
                 var token = createJWT(user);
                 res.send({ token: token });
               });
@@ -50,7 +51,7 @@ module.exports = {
           });
         } else {
           // Step 3b. Create a new user account or return an existing one.
-          User.findOne({ 'providerDetails.id': profile.sub }, function(err, existingUser) {
+          User.findOne({ 'providerDetails.id': profile.sub }, function (err, existingUser) {
             if (existingUser) {
               return res.send({ token: JwtService.createJWT(existingUser) });
             }
@@ -62,7 +63,7 @@ module.exports = {
               },
               pictureUri: profile.picture.replace('sz=50', 'sz=200'),
               displayName: profile.name,
-            }, function(err, created) {
+            }, function (err, created) {
               if (err) {
                 return res.serverError(err);
               }
@@ -75,28 +76,50 @@ module.exports = {
     });
   },
 
-  adfsSamlLogin: function(req, res, next) {
+  adfsSamlLogin: function (req, res, next) {
     passport.authenticate('saml', { session: false })(req, res, next);
   },
 
-  adfsSamlCallback: [passport.authenticate('saml', { session: false }),
-  function(req, res, next) {
-    console.log('redirecting...');
-    res.redirect(sails.config.settings.frontendUrl);
-  }],
+  adfsSamlCallback: function (req, res, next) {
+    passport.authenticate('saml', { session: false }, function (err, userDetails, info) {
+      console.log('Authenticating callback...');
 
-  isAuthenticated: function(req, res, next) {
-    if (req.isAuthenticated()) {
-      res.status(200);
-    } else {
-      res.status(401);
-    }
-    return res.send();
+      if (err) {
+        return res.serverError(err);
+      }
+
+      // check user existence
+      UserService
+        .findUserByProfileId(userDetails.uniqueId)
+        .then(function (user) {
+          // case user exist, return him
+          if (user) {
+            console.log('User exists.');
+            return Promise.resolve(user);
+          }
+          // else, create user
+          else {
+            console.log('User does not exist, creating user...');
+            return UserService.createUser('adfs-saml', userDetails.uniqueId, userDetails.displayName);
+          }
+        })
+        .then(function (user) {
+          // return JWT
+          var token = JwtService.createJWT(user);
+          token = { token: token };
+          res.send(token);
+          console.log('Returned JWT:', token);
+        })
+        .catch(function (err) {
+          res.serverError(err);
+        })
+    })(req, res, next);
   },
 
-  logout: function(req, res, next) {
-    req.logout();
-    res.ok();
+  isAuthenticated: function (req, res, next) {
+    // return OK always because there's a policy of jwtAuth in order to reach this route,
+    // so if we reached here token is validated.
+    res.status(200);
   }
 
 };

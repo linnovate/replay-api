@@ -22,7 +22,7 @@
 
 var blueprints = require('./blueprints').blueprints;
 
-module.exports.routes = addPrefixes({
+module.exports.routes = {
 
 	/***************************************************************************
 	 *                                                                          *
@@ -34,9 +34,9 @@ module.exports.routes = addPrefixes({
 	 *                                                                          *
 	 ***************************************************************************/
 
-	'<restPrefix>/:service?*': {
-		controller: 'GatewayController',
-		action: 'gate'
+	'get /auth': {
+		controller: 'auth',
+		action: 'isAuthenticated'
 	},
 
 	'/auth/google': {
@@ -52,20 +52,7 @@ module.exports.routes = addPrefixes({
 	'post /auth/adfs-saml/callback': {
 		controller: 'auth',
 		action: 'adfsSamlCallback'
-	},
-
-	'get /auth/authenticated': {
-		controller: 'auth',
-		action: 'isAuthenticated'
-	},
-
-	'get /auth/logout': {
-		controller: 'auth',
-		action: 'logout'
 	}
-
-	// 'get /': 'SamlController.ensureAuthenticated'
-
 
 	/***************************************************************************
 	 *                                                                          *
@@ -77,27 +64,4 @@ module.exports.routes = addPrefixes({
 	 *                                                                          *
 	 ***************************************************************************/
 
-});
-
-// manually add prefixes to custom defined routes starts with <restPrefix>,
-// as sails does so only for the routes defined via blueprints
-function addPrefixes(prefixes) {
-	var result = {};
-
-	for (var prefix in prefixes) {
-		// append rest prefix
-		if (prefix.indexOf('<restPrefix>') > -1) {
-			result[prefix.replace('<restPrefix>', blueprints.restPrefix)] = prefixes[prefix];
-		}
-		// append internal prefix
-		else if (prefix.indexOf('<internalPrefix>') > -1) {
-			result[prefix.replace('<internalPrefix>', blueprints.restPrefix + blueprints.internalPrefix)] = prefixes[prefix];
-		}
-		// do not append prefix
-		else {
-			result[prefix] = prefixes[prefix];
-		}
-	}
-
-	return result;
-}
+};
