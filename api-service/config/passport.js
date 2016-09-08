@@ -14,6 +14,6 @@ passport.use(new SamlStrategy({
     },
     function(profile, done) {
         console.log('in verifier, profile is:', JSON.stringify(profile));
-        done();
+        done(null, profile);
     }
 ));

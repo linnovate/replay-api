@@ -79,14 +79,13 @@ module.exports = {
     passport.authenticate('saml', { session: false })(req, res, next);
   },
 
-  adfsSamlCallback: function(req, res, next) {
-    passport.authenticate('saml', { session: false },
-      function(err, user, info) {
-        console.log('in callback, err %s, user %s, info %s', JSON.stringify(err), JSON.stringify(user), JSON.stringify(info));
-        console.log(req.isAuthenticated());
-        res.redirect(sails.config.settings.frontendUrl);
-      })(req, res, next);
-  },
+  adfsSamlCallback: [passport.authenticate('saml', { session: false }, function(err, user, info){
+    console.log('in callback, err %s, user %s, info %s', JSON.stringify(err), JSON.stringify(user), JSON.stringify(info));
+  }),
+  function(req, res, next) {
+    console.log(req.isAuthenticated());
+    res.redirect(sails.config.settings.frontendUrl);
+  }],
 
   isAuthenticated: function(req, res, next) {
     if (req.isAuthenticated()) {
