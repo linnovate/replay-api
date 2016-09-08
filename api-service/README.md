@@ -3,7 +3,7 @@
 This service is responsible to route user requests to the appropriate service.
 
 ## Installation
-Install sails globally
+Install sails globally:
 ```
 sudo npm -g install sails
 ```
