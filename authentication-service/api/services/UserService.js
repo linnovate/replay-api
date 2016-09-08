@@ -2,7 +2,7 @@ User = require('replay-schemas/User');
 
 module.exports.findUserByProfileId = function (profileId) {
     return User
-        .find({
+        .findOne({
             'providerDetails.id': profileId
         });
 }

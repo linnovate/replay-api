@@ -119,7 +119,7 @@ module.exports = {
   isAuthenticated: function (req, res, next) {
     // return OK always because there's a policy of jwtAuth in order to reach this route,
     // so if we reached here token is validated.
-    res.status(200);
+    res.ok();
   }
 
 };
