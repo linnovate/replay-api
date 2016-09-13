@@ -1,5 +1,6 @@
 var request = require('supertest'),
 	assert = require('chai').assert,
+	VideoCompartment = require('replay-schemas/VideoCompartment'),
 	Video = require('replay-schemas/Video');
 
 const MANIFEST_SUFFIX = '/manifest.mpd';
@@ -12,15 +13,21 @@ function test() {
 
 function findOne() {
 	describe('Normal behavior', function() {
-		var id = '57a70996d7230637394bbb62';
+		var id = '57a70996d7230637394ccc62';
 		var videoFileName;
 		beforeEach(function(done) {
-			Video.findOne({ _id: id }, function(err, video) {
-				if (err || video === null) {
+			VideoCompartment.findOne({ _id: id }, function(err, videoComp) {
+				if (err || videoComp === null) {
 					done(err);
 				} else {
-					videoFileName = video.videoFileName;
-					done();
+					Video.findOne({ _id: videoComp.videoId }, function(err, video) {
+						if (err || videoComp === null) {
+							done(err);
+						} else {
+							videoFileName = video.videoFileName;
+							done();
+						}
+					});
 				}
 			});
 		});

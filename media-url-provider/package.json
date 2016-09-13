@@ -5,18 +5,18 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
-    "bluebird": "3.4.1",
+    "bluebird": "3.4.6",
     "chai": "3.5.0",
     "include-all": "0.1.6",
-    "mocha": "2.5.3",
+    "mocha": "3.0.2",
     "nock": "8.0.0",
-    "rc": "1.0.1",
-    "replay-schemas": "1.0.30",
+    "rc": "1.1.6",
+    "replay-schemas": "^1.0.32",
     "request": "2.74.0",
-    "sails": "0.12.3",
-    "sails-disk": "0.10.9",
+    "sails": "0.12.4",
+    "sails-disk": "0.10.10",
     "supertest": "^2.0.0",
-    "xml2json": "0.9.1"
+    "xml2json": "0.10.0"
   },
   "scripts": {
     "debug": "node debug app.js",

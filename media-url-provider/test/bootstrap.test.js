@@ -1,10 +1,11 @@
 var sails = require('sails');
 var Video = require('replay-schemas/Video'),
+	VideoCompartment = require('replay-schemas/VideoCompartment'),
 	Promise = require('bluebird');
 
 before(function(done) {
 	// Increase the Mocha timeout so that Sails has enough time to lift.
-	this.timeout(10000);
+	this.timeout(5000);
 	sails.lift({ environment: 'test' }, function(err, server) {
 		if (err) {
 			return done(err);
@@ -22,17 +23,36 @@ after(function(done) {
 	wipeMongo(done);
 });
 
-function setTestEnvironment() {
-	process.env.REPLAY_SCHEMA = 'Video';
-	process.env.DATA_FILE = 'video';
-	process.env.ID = '57a709954f3c38a839a0605c';
+function mongoFill() {
+	return createVideoRecordInMongo()
+		.then(createVideoCompartmentRecordInMongo);
 }
 
-function mongoFill() {
+function createVideoCompartmentRecordInMongo() {
 	return new Promise(function(resolve, reject) {
-		setTestEnvironment();
+		var videoComp = new VideoCompartment({
+			_id: '57a70996d7230637394ccc62',
+			videoId: '57a70996d7230637394bbb62',
+			startTime: '2016-08-07T10:12:57.417Z',
+			endTime: '2016-08-07T10:13:27.417Z',
+			startAsset: '20000',
+			duration: '30000'
+		});
+		videoComp.save(function(err, result) {
+			if (err) {
+				console.log(err);
+				reject(err);
+			} else {
+				console.log('created videoCompartment object');
+				resolve();
+			}
+		});
+	});
+}
+
+function createVideoRecordInMongo() {
+	return new Promise(function(resolve, reject) {
 		var video = new Video({
-			createdAt: '2016-08-07T10:12:38.590Z',
 			_id: '57a70996d7230637394bbb62',
 			durationInSeconds: 1800,
 			endTime: '2016-08-07T10:42:37.417Z',
@@ -68,9 +88,13 @@ function mongoFill() {
 function wipeMongo(done) {
 	Video.remove({}, function(err) {
 		if (err) {
-			done(err);
-		} else {
-			done();
+			console.log(err);
 		}
+		VideoCompartment.remove({}, function(err) {
+			if (err) {
+				console.log(err);
+			}
+			done();
+		});
 	});
 }
