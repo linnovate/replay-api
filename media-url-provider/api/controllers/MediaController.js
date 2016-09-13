@@ -4,10 +4,6 @@
  * @description :: Server-side logic for managing media
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-var Promise = require('bluebird'),
-	Video = require('replay-schemas/Video');
-
 module.exports = {
 	findOne: function(req, res, next) {
 		var id = req.params.id;
