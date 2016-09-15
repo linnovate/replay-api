@@ -7,7 +7,8 @@
 module.exports = {
 	findOne: function(req, res, next) {
 		var id = req.params.id;
-		ManifestRequestBuilder.buildManifestRequest(id)
+		var user = req.headers.Authorization;
+		ManifestRequestBuilder.buildManifestRequest(id, user)
 			.then(function(mpd) {
 				res.json({ url: mpd });
 			})

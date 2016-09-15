@@ -11,7 +11,7 @@
     "mocha": "3.0.2",
     "nock": "8.0.0",
     "rc": "1.1.6",
-    "replay-schemas": "^1.0.32",
+    "replay-schemas": "^1.0.33",
     "request": "2.74.0",
     "sails": "0.12.4",
     "sails-disk": "0.10.10",
