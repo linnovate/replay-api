@@ -1,19 +1,20 @@
 {
     "list_url": [
         {
-            "docs": "http://petstore.swagger.io/v2/swagger.json",
-            "base_path": "http://petstore.swagger.io/v2",
+            "docs": "http://localhost:1338/swagger/doc",
+            "base_path": "http://localhost:1338",
             "route_match": [
-                "/user*",
-                "/pet*"
+                "/video*",
+                "/query*",
+                "/source*",
+                "/tag*",
+                "/videometadata*"
             ],
-            "route_filter": [
-                "/store*"
-            ]
+            "route_filter": []
         }
     ],
     "info": {
-        "title": "Test API",
+        "title": "Replay API",
         "version": "1.0"
     },
     "port": 1336
