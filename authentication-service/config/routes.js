@@ -22,7 +22,7 @@
 
 var blueprints = require('./blueprints').blueprints;
 
-module.exports.routes = addPrefixes({
+module.exports.routes = {
 
 	/***************************************************************************
 	 *                                                                          *
@@ -33,17 +33,26 @@ module.exports.routes = addPrefixes({
 	 * `assets` directory)                                                      *
 	 *                                                                          *
 	 ***************************************************************************/
-  
+
+	'get /auth': {
+		controller: 'auth',
+		action: 'isAuthenticated'
+	},
+
 	'/auth/google': {
 		controller: 'auth',
 		action: 'googleCallback'
 	},
-  
-	'<restPrefix>/:service?*': {
-		controller: 'GatewayController',
-		action: 'gate'
-	}
 
+	'get /auth/adfs-saml': {
+		controller: 'auth',
+		action: 'adfsSamlLogin'
+	},
+
+	'post /auth/adfs-saml/callback': {
+		controller: 'auth',
+		action: 'adfsSamlCallback'
+	}
 
 	/***************************************************************************
 	 *                                                                          *
@@ -55,27 +64,4 @@ module.exports.routes = addPrefixes({
 	 *                                                                          *
 	 ***************************************************************************/
 
-});
-
-// manually add prefixes to custom defined routes starts with <restPrefix>,
-// as sails does so only for the routes defined via blueprints
-function addPrefixes(prefixes) {
-	var result = {};
-
-	for (var prefix in prefixes) {
-		// append rest prefix
-		if (prefix.indexOf('<restPrefix>') > -1) {
-			result[prefix.replace('<restPrefix>', blueprints.restPrefix)] = prefixes[prefix];
-		}
-		// append internal prefix
-		else if (prefix.indexOf('<internalPrefix>') > -1) {
-			result[prefix.replace('<internalPrefix>', blueprints.restPrefix + blueprints.internalPrefix)] = prefixes[prefix];
-		}
-		// do not append prefix
-		else {
-			result[prefix] = prefixes[prefix];
-		}
-	}
-
-	return result;
-}
+};
