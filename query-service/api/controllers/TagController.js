@@ -7,9 +7,6 @@
 var Promise = require('bluebird'),
 	Tag = require('replay-schemas/Tag');
 
-// trick sails to activate restful API to this controller
-sails.models.tag = {};
-
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)

@@ -8,9 +8,6 @@
 var Promise = require('bluebird'),
 	VideoMetadata = require('replay-schemas/VideoMetadata');
 
-// trick sails to activate resful API to this controller
-sails.models.videometadata = {};
-
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)

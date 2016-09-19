@@ -1,0 +1,31 @@
+{
+  "name": "api-service",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "include-all": "~0.1.6",
+    "jwt-simple": "^0.5.0",
+    "moment": "^2.14.1",
+    "passport": "^0.3.2",
+    "passport-saml": "^0.15.0",
+    "rc": "1.0.1",
+    "replay-schemas": "^1.0.31",
+    "request": "^2.74.0",
+    "sails": "~0.12.3",
+    "sails-disk": "~0.10.9",
+    "url-join": "^1.1.0"
+  },
+  "scripts": {
+    "debug": "node debug app.js",
+    "start": "node app.js"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/linnovate1/api.git"
+  },
+  "author": "linnovate1",
+  "license": ""
+}

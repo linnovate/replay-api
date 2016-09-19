@@ -17,7 +17,8 @@
     "replay-schemas": "^1.0.30",
     "sails": "^0.12.4",
     "sails-disk": "^0.10.10",
-    "sails-mongo": "^0.12.1"
+    "sails-mongo": "^0.12.1",
+    "sails-swagger": "^0.5.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
