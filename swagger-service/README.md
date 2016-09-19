@@ -6,7 +6,7 @@ serves their swagger json in /swagger/doc.
 
 Note the UI will not work if one of the referenced services is not up or responding.
 
-# Installation
+## Installation
 Install sails globally
 ```
 sudo npm -g install sails
@@ -32,7 +32,7 @@ Set environment variables to config the app:
 | MEDIA_PROVIDER_URL          | Url of media url provider service            | http://localhost:1338 |
 | SWAGGER_DOCS_PORT           | Internal port for swagger-combined module    | 1111                  |
 
-# Usage
+## Usage
 Run with:
 ```
 sails lift
