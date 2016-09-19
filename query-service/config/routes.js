@@ -32,6 +32,19 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  // do not use { controller: , action: } format because it crashes sails-swagger
+
+  'get /tag': 'TagController.find',
+
+  'get /video': 'VideoController.find',
+  'put /video/:id': 'VideoController.update',
+
+  'get /videometadata': 'VideoMetadataController.find',
+
+  'get /query': 'QueryController.find',
+
+  'get /source': 'SourceController.find'
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

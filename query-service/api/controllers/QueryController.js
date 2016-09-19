@@ -8,9 +8,6 @@
 var Promise = require('bluebird'),
 	Query = require('replay-schemas/Query');
 
-// trick sails to activate resful API to this controller
-sails.models.query = {};
-
 module.exports = {
 	find: function(req, res, next) {
 		validateRequest(req)

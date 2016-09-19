@@ -27,7 +27,7 @@ Set environment variables to config the app:
 | Name                        | Description                                  | Default               |
 |-----------------------------|----------------------------------------------|-----------------------|
 | BASE_HOST                   | Base host of the app                         | http://localhost      | 
-| PORT                        | The port which the service will listen to    | 1338                  |
+| PORT                        | The port which the service will listen to    | 1335                  |
 | QUERY_SERVICE_URL           | Url of query service                         | http://localhost:1339 |
 | MEDIA_PROVIDER_URL          | Url of media url provider service            | http://localhost:1338 |
 | SWAGGER_DOCS_PORT           | Internal port for swagger-combined module    | 1111                  |
