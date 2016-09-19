@@ -10,7 +10,13 @@
  *
  */
 var port = process.env.PORT || 1336;
+var host = process.env.HOST || 'http://localhost';
+var baseUrl = baseUrl + ':' + port;
 
+// external swagger services urls
+var QUERY_SERVICE_URL = process.env.QUERY_SERVICE_URL || 'http://localhost:1338',
+  MEDIA_PROVIDER_URL = process.env.MEDIA_PROVIDER_URL || 'http://localhost:1339',
+  AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:1337';
 module.exports = {
 
   /***************************************************************************
@@ -23,17 +29,26 @@ module.exports = {
   // }
 
   port: port,
-  list_url: [
-    {
-      docs: 'http://petstore.swagger.io/v2/swagger.json',
-      base_path: 'http://petstore.swagger.io/v2',
-      route_match: ['/user*', '/pet*'],
-      route_filter: ['/store*']
+  host: host,
+  swaggerCombined: {
+    port: process.env.SWAGGER_DOCS_PORT || 1111,
+    list_url: [
+      {
+        docs: QUERY_SERVICE_URL + '/swagger/doc',
+        base_path: QUERY_SERVICE_URL,
+        route_match: [
+          "/video*",
+          "/query*",
+          "/source*",
+          "/tag*",
+          "/videometadata*"
+        ],
+        route_filter: []
+      }
+    ],
+    info: {
+      title: 'Replay API',
+      version: '1.0'
     }
-  ],
-  info: {
-    title: 'Example API',
-    version: '1.0'
   }
-
 };
