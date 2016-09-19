@@ -9,14 +9,13 @@
  * any private information to this file!
  *
  */
-var port = process.env.PORT || 1336;
+var port = process.env.PORT || 1335;
 var baseHost = process.env.BASE_HOST || 'http://localhost';
 var baseUrl = baseUrl + ':' + port;
 
 // external swagger services urls
 var QUERY_SERVICE_URL = process.env.QUERY_SERVICE_URL || 'http://localhost:1338',
-  MEDIA_PROVIDER_URL = process.env.MEDIA_PROVIDER_URL || 'http://localhost:1339',
-  AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:1337';
+  MEDIA_PROVIDER_URL = process.env.MEDIA_PROVIDER_URL || 'http://localhost:1339';
 
 module.exports = {
 
@@ -38,11 +37,19 @@ module.exports = {
         docs: QUERY_SERVICE_URL + '/swagger/doc',
         base_path: QUERY_SERVICE_URL,
         route_match: [
-          "/video*",
-          "/query*",
-          "/source*",
-          "/tag*",
-          "/videometadata*"
+          '/video*',
+          '/query*',
+          '/source*',
+          '/tag*',
+          '/videometadata*'
+        ],
+        route_filter: []
+      },
+      {
+        docs: MEDIA_PROVIDER_URL + '/swagger/doc',
+        base_path: MEDIA_PROVIDER_URL,
+        route_match: [
+          '/media*'
         ],
         route_filter: []
       }

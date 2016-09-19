@@ -1,5 +1,5 @@
 {
-  "name": "swagger-service-frontend",
+  "name": "swagger-service",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
@@ -22,7 +22,7 @@
     "rc": "1.0.1",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
-    "swagger-combined": "^1.4.2",
+    "swagger-combined": "1.4.2", // hardcoded since later versions does not support NPM
     "swagger-ui": "^2.2.3"
   },
   "scripts": {
