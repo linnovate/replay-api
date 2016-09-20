@@ -36,7 +36,6 @@ function ManifestRequestBuilder() {
 			MANIFEST_SUFFIX + '?wowzaplaystart=' +
 			manifestParams.wowzaplaystart + '&wowzaplayduration=' +
 			manifestParams.wowzaplayduration;
-		console.log(requestUrl);
 		return requestUrl;
 	}
 }
@@ -75,12 +74,10 @@ function getVideoAndTimeCompassParamsByCompartmentQuery(query) {
 }
 
 function getVideoCompartment(query) {
-	console.log(JSON.stringify(query));
 	return new Promise(function(resolve, reject) {
 		return VideoCompartmentSchema
-			.findOne({ _id: '57a70996d7230637394ccc62' }, function(err, videoCompartment) {
+			.findOne(query, function(err, videoCompartment) {
 				if (err || !videoCompartment) {
-					console.log(videoCompartment);
 					reject('Video compartment does not exist');
 				}
 				resolve(videoCompartment);
