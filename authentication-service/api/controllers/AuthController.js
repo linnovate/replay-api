@@ -106,9 +106,8 @@ module.exports = {
         .then(function (user) {
           // return JWT
           var token = JwtService.createJWT(user);
-          token = { token: token };
-          res.send(token);
           console.log('Returned JWT:', token);
+          res.redirect(sails.config.settings.frontendUrl+'?token='+token);
         })
         .catch(function (err) {
           res.serverError(err);
