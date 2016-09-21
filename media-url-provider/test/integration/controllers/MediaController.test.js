@@ -6,8 +6,6 @@ var request = require('supertest'),
 	VideoCompartment = require('replay-schemas/VideoCompartment').VideoCompartment,
 	Video = require('replay-schemas/Video');
 
-
-
 function test() {
 	before(function(done) {
 		mongoFill()
@@ -89,7 +87,7 @@ function findOne() {
 	});
 }
 
-test();
+// test();
 
 function mongoFill() {
 	return createVideoRecordInMongo()

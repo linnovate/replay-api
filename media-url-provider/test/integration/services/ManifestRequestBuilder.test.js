@@ -18,7 +18,10 @@ var compartmentBaseUrl = 'http://' + sails.settings.services.compartment.host + 
 describe('buildManifestRequest tests', buildManifestRequest);
 // buildManifestRequest methods tests
 function buildManifestRequest() {
+	var originProcessPath;
 	before(function(done) {
+		originProcessPath = process.cwd();
+		process.chdir(__dirname);
 		mongoFill()
 			.then(function() {
 				done();
@@ -30,6 +33,7 @@ function buildManifestRequest() {
 
 	after(function(done) {
 		wipeMongo(done);
+		process.chdir(originProcessPath);
 	});
 
 	describe('Normal behavior', function normalBehavior() {
@@ -39,7 +43,7 @@ function buildManifestRequest() {
 			var videoFileName;
 			before(function(done) {
 				try {
-					var compartmentData = fs.readFileSync('./test/integration/assets/compartmentDummy.xml');
+					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
 							'Content-Type': 'application/xml'
@@ -83,7 +87,7 @@ function buildManifestRequest() {
 		describe('empty user compartments', function() {
 			before(function(done) {
 				try {
-					var compartmentData = fs.readFileSync('./test/integration/assets/emptyUserCompartment.xml');
+					var compartmentData = fs.readFileSync('../assets/emptyUserCompartment.xml');
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
 							'Content-Type': 'application/xml'
@@ -116,7 +120,7 @@ function buildManifestRequest() {
 		describe('non existing id', function() {
 			before(function(done) {
 				try {
-					var compartmentData = fs.readFileSync('./test/integration/assets/compartmentDummy.xml');
+					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
 							'Content-Type': 'application/xml'
@@ -218,7 +222,7 @@ function buildManifestRequest() {
 			var id;
 			before(function(done) {
 				try {
-					var compartmentData = fs.readFileSync('./test/integration/assets/compartmentDummy.xml');
+					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
 							'Content-Type': 'application/xml'
