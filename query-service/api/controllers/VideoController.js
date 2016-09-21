@@ -12,9 +12,6 @@ var Promise = require('bluebird'),
     Video = require('replay-schemas/Video'),
     Tag = require('replay-schemas/Tag');
 
-// trick sails to activate restful API to this controller
-sails.models.video = {};
-
 module.exports = {
 
     find: function (req, res, next) {

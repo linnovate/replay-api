@@ -23,12 +23,19 @@ module.exports = {
 	port: 1339,
 	settings: {
 		services: {
-			kaltura: {
+			wowza: {
 				server: 'http://vod.linnovate.net',
-				port: '80',
-				partnerId: 101
+				port: '1935',
+				instance: 'weplay',
+				content_instance: 'weplay'
 			}
 		}
+	},
+	mongo: {
+		host: process.env.MONGO_HOST || 'localhost',
+		port: process.env.MONGO_PORT || 27017,
+		database: process.env.MONGO_DATABASE || 'replay_dev'
 	}
-
 };
+
+

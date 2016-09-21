@@ -7,9 +7,6 @@
 var Promise = require('bluebird'),
 	StreamingSource = require('replay-schemas/StreamingSource');
 
-// trick sails to activate restful API to this controller
-sails.models.source = {};
-
 module.exports = {
 	find: function(req, res, next) {
 		validateFindRequest(req)
