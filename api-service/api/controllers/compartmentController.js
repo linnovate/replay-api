@@ -11,7 +11,7 @@ module.exports = {
 	/**
 	 * `AuthorizationXmlController.serve()`
 	 */
-	serve: function(req, res) {
+	getCompartment: function(req, res) {
 		var id = req.params.id;
 		var fileName = 'sys';
 		if (id) {
@@ -22,7 +22,7 @@ module.exports = {
 			if (!exists) {
 				return res.notFound('The requested file (' + fileName + ') does not exist.');
 			}
-
+			console.log('resolving');
 			res.writeHead(200, { 'Content-Type': 'text/xml' });
 			var readStream = fileSystem.createReadStream(target);
 			// We replaced all the event handlers with a simple call to readStream.pipe()
