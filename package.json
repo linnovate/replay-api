@@ -6,8 +6,8 @@
   "dependencies": {
     "istanbul": "^0.4.5",
     "mocha": "^2.5.3",
-    "replay-jobs-service": "^1.0.13",
-    "replay-rabbitmq": "^1.0.3",
+    "replay-jobs-service": "^1.0.18",
+    "replay-rabbitmq": "^1.0.7",
     "request": "^2.74.0"
   },
   "devDependencies": {

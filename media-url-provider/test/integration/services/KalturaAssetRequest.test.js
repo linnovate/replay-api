@@ -21,7 +21,7 @@ function exportedMethodsTesting() {
 	});
 }
 
-test();
+// test();
 
 function getMpdInputTests() {
 	describe('inputTesting', function() {
