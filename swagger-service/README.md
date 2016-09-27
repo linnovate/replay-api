@@ -4,7 +4,7 @@
 serves their swagger json in /swagger/doc.
 2. This service also serves swagger UI on /swagger/ui.
 
-Note the UI will not work if one of the referenced services is not up or responding.
+### Note the UI will not work if one of the referenced services is not up or responding.
 
 ## Installation
 Install sails globally
