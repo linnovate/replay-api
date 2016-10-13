@@ -6,3 +6,5 @@
 /media-url-provider
 /query-service
 /swagger-service
+/authorization-service
+/authorization-ui
