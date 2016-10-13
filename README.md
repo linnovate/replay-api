@@ -9,6 +9,5 @@ In order to be able to run replay-infra, which consists the app backend for capt
 
 ## Nginx
 In order to fully run the frontend and the microservices in this repo, one must have a working nginx which will route the requests from frontend to their appropriate microservice.  
-Please refer [here](https://github.com/linnovate/replay-infra/tree/develop/ops/nginx) to instructions regarding nginx.    
-
-
+Please refer [here](https://github.com/linnovate/replay-infra/tree/develop/ops/nginx) to instructions regarding nginx. 
+>>
