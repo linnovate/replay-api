@@ -12,7 +12,6 @@ module.exports.initialize = function () {
         entryPoint: sails.config.settings.passport.adfsSaml.entryPoint,
         issuer: sails.config.settings.passport.adfsSaml.issuer,
         callbackUrl: sails.config.settings.baseUrl + '/auth/adfs-saml/callback',
-        cert: fs.readFileSync('./replayadfs.westeurope.cloudapp.azure.com.crt', 'utf-8'),
         disableRequestedAuthnContext: true,
         identifierFormat: null,
         signatureAlgorithm: 'sha256'

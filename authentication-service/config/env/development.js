@@ -42,7 +42,7 @@ module.exports = {
 		frontendUrl: frontendUrl + ':' + frontendPort, 
 		passport: {
 			adfsSaml: {
-				entryPoint: 'https://replayadfs.westeurope.cloudapp.azure.com/adfs/ls/',
+				entryPoint: 'https://replaysts.westeurope.cloudapp.azure.com/adfs/ls/',
 				issuer: 'https://dev.replay.linnovate.net'
 			}
 		}
