@@ -19,7 +19,7 @@
 
 module.exports.policies = {
   AuthController: {
-    'isAuthenticated' : ['jwtAuth']
+    'isAuthenticated' : require('replay-jwt-middleware')
   }
 
   /***************************************************************************
