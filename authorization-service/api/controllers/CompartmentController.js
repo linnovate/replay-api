@@ -37,7 +37,18 @@ module.exports = {
 			.catch(function(err) {
 				res.notFound(err);
 			});
-	}
+	},
+	permission: function(req, res) {
+		var id = req.params.id;
+		return getCompartment(id)
+			.then(parseXml)
+			.then(function(result) {
+				res.send(result);
+			})
+			.catch(function(err) {
+				res.notFound(err);
+			});
+	},
 };
 
 function getCompartment(id) {
