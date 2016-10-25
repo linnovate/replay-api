@@ -1,5 +1,7 @@
 ## Description
-This service purpose is to handle all video related queries.
+This service purpose is to handle all video related queries.  
+This service also interacts with authorization-service, in order to retrieve the authorization of the user's request to the videos.  
+Therefore, authorization-service must be up and running beforehand.
 
 ## Installation
 Install sails globally
