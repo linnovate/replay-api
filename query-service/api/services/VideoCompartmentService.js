@@ -1,11 +1,11 @@
-var Video = require('replay-schemas/Video'),
+var VideoCompartment = require('replay-schemas/VideoCompartment')
     Tag = require('replay-schemas/Tag');
 
-module.exports.buildMongoQuery = function (query) {
+module.exports.buildMongoQuery = function (query, permissions) {
     // build the baseline of the query
     var mongoQuery = {
         $and: [
-            { status: 'ready' }
+            VideoCompartment.buildQueryCondition(permissions)
         ]
     };
 
@@ -25,13 +25,13 @@ module.exports.buildMongoQuery = function (query) {
 
     if (query.minVideoDuration) {
         mongoQuery.$and.push({
-            durationInSeconds: { $gte: query.minVideoDuration }
+            duration: { $gte: query.minVideoDuration }
         });
     }
 
     if (query.maxVideoDuration) {
         mongoQuery.$and.push({
-            durationInSeconds: { $lte: query.maxVideoDuration }
+            duration: { $lte: query.maxVideoDuration }
         });
     }
 
@@ -62,7 +62,7 @@ module.exports.buildMongoQuery = function (query) {
 module.exports.performMongoQuery = function (mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
-    return Video.find(mongoQuery).populate('tags');
+    return VideoCompartment.find(mongoQuery).populate('tags');
 }
 
 module.exports.performUpdate = function (id, body) {
@@ -99,7 +99,7 @@ function findOrCreateTagByTitle(title) {
 function updateVideo(id, updateQuery) {
     console.log('Updating video:', id);
     console.log('Update query:', updateQuery);
-    return Video.findOneAndUpdate({
+    return VideoCompartment.findOneAndUpdate({
         _id: id
     }, updateQuery);
 }

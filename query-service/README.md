@@ -19,14 +19,15 @@ npm install
 ## Configurations
 Set environment variables to config the app:
 
-| Name                          | Description                                  | Default        |
-|-------------------------------|----------------------------------------------|----------------|
-| MONGO_HOST                    | Mongo host URI                               | localhost      |
-| MONGO_PORT                    | Mongo port                                   | 27017          |
-| MONGO_DATABASE                | Mongo database name                          | replay_dev     |
-| ELASTIC_HOST                  | Elastic host URI                             | localhost      |
-| ELASTIC_PORT                  | Elastic port                                 | 9200           |
-| PORT                          | The port which the service will listen to    | 1338           |
+| Name                          | Description                                  | Default          |
+|-------------------------------|----------------------------------------------|------------------|
+| MONGO_HOST                    | Mongo host URI                               | localhost        |
+| MONGO_PORT                    | Mongo port                                   | 27017            |
+| MONGO_DATABASE                | Mongo database name                          | replay_dev       |
+| PORT                          | The port which the service will listen to    | 1338             |
+| TOKEN_SECRET				    | Secret for creating JWT    	               | some_random      |
+| AUTHORIZATION_SERVICE_HOST    | Authorization service host name              | http://localhost |
+| AUTHORIZATION_SERVICE_PORT    |  Authorization service host port             | 1340             |
 
 ## Usage
 Run with:

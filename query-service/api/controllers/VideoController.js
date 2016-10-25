@@ -12,13 +12,22 @@ var Promise = require('bluebird'),
     Video = require('replay-schemas/Video'),
     Tag = require('replay-schemas/Tag');
 
+// NOTE: This controller is called VideoController, however, it actually serves VideoCompartment objects.
+
 module.exports = {
 
     find: function (req, res, next) {
+        var _parsedQuery;
         validateFindRequest(req)
             .then(() => QueryService.saveQuery(req.query))
-            .then(VideoService.buildMongoQuery)
-            .then(VideoService.performMongoQuery)
+            .then(query => {
+                _parsedQuery = query;
+                return PermissionsService.findPermissionsByUserId(req.userId);
+            })
+            .then(permissions => {
+                return VideoCompartmentService.buildMongoQuery(_parsedQuery, permissions);
+            })
+            .then(VideoCompartmentService.performMongoQuery)
             .then(function (results) {
                 return res.json(results);
             })
@@ -29,7 +38,7 @@ module.exports = {
 
     update: function (req, res, next) {
         validateUpdateRequest(req)
-            .then(() => VideoService.performUpdate(req.params.id, req.body))
+            .then(() => VideoCompartmentService.performUpdate(req.params.id, req.body))
             .then(function (video) {
                 if(video){
                     return res.ok();
