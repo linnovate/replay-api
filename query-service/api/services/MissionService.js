@@ -1,4 +1,5 @@
-var VideoCompartment = require('replay-schemas/VideoCompartment')
+var Mission = require('replay-schemas/Mission'),
+    VideoCompartment = require('replay-schemas/VideoCompartment'),
     Tag = require('replay-schemas/Tag');
 
 module.exports.buildMongoQuery = function (query, permissions) {
@@ -62,7 +63,7 @@ module.exports.buildMongoQuery = function (query, permissions) {
 module.exports.performMongoQuery = function (mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
-    return VideoCompartment.find(mongoQuery).populate('tags');
+    return Mission.find(mongoQuery).populate('tags');
 }
 
 module.exports.performUpdate = function (id, body) {
@@ -75,7 +76,7 @@ module.exports.performUpdate = function (id, body) {
                 updateQuery.$addToSet = {
                     tags: tag._id
                 };
-                return updateVideo(id, updateQuery);
+                return updateMission(id, updateQuery);
             });
     }
 
@@ -96,10 +97,10 @@ function findOrCreateTagByTitle(title) {
         });
 }
 
-function updateVideo(id, updateQuery) {
-    console.log('Updating video:', id);
+function updateMission(id, updateQuery) {
+    console.log('Updating mission:', id);
     console.log('Update query:', updateQuery);
-    return VideoCompartment.findOneAndUpdate({
+    return Mission.findOneAndUpdate({
         _id: id
     }, updateQuery);
 }

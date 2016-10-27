@@ -59,7 +59,7 @@ module.exports.http = {
     //     console.log("Requested :: ", req.method, req.url);
     //     return next();
     // },
-    replayJwtMiddleware: require('replay-jwt-middleware')
+    replayJwtMiddleware: process.env.NODE_ENV === 'testing'? undefined : require('replay-jwt-middleware')
 
 
     /***************************************************************************

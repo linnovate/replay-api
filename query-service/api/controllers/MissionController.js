@@ -1,7 +1,7 @@
 /**
- * VideoController
+ * MissionController
  *
- * @description :: Server-side logic for managing videos
+ * @description :: Server-side logic for managing Missions
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
@@ -9,10 +9,8 @@ var Promise = require('bluebird'),
     _ = require('lodash'),
     mongoose = require('mongoose'),
     Query = require('replay-schemas/Query'),
-    Video = require('replay-schemas/Video'),
+    Mission = require('replay-schemas/Mission'),
     Tag = require('replay-schemas/Tag');
-
-// NOTE: This controller is called VideoController, however, it actually serves VideoCompartment objects.
 
 module.exports = {
 
@@ -25,9 +23,9 @@ module.exports = {
                 return PermissionsService.findPermissionsByUserId(req.userId);
             })
             .then(permissions => {
-                return VideoCompartmentService.buildMongoQuery(_parsedQuery, permissions);
+                return MissionService.buildMongoQuery(_parsedQuery, permissions);
             })
-            .then(VideoCompartmentService.performMongoQuery)
+            .then(MissionService.performMongoQuery)
             .then(function (results) {
                 return res.json(results);
             })
@@ -38,9 +36,9 @@ module.exports = {
 
     update: function (req, res, next) {
         validateUpdateRequest(req)
-            .then(() => VideoCompartmentService.performUpdate(req.params.id, req.body))
-            .then(function (video) {
-                if(video){
+            .then(() => MissionService.performUpdate(req.params.id, req.body))
+            .then(function (mission) {
+                if(mission){
                     return res.ok();
                 }
                 else{

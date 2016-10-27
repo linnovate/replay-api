@@ -1,4 +1,4 @@
-var Video = require('replay-schemas/Video'),
+var VideoCompartment = require('replay-schemas/VideoCompartment'),
     Tag = require('replay-schemas/Tag')
 request = require('supertest-as-promised'),
     Promise = require('bluebird'),
@@ -10,155 +10,155 @@ describe('VideoController', function () {
         var videoStubsAmount = 3;
         it(util.format('should return all %s videos', videoStubsAmount), function (done) {
             var query = {};
-            createVideos(videoStubsAmount)
-                .then(() => getAndExpectVideos(videoStubsAmount, query))
+            createVideoCompartments(videoStubsAmount)
+                .then(() => getAndExpectVideoCompartments(videoStubsAmount, query))
                 .then(done)
                 .catch(done);
         });
 
         it('should return 0 videos', function (done) {
             var query = {};
-            getAndExpectVideos(0, query)
+            getAndExpectVideoCompartments(0, query)
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by fromVideoTime', function (done) {
+        it('should return 1 videoCompartments by fromVideoTime', function (done) {
             var query = { fromVideoTime: new Date('1970') }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by fromVideoTime', function (done) {
+        it('should return 0 videoCompartments by fromVideoTime', function (done) {
             var query = { fromVideoTime: new Date('9999') }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by toVideoTime', function (done) {
+        it('should return 1 videoCompartments by toVideoTime', function (done) {
             var query = { toVideoTime: new Date('9999') }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by toVideoTime', function (done) {
+        it('should return 0 videoCompartments by toVideoTime', function (done) {
             var query = { toVideoTime: new Date('1970') }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by minVideoDuration', function (done) {
+        it('should return 1 videoCompartments by minVideoDuration', function (done) {
             var query = { minVideoDuration: 1 }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by minVideoDuration', function (done) {
+        it('should return 0 videoCompartments by minVideoDuration', function (done) {
             var query = { minVideoDuration: 9999999 }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by maxVideoDuration', function (done) {
+        it('should return 1 videoCompartments by maxVideoDuration', function (done) {
             var query = { maxVideoDuration: 9999999 }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by maxVideoDuration', function (done) {
+        it('should return 0 videoCompartments by maxVideoDuration', function (done) {
             var query = { maxVideoDuration: 1 }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by sourceId', function (done) {
+        it('should return 1 videoCompartments by sourceId', function (done) {
             var query = { sourceId: '100' }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by sourceId', function (done) {
+        it('should return 0 videoCompartments by sourceId', function (done) {
             var query = { sourceId: 'someSourceId' }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by tagsIds', function (done) {
+        it('should return 1 videoCompartments by tagsIds', function (done) {
             var tag = 'test1';
-            createVideos(1)
-                .then(() => getVideos())
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
                 .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
                 .then(() => getTags())
                 .then((tags) => {
                     var query = { tagsIds: JSON.stringify([tags[0].id]) }
-                    return getAndExpectVideos(1, query);
+                    return getAndExpectVideoCompartments(1, query);
                 })
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by tagsIds', function (done) {
+        it('should return 0 videoCompartments by tagsIds', function (done) {
             var tag = 'test1';
-            createVideos(1)
-                .then(() => getVideos())
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
                 .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
                 .then(() => getTags())
                 .then((tags) => {
                     var query = { tagsIds: JSON.stringify([new mongoose.Types.ObjectId()]) }
-                    return getAndExpectVideos(0, query);
+                    return getAndExpectVideoCompartments(0, query);
                 })
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 video by boundingShape', function (done) {
+        it('should return 1 videoCompartments by boundingShape', function (done) {
             var query = {
                 boundingShapeType: 'Polygon',
                 boundingShapeCoordinates: '[[[34.784518, 32.128957], [34.848031, 32.125534], [34.846299, 32.029153], [34.744677, 32.018383], [34.784518, 32.128957]]]'
             }
-            createVideos(1)
-                .then(() => getAndExpectVideos(1, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 video by boundingShape', function (done) {
+        it('should return 0 videoCompartments by boundingShape', function (done) {
             var query = {
                 boundingShapeType: 'Polygon',
                 boundingShapeCoordinates: '[[[1,1], [2,2], [3,3], [1,1]]]'
             }
-            createVideos(1)
-                .then(() => getAndExpectVideos(0, query))
+            createVideoCompartments(1)
+                .then(() => getAndExpectVideoCompartments(0, query))
                 .then(done)
                 .catch(done);
         })
     });
 
     describe('#update()', function () {
-        it('should update video tag successfuly', function (done) {
+        it('should update videoCompartments tag successfuly', function (done) {
             var tag = 'newTag'
-            createVideos(1)
-                .then(() => getVideos())
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
                 .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
                 .then(() => validateTagUpdated(tag))
                 .then(done)
@@ -168,71 +168,71 @@ describe('VideoController', function () {
 
     describe('#find() bad input tests', function () {
         it('should reject due to bad fromVideoTime (not Date)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.fromVideoTime = 'test';
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad toVideoTime (not Date)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.toVideoTime = 'test';
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad minVideoDuration (not Number)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.minVideoDuration = 'test';
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad maxVideoDuration (not Number)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.maxVideoDuration = 'test';
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad boundingShapeType (boundingShapeCoordinates without boundingShapeType)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.boundingShapeType = undefined;
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad boundingShapeCoordinates (boundingShapeType without boundingShapeCoordinates)', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.boundingShapeCoordinates = undefined;
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
 
         it('should reject due to bad tagsIds (not [mongoose.Types.ObjectId])', function (done) {
-            var query = createVideoQuery();
+            var query = createVideoCompartmentQuery();
             query.tagsIds = '[someId]';
-            getVideoAndExpectError(done, query);
+            getVideoCompartmentAndExpectError(done, query);
         })
     });
 
     describe('#update() bad input tests', function () {
         it('should reject due to empty update', function (done) {
             var tag = ''
-            createVideos(1)
-                .then(() => getVideos())
-                .then((videos) => updateVideoAndExpectError(videos[0].id, tag))
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
+                .then((videos) => updateVideoCompartmentAndExpectError(videos[0].id, tag))
                 .then(() => done())
                 .catch(done);
         })
 
         it('should reject due to bad id (not mongoose.Types.ObjectId)', function (done) {
             var tag = 'newTag'
-            createVideos(1)
-                .then(() => getVideos())
-                .then((videos) => updateVideoAndExpectError('someNotExistingId', tag))
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
+                .then((videos) => updateVideoCompartmentAndExpectError('someNotExistingId', tag))
                 .then(() => done())
                 .catch(done);
         })
 
         it('should reject due to bad update property (not tag property)', function (done) {
             var tag = 'newTag'
-            createVideos(1)
-                .then(() => getVideos())
+            createVideoCompartments(1)
+                .then(() => getVideoCompartments())
                 .then((videos) => {
                     return request(sails.hooks.http.app)
                         .put(util.format('/video/%s', videos[0].id))
@@ -248,8 +248,8 @@ describe('VideoController', function () {
     });
 });
 
-function createVideos(amount) {
-    var video = {
+function createVideoCompartments(amount) {
+    var videoCompartment = {
         sourceId: '100',
         videoFileName: 'test.mp4',
         contentDirectoryPath: '/',
@@ -271,16 +271,16 @@ function createVideos(amount) {
 
     var promises = [];
     for (var i = 0; i < amount; i++) {
-        promises.push(Video.create(video));
+        promises.push(VideoCompartment.create(videoCompartment));
     }
     return Promise.all(promises);
 }
 
-function getVideos() {
-    return Video.find();
+function getVideoCompartments() {
+    return VideoCompartment.find();
 }
 
-function getAndExpectVideos(amount, params) {
+function getAndExpectVideoCompartments(amount, params) {
     return request(sails.hooks.http.app)
         .get('/video')
         .query({ fromVideoTime: params.fromVideoTime })
@@ -299,7 +299,7 @@ function getAndExpectVideos(amount, params) {
         });
 }
 
-function getVideoAndExpectError(done, params) {
+function getVideoCompartmentAndExpectError(done, params) {
     request(sails.hooks.http.app)
         .get('/video')
         .query({ fromVideoTime: params.fromVideoTime })
@@ -322,14 +322,14 @@ function updateVideoAndExpectOK(videoId, tag) {
         .expect(200);
 }
 
-function updateVideoAndExpectError(videoId, tag) {
+function updateVideoCompartmentAndExpectError(videoId, tag) {
     request(sails.hooks.http.app)
         .put(util.format('/video/%s', videoId))
         .send({ tag: tag })
         .expect(500);
 }
 
-function createVideoQuery() {
+function createVideoCompartmentQuery() {
     return {
         fromVideoTime: new Date(),
         toVideoTime: new Date(),
@@ -347,7 +347,7 @@ function createVideoQuery() {
 }
 
 function validateTagUpdated(tag) {
-    return Video
+    return VideoCompartment
         .find()
         .populate('tags')
         .then(function (videos) {
