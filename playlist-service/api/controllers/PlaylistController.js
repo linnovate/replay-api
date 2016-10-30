@@ -58,6 +58,12 @@ module.exports = {
 				}
 			})
 	},
+	addMission: function(req, res, next) {
+
+	},
+	removeMission: function(req, res, next) {
+
+	},
 	destroy: function (req, res, next) {
 		if (!validateDeleteRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));

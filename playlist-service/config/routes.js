@@ -36,9 +36,9 @@ module.exports.routes = {
   'POST /playlist': 'PlaylistController.create',
   'PUT /playlist/:id': 'PlaylistController.update',
   // add mission with missionId to playlist with playlistId
-  'PUT /playlist/:playlistId/mission/:missionId': 'PlaylistController.update',
+  'PUT /playlist/:playlistId/mission/:missionId': 'PlaylistController.addMission',
   // delete mission with missionId from playlist with playlistId
-  'DELETE /playlist/:playlistId/mission/:missionId': 'PlaylistController.update',
+  'DELETE /playlist/:playlistId/mission/:missionId': 'PlaylistController.removeMission',
   'DELETE /playlist/:id': 'PlaylistController.destroy'
 
   /***************************************************************************
