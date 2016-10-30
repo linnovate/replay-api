@@ -9,7 +9,7 @@
     "mongoose": "^4.6.5",
     "rc": "1.0.1",
     "replay-jwt-middleware": "^1.0.0",
-    "replay-schemas": "^1.0.42",
+    "replay-schemas": "^1.0.43",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9"
   },
