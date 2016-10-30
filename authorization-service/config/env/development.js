@@ -16,9 +16,11 @@ module.exports = {
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-   port: 1340
-  // models: {
-  //   connection: 'someMongodbServer'
-  // }
+  port: process.env.PORT || 1340,
+  mongo: {
+    host: process.env.MONGO_HOST || 'localhost',
+    port: process.env.MONGO_PORT || 27017,
+    database: process.env.MONGO_DATABASE || 'replay_dev'
+  },
 
 };

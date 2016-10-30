@@ -1,43 +1,50 @@
-var Video = require('replay-schemas/Video'),
+var Mission = require('replay-schemas/Mission'),
+    VideoCompartment = require('replay-schemas/VideoCompartment'),
     Tag = require('replay-schemas/Tag');
 
-module.exports.buildMongoQuery = function (query) {
+module.exports.buildMongoQuery = function (query, permissions) {
     // build the baseline of the query
     var mongoQuery = {
         $and: [
-            { status: 'ready' }
+            VideoCompartment.buildQueryCondition(permissions)
         ]
     };
 
     // append the fields the user specified
 
-    if (query.fromVideoTime) {
+    if (query.fromMissionTime) {
         mongoQuery.$and.push({
-            startTime: { $gte: query.fromVideoTime }
+            startTime: { $gte: query.fromMissionTime }
         });
     }
 
-    if (query.toVideoTime) {
+    if (query.toMissionTime) {
         mongoQuery.$and.push({
-            endTime: { $lte: query.toVideoTime }
+            endTime: { $lte: query.toMissionTime }
         });
     }
 
-    if (query.minVideoDuration) {
+    if (query.minMissionDuration) {
         mongoQuery.$and.push({
-            durationInSeconds: { $gte: query.minVideoDuration }
+            durationInSeconds: { $gte: query.minMissionDuration }
         });
     }
 
-    if (query.maxVideoDuration) {
+    if (query.maxMissionDuration) {
         mongoQuery.$and.push({
-            durationInSeconds: { $lte: query.maxVideoDuration }
+            durationInSeconds: { $lte: query.maxMissionDuration }
         });
     }
 
     if (query.sourceId) {
         mongoQuery.$and.push({
             sourceId: query.sourceId
+        });
+    }
+
+    if (query.missionName) {
+        mongoQuery.$and.push({
+            missionName: query.missionName
         });
     }
 
@@ -54,7 +61,7 @@ module.exports.buildMongoQuery = function (query) {
     }
 
     // skip check of minimum width & height and minimum duration inside intersection
-    
+
     // return the original query for later use, and the built mongo query
     return Promise.resolve(mongoQuery);
 }
@@ -62,20 +69,27 @@ module.exports.buildMongoQuery = function (query) {
 module.exports.performMongoQuery = function (mongoQuery) {
     console.log('Performing mongo query:', JSON.stringify(mongoQuery));
 
-    return Video.find(mongoQuery).populate('tags');
+    return Mission.find(mongoQuery).populate('tags');
 }
 
-module.exports.performUpdate = function (id, body) {
-    var updateQuery = {};
+module.exports.updateMission = function (id, permissions, body) {
+    var updateParams = {};
 
     if (body.tag) {
         return findOrCreateTagByTitle(body.tag)
             .then(function (tag) {
                 console.log('Found / Created tag:', tag.title);
-                updateQuery.$addToSet = {
+                updateParams.$addToSet = {
                     tags: tag._id
                 };
-                return updateVideo(id, updateQuery);
+
+                var updateQuery = {
+                    $and: [
+                        VideoCompartment.buildQueryCondition(permissions),
+                        { _id: id }
+                    ]
+                }
+                return updateMission(updateQuery, updateParams);
             });
     }
 
@@ -96,10 +110,8 @@ function findOrCreateTagByTitle(title) {
         });
 }
 
-function updateVideo(id, updateQuery) {
-    console.log('Updating video:', id);
-    console.log('Update query:', updateQuery);
-    return Video.findOneAndUpdate({
-        _id: id
-    }, updateQuery);
+function updateMission(query, updateParams) {
+    console.log('Update query:', JSON.stringify(query));
+    console.log('Update params:', JSON.stringify(updateParams));
+    return Mission.findOneAndUpdate(query, updateParams);
 }

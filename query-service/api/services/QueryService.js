@@ -21,10 +21,11 @@ module.exports.saveQuery = function(query) {
     }
 
     return Query.create({
-        fromVideoTime: query.fromVideoTime,
-        toVideoTime: query.toVideoTime,
-        minVideoDuration: query.minVideoDuration,
-        maxVideoDuration: query.maxVideoDuration,
+        missionName: query.missionName,
+        fromMissionTime: query.fromMissionTime,
+        toMissionTime: query.toMissionTime,
+        minMissionDuration: query.minMissionDuration,
+        maxMissionDuration: query.maxMissionDuration,
         copyright: query.copyright,
         minTraceHeight: query.minTraceHeight,
         minTraceWidth: query.minTraceWidth,
