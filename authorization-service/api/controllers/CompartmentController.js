@@ -1,15 +1,18 @@
 /**
- * AuthorizationXmlController
+ * CompartmentController
  *
  * @description :: Server-side logic for serving authorization xmls files
  */
 
+// Getting the user permissions by his ID.
+// NOTE: Supports authorizations for 'adfs-saml' authenticated users.
 module.exports = {
 
 	find: function (req, res, next) {
 		var id = req.query.id;
 		return validateRequest(req.query)
-			.then(() => CompartmentService.getCompartmentPermissions(id))
+			.then(() => UserService.getUserById(id))
+			.then(user => CompartmentService.getCompartmentPermissions(user.providerDetails.id))
 			.then(function (result) {
 				res.send(result);
 			})
