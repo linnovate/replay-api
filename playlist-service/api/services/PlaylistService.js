@@ -4,7 +4,7 @@ module.exports.findPlaylistsByOwnerId = function(ownerId) {
 	console.log('Finding playlists of ownerId:', ownerId);
 	return Playlist.find({
 		ownerId: ownerId
-	});
+	}).populate('missions');
 }
 
 module.exports.createPlaylist = function(userId, name) {
