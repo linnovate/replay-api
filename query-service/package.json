@@ -16,7 +16,7 @@
     "mongoose": "^4.6.5",
     "rc": "^1.1.6",
     "replay-jwt-middleware": "^1.0.0",
-    "replay-schemas": "^1.0.41",
+    "replay-schemas": "^1.0.42",
     "request": "^2.76.0",
     "request-promise": "^4.1.1",
     "sails": "^0.12.8",
