@@ -171,15 +171,15 @@ describe('MissionController', function () {
     });
 
     describe('#update()', function () {
-        // it('should update Missions tag successfuly', function (done) {
-        //     var tag = 'newTag'
-        //     createMissions(1)
-        //         .then(() => getMissions())
-        //         .then((missions) => updateMissionAndExpectOK(missions[0].id, tag))
-        //         .then(() => validateTagUpdated(tag))
-        //         .then(done)
-        //         .catch(done);
-        // })
+        it('should update Missions tag successfuly', function (done) {
+            var tag = 'newTag'
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => updateMissionAndExpectOK(missions[0].id, tag))
+                .then(() => validateTagUpdated(tag))
+                .then(done)
+                .catch(done);
+        })
     })
 
     describe('#find() bad input tests', function () {
@@ -227,40 +227,40 @@ describe('MissionController', function () {
     });
 
     describe('#update() bad input tests', function () {
-        // it('should reject due to empty update', function (done) {
-        //     var tag = ''
-        //     createMissions(1)
-        //         .then(() => getMissions())
-        //         .then((missions) => updateMissionAndExpectError(missions[0].id, tag))
-        //         .then(() => done())
-        //         .catch(done);
-        // })
+        it('should reject due to empty update', function (done) {
+            var tag = ''
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => updateMissionAndExpectError(missions[0].id, tag))
+                .then(() => done())
+                .catch(done);
+        })
 
-        // it('should reject due to bad id (not mongoose.Types.ObjectId)', function (done) {
-        //     var tag = 'newTag'
-        //     createMissions(1)
-        //         .then(() => getMissions())
-        //         .then((missions) => updateMissionAndExpectError('someNotExistingId', tag))
-        //         .then(() => done())
-        //         .catch(done);
-        // })
+        it('should reject due to bad id (not mongoose.Types.ObjectId)', function (done) {
+            var tag = 'newTag'
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => updateMissionAndExpectError('someNotExistingId', tag))
+                .then(() => done())
+                .catch(done);
+        })
 
-        // it('should reject due to bad update property (not tag property)', function (done) {
-        //     var tag = 'newTag'
-        //     createMissions(1)
-        //         .then(() => getMissions())
-        //         .then((missions) => {
-        //             return request(sails.hooks.http.app)
-        //                 .put(util.format('/mission/%s', missions[0].id))
-        //                 .send({
-        //                     tag: tag,
-        //                     sourceId: 'newSourceId'
-        //                 })
-        //                 .expect(500);
-        //         })
-        //         .then(() => done())
-        //         .catch(done);
-        // })
+        it('should reject due to bad update property (not tag property)', function (done) {
+            var tag = 'newTag'
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => {
+                    return request(sails.hooks.http.app)
+                        .put(util.format('/mission/%s', missions[0].id))
+                        .send({
+                            tag: tag,
+                            sourceId: 'newSourceId'
+                        })
+                        .expect(500);
+                })
+                .then(() => done())
+                .catch(done);
+        })
     });
 });
 
