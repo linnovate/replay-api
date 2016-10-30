@@ -58,8 +58,8 @@ module.exports = {
 				}
 			})
 	},
-	addMission: function (req, res, next) {
-		if (!validateAddMissionRequest(req)) {
+	updateMission: function (req, res, next) {
+		if (!validateAlterMissionRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));
 		}
 
@@ -67,9 +67,18 @@ module.exports = {
 		var missionId = req.params.missionId;
 		PlaylistService.validateUserOwnsPlaylist(req.userId, playlistId)
 			.then(() => MissionService.validateMissionExists(missionId))
-			.then(() => PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } }))
 			.then(() => {
-				console.log('Playlist updated successfuly with new mission.');
+				if(req.method === 'PUT') {
+					return PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } });
+				}
+				else if(req.method === 'DELETE') {
+					return PlaylistService.updatePlaylistById(playlistId, { $pull: { missions: missionId } });
+				}
+				
+				return Promise.reject(new Error('Unsupported HTTP method.'));
+			})
+			.then(() => {
+				console.log('Playlist updated missions successfuly.');
 				return res.ok();
 			})
 			.catch(err => {
@@ -78,9 +87,6 @@ module.exports = {
 					next(err);
 				}
 			})
-	},
-	removeMission: function (req, res, next) {
-
 	},
 	destroy: function (req, res, next) {
 		if (!validateDeleteRequest(req)) {
@@ -144,7 +150,7 @@ function validateUpdateRequest(req) {
 	return true;
 }
 
-function validateAddMissionRequest(req) {
+function validateAlterMissionRequest(req) {
 	if (!validateGeneralUpdateRequest(req)) {
 		return false;
 	}
