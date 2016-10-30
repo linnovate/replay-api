@@ -58,10 +58,28 @@ module.exports = {
 				}
 			})
 	},
-	addMission: function(req, res, next) {
+	addMission: function (req, res, next) {
+		if (!validateAddMissionRequest(req)) {
+			return res.badRequest(new Error('Some parameters are missing.'));
+		}
 
+		var playlistId = req.params.id;
+		var missionId = req.params.missionId;
+		PlaylistService.validateUserOwnsPlaylist(req.userId, playlistId)
+			.then(() => MissionService.validateMissionExists(missionId))
+			.then(() => PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } }))
+			.then(() => {
+				console.log('Playlist updated successfuly with new mission.');
+				return res.ok();
+			})
+			.catch(err => {
+				if (err) {
+					console.log(err);
+					next(err);
+				}
+			})
 	},
-	removeMission: function(req, res, next) {
+	removeMission: function (req, res, next) {
 
 	},
 	destroy: function (req, res, next) {
@@ -93,7 +111,7 @@ function validateCreateRequest(req) {
 	return true;
 }
 
-function validateUpdateRequest(req) {
+function validateGeneralUpdateRequest(req) {
 	if (!req.body) {
 		return false;
 	}
@@ -110,8 +128,36 @@ function validateUpdateRequest(req) {
 		return false;
 	}
 
+	return true;
+}
+
+function validateUpdateRequest(req) {
+	if (!validateGeneralUpdateRequest(req)) {
+		return false;
+	}
+
 	// allow to update name only
-	if(Object.keys(req.body).length !== 1 || !req.body.name) {
+	if (Object.keys(req.body).length !== 1 || !req.body.name) {
+		return false;
+	}
+
+	return true;
+}
+
+function validateAddMissionRequest(req) {
+	if (!validateGeneralUpdateRequest(req)) {
+		return false;
+	}
+
+	// make sure missionId is a valid ObjectId
+	if (req.params.missionId) {
+		try {
+			mongoose.Types.ObjectId(req.params.missionId);
+		} catch (e) {
+			return false;
+		}
+	}
+	else {
 		return false;
 	}
 
