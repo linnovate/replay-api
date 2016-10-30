@@ -15,6 +15,11 @@ module.exports.createPlaylist = function(userId, name) {
 	});
 }
 
+module.exports.updatePlaylistById = function(id, updateParams) {
+	console.log('Updating playlist of id: %s with params: %s', id, JSON.stringify(updateParams));
+	return Playlist.findOneAndUpdate({ _id: id }, updateParams);
+}
+
 module.exports.validateUserOwnsPlaylist = function(userId, playlistId) {
 	console.log('Validating user owns the playlist...');
 

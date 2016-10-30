@@ -92,11 +92,6 @@ function validateFindRequest(req) {
 
 function validateUpdateRequest(req) {
     return new Promise(function (resolve, reject) {
-        // make sure we have at least one attribute
-        if (!req.query) {
-            return reject(new Error('Empty update is not allowed.'));
-        }
-
         // validate id is a mongoose id
         if (req.params.id) {
             try {
