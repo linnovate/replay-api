@@ -1,5 +1,13 @@
 var Playlist = require('replay-schemas/Playlist');
 
+module.exports.createPlaylist = function(userId, name) {
+	console.log('Creating playlist for userId: %s, with name: %s.', userId, name);
+	return Playlist.create({
+		name: name,
+		ownerId: userId
+	});
+}
+
 module.exports.validateUserOwnsPlaylist = function(userId, playlistId) {
 	console.log('Validating user owns the playlist...');
 

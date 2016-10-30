@@ -7,10 +7,25 @@
 
 module.exports = {
 	find: function (req, res, next) {
-
+		PlaylistService.findPlaylists()
 	},
 	create: function (req, res, next) {
+		if(!validateCreateRequest(req)) {
+			return res.badRequest(new Error('Some parameters are missing.'));
+		}
 
+		var name = req.body.name;
+		PlaylistService.createPlaylist(req.userId, name)
+			.then(playlist => {
+				console.log('Playlist created successfuly.');
+				return res.json(playlist);
+			})
+			.catch(err => {
+				if(err) {
+					console.log(err);
+					next(err);
+				}
+			})
 	},
 	update: function (req, res, next) {
 
@@ -35,6 +50,14 @@ module.exports = {
 
 	}
 };
+
+function validateCreateRequest(req) {
+	if (!req.body || !req.body.name) {
+		return false;
+	}
+
+	return true;
+}
 
 function validateDeleteRequest(req) {
 	if (!req.params || !req.params.id) {

@@ -17,8 +17,20 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMongodbServer'
-  // }
+  port: process.env.PORT || 1341,
+  mongo: {
+    host: process.env.MONGO_HOST || 'localhost',
+    port: process.env.MONGO_PORT || 27017,
+    database: process.env.MONGO_DATABASE || 'replay_dev'
+  },
+  settings: {
+    'token_secret': process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8'
+  },
+  services: {
+    'authorization_service': {
+      host: process.env.AUTHORIZATION_SERVICE_HOST || 'http://localhost',
+      port: process.env.AUTHORIZATION_SERVICE_PORT || '1340'
+    }
+  }
 
 };
