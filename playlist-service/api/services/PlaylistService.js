@@ -27,5 +27,6 @@ module.exports.validateUserOwnsPlaylist = function(userId, playlistId) {
 }
 
 module.exports.deletePlaylist = function(id) {
+	console.log('Deleting playlist with id:', id);
 	return Playlist.findByIdAndRemove(id);
 }

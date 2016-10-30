@@ -36,9 +36,10 @@ module.exports = {
 			return res.badRequest(new Error('Some parameters are missing.'));
 		}
 
-		validateUserOwnsPlaylist(req.userId, playlistId)
+		PlaylistService.validateUserOwnsPlaylist(req.userId, playlistId)
 			.then(() => PlaylistService.deletePlaylist(playlistId))
 			.then(() => {
+				console.log('Playlist deleted successfuly.');
 				return res.ok();
 			})
 			.catch(err => {
