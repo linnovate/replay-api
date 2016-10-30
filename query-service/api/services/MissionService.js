@@ -12,33 +12,39 @@ module.exports.buildMongoQuery = function (query, permissions) {
 
     // append the fields the user specified
 
-    if (query.fromVideoTime) {
+    if (query.fromMissionTime) {
         mongoQuery.$and.push({
-            startTime: { $gte: query.fromVideoTime }
+            startTime: { $gte: query.fromMissionTime }
         });
     }
 
-    if (query.toVideoTime) {
+    if (query.toMissionTime) {
         mongoQuery.$and.push({
-            endTime: { $lte: query.toVideoTime }
+            endTime: { $lte: query.toMissionTime }
         });
     }
 
-    if (query.minVideoDuration) {
+    if (query.minMissionDuration) {
         mongoQuery.$and.push({
-            duration: { $gte: query.minVideoDuration }
+            durationInSeconds: { $gte: query.minMissionDuration }
         });
     }
 
-    if (query.maxVideoDuration) {
+    if (query.maxMissionDuration) {
         mongoQuery.$and.push({
-            duration: { $lte: query.maxVideoDuration }
+            durationInSeconds: { $lte: query.maxMissionDuration }
         });
     }
 
     if (query.sourceId) {
         mongoQuery.$and.push({
             sourceId: query.sourceId
+        });
+    }
+
+    if (query.missionName) {
+        mongoQuery.$and.push({
+            missionName: query.missionName
         });
     }
 

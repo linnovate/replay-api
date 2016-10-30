@@ -1,268 +1,276 @@
-var VideoCompartment = require('replay-schemas/VideoCompartment'),
+var Mission = require('replay-schemas/Mission'),
     Tag = require('replay-schemas/Tag')
 request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
     util = require('util');
 
-describe('VideoController', function () {
+describe('MissionController', function () {
     describe('#find()', function () {
-        var videoStubsAmount = 3;
-        it(util.format('should return all %s videos', videoStubsAmount), function (done) {
+        var missionStubsAmount = 3;
+        it(util.format('should return all %s missions', missionStubsAmount), function (done) {
             var query = {};
-            createVideoCompartments(videoStubsAmount)
-                .then(() => getAndExpectVideoCompartments(videoStubsAmount, query))
+            createMissions(missionStubsAmount)
+                .then(() => getAndExpectMissions(missionStubsAmount, query))
                 .then(done)
                 .catch(done);
         });
 
-        it('should return 0 videos', function (done) {
+        it('should return 0 missions', function (done) {
             var query = {};
-            getAndExpectVideoCompartments(0, query)
+            getAndExpectMissions(0, query)
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by fromVideoTime', function (done) {
-            var query = { fromVideoTime: new Date('1970') }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+        it('should return 1 Missions by fromMissionTime', function (done) {
+            var query = { fromMissionTime: new Date('1970') }
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by fromVideoTime', function (done) {
-            var query = { fromVideoTime: new Date('9999') }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+        it('should return 0 Missions by fromMissionTime', function (done) {
+            var query = { fromMissionTime: new Date('9999') }
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by toVideoTime', function (done) {
-            var query = { toVideoTime: new Date('9999') }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+        it('should return 1 Missions by toMissionTime', function (done) {
+            var query = { toMissionTime: new Date('9999') }
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by toVideoTime', function (done) {
-            var query = { toVideoTime: new Date('1970') }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+        it('should return 0 Missions by toMissionTime', function (done) {
+            var query = { toMissionTime: new Date('1970') }
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by minVideoDuration', function (done) {
-            var query = { minVideoDuration: 1 }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+        it('should return 1 Missions by minMissionDuration', function (done) {
+            var query = { minMissionDuration: 1 }
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by minVideoDuration', function (done) {
-            var query = { minVideoDuration: 9999999 }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+        it('should return 0 Missions by minMissionDuration', function (done) {
+            var query = { minMissionDuration: 9999999 }
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by maxVideoDuration', function (done) {
-            var query = { maxVideoDuration: 9999999 }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+        it('should return 1 Missions by maxMissionDuration', function (done) {
+            var query = { maxMissionDuration: 9999999 }
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by maxVideoDuration', function (done) {
-            var query = { maxVideoDuration: 1 }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+        it('should return 0 Missions by maxMissionDuration', function (done) {
+            var query = { maxMissionDuration: 1 }
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by sourceId', function (done) {
+        it('should return 1 Missions by sourceId', function (done) {
             var query = { sourceId: '100' }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by sourceId', function (done) {
+        it('should return 0 Missions by sourceId', function (done) {
             var query = { sourceId: 'someSourceId' }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by tagsIds', function (done) {
+        it('should return 1 Missions by tagsIds', function (done) {
             var tag = 'test1';
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => updateMissionAndExpectOK(missions[0].id, tag))
                 .then(() => getTags())
                 .then((tags) => {
                     var query = { tagsIds: JSON.stringify([tags[0].id]) }
-                    return getAndExpectVideoCompartments(1, query);
+                    return getAndExpectMissions(1, query);
                 })
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by tagsIds', function (done) {
+        it('should return 0 Missions by tagsIds', function (done) {
             var tag = 'test1';
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
+            createMissions(1)
+                .then(() => getMissions())
+                .then((missions) => updateMissionAndExpectOK(missions[0].id, tag))
                 .then(() => getTags())
                 .then((tags) => {
                     var query = { tagsIds: JSON.stringify([new mongoose.Types.ObjectId()]) }
-                    return getAndExpectVideoCompartments(0, query);
+                    return getAndExpectMissions(0, query);
                 })
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 1 videoCompartments by boundingShape', function (done) {
+        it('should return 1 Missions by boundingShape', function (done) {
             var query = {
                 boundingShapeType: 'Polygon',
                 boundingShapeCoordinates: '[[[34.784518, 32.128957], [34.848031, 32.125534], [34.846299, 32.029153], [34.744677, 32.018383], [34.784518, 32.128957]]]'
             }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(1, query))
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
                 .then(done)
                 .catch(done);
         })
 
-        it('should return 0 videoCompartments by boundingShape', function (done) {
+        it('should return 0 Missions by boundingShape', function (done) {
             var query = {
                 boundingShapeType: 'Polygon',
                 boundingShapeCoordinates: '[[[1,1], [2,2], [3,3], [1,1]]]'
             }
-            createVideoCompartments(1)
-                .then(() => getAndExpectVideoCompartments(0, query))
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
+                .then(done)
+                .catch(done);
+        })
+
+        it('should return 1 Missions by missionName', function (done) {
+            var query = { missionName: 'testMission' }
+            createMissions(1)
+                .then(() => getAndExpectMissions(1, query))
+                .then(done)
+                .catch(done);
+        })
+
+        it('should return 0 Missions by missionName', function (done) {
+            var query = { missionName: 'someTestMission' }
+            createMissions(1)
+                .then(() => getAndExpectMissions(0, query))
                 .then(done)
                 .catch(done);
         })
     });
 
     describe('#update()', function () {
-        it('should update videoCompartments tag successfuly', function (done) {
-            var tag = 'newTag'
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => updateVideoAndExpectOK(videos[0].id, tag))
-                .then(() => validateTagUpdated(tag))
-                .then(done)
-                .catch(done);
-        })
+        // it('should update Missions tag successfuly', function (done) {
+        //     var tag = 'newTag'
+        //     createMissions(1)
+        //         .then(() => getMissions())
+        //         .then((missions) => updateMissionAndExpectOK(missions[0].id, tag))
+        //         .then(() => validateTagUpdated(tag))
+        //         .then(done)
+        //         .catch(done);
+        // })
     })
 
     describe('#find() bad input tests', function () {
-        it('should reject due to bad fromVideoTime (not Date)', function (done) {
-            var query = createVideoCompartmentQuery();
-            query.fromVideoTime = 'test';
-            getVideoCompartmentAndExpectError(done, query);
+        it('should reject due to bad fromMissionTime (not Date)', function (done) {
+            var query = createMissionQuery();
+            query.fromMissionTime = 'test';
+            getMissionAndExpectError(done, query);
         })
 
-        it('should reject due to bad toVideoTime (not Date)', function (done) {
-            var query = createVideoCompartmentQuery();
-            query.toVideoTime = 'test';
-            getVideoCompartmentAndExpectError(done, query);
+        it('should reject due to bad toMissionTime (not Date)', function (done) {
+            var query = createMissionQuery();
+            query.toMissionTime = 'test';
+            getMissionAndExpectError(done, query);
         })
 
-        it('should reject due to bad minVideoDuration (not Number)', function (done) {
-            var query = createVideoCompartmentQuery();
-            query.minVideoDuration = 'test';
-            getVideoCompartmentAndExpectError(done, query);
+        it('should reject due to bad minMissionDuration (not Number)', function (done) {
+            var query = createMissionQuery();
+            query.minMissionDuration = 'test';
+            getMissionAndExpectError(done, query);
         })
 
-        it('should reject due to bad maxVideoDuration (not Number)', function (done) {
-            var query = createVideoCompartmentQuery();
-            query.maxVideoDuration = 'test';
-            getVideoCompartmentAndExpectError(done, query);
+        it('should reject due to bad maxMissionDuration (not Number)', function (done) {
+            var query = createMissionQuery();
+            query.maxMissionDuration = 'test';
+            getMissionAndExpectError(done, query);
         })
 
         it('should reject due to bad boundingShapeType (boundingShapeCoordinates without boundingShapeType)', function (done) {
-            var query = createVideoCompartmentQuery();
+            var query = createMissionQuery();
             query.boundingShapeType = undefined;
-            getVideoCompartmentAndExpectError(done, query);
+            getMissionAndExpectError(done, query);
         })
 
         it('should reject due to bad boundingShapeCoordinates (boundingShapeType without boundingShapeCoordinates)', function (done) {
-            var query = createVideoCompartmentQuery();
+            var query = createMissionQuery();
             query.boundingShapeCoordinates = undefined;
-            getVideoCompartmentAndExpectError(done, query);
+            getMissionAndExpectError(done, query);
         })
 
         it('should reject due to bad tagsIds (not [mongoose.Types.ObjectId])', function (done) {
-            var query = createVideoCompartmentQuery();
+            var query = createMissionQuery();
             query.tagsIds = '[someId]';
-            getVideoCompartmentAndExpectError(done, query);
+            getMissionAndExpectError(done, query);
         })
     });
 
     describe('#update() bad input tests', function () {
-        it('should reject due to empty update', function (done) {
-            var tag = ''
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => updateVideoCompartmentAndExpectError(videos[0].id, tag))
-                .then(() => done())
-                .catch(done);
-        })
+        // it('should reject due to empty update', function (done) {
+        //     var tag = ''
+        //     createMissions(1)
+        //         .then(() => getMissions())
+        //         .then((missions) => updateMissionAndExpectError(missions[0].id, tag))
+        //         .then(() => done())
+        //         .catch(done);
+        // })
 
-        it('should reject due to bad id (not mongoose.Types.ObjectId)', function (done) {
-            var tag = 'newTag'
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => updateVideoCompartmentAndExpectError('someNotExistingId', tag))
-                .then(() => done())
-                .catch(done);
-        })
+        // it('should reject due to bad id (not mongoose.Types.ObjectId)', function (done) {
+        //     var tag = 'newTag'
+        //     createMissions(1)
+        //         .then(() => getMissions())
+        //         .then((missions) => updateMissionAndExpectError('someNotExistingId', tag))
+        //         .then(() => done())
+        //         .catch(done);
+        // })
 
-        it('should reject due to bad update property (not tag property)', function (done) {
-            var tag = 'newTag'
-            createVideoCompartments(1)
-                .then(() => getVideoCompartments())
-                .then((videos) => {
-                    return request(sails.hooks.http.app)
-                        .put(util.format('/video/%s', videos[0].id))
-                        .send({
-                            tag: tag,
-                            sourceId: 'newSourceId'
-                        })
-                        .expect(500);
-                })
-                .then(() => done())
-                .catch(done);
-        })
+        // it('should reject due to bad update property (not tag property)', function (done) {
+        //     var tag = 'newTag'
+        //     createMissions(1)
+        //         .then(() => getMissions())
+        //         .then((missions) => {
+        //             return request(sails.hooks.http.app)
+        //                 .put(util.format('/mission/%s', missions[0].id))
+        //                 .send({
+        //                     tag: tag,
+        //                     sourceId: 'newSourceId'
+        //                 })
+        //                 .expect(500);
+        //         })
+        //         .then(() => done())
+        //         .catch(done);
+        // })
     });
 });
 
-function createVideoCompartments(amount) {
-    var videoCompartment = {
+function createMissions(amount) {
+    var mission = {
+        missionName: 'testMission',
         sourceId: '100',
-        videoFileName: 'test.mp4',
-        contentDirectoryPath: '/',
-        baseName: 'test',
-        requestFormat: 'mp4',
-        receivingMethod: {
-            standard: 'VideoStandard',
-            version: '1.0'
-        },
-        jobStatusId: 'someId',
         startTime: new Date(),
         endTime: addMinutes(new Date(), 10),
-        status: 'ready',
+        destination: 'System 1',
         boundingPolygon: {
             type: 'Polygon',
             coordinates: [[[34.784518, 32.128957], [34.848031, 32.125534], [34.846299, 32.029153], [34.744677, 32.018383], [34.784518, 32.128957]]]
@@ -271,22 +279,23 @@ function createVideoCompartments(amount) {
 
     var promises = [];
     for (var i = 0; i < amount; i++) {
-        promises.push(VideoCompartment.create(videoCompartment));
+        promises.push(Mission.create(mission));
     }
     return Promise.all(promises);
 }
 
-function getVideoCompartments() {
-    return VideoCompartment.find();
+function getMissions() {
+    return Mission.find();
 }
 
-function getAndExpectVideoCompartments(amount, params) {
+function getAndExpectMissions(amount, params) {
     return request(sails.hooks.http.app)
-        .get('/video')
-        .query({ fromVideoTime: params.fromVideoTime })
-        .query({ toVideoTime: params.toVideoTime })
-        .query({ minVideoDuration: params.minVideoDuration })
-        .query({ maxVideoDuration: params.maxVideoDuration })
+        .get('/mission')
+        .query({ missionName: params.missionName })
+        .query({ fromMissionTime: params.fromMissionTime })
+        .query({ toMissionTime: params.toMissionTime })
+        .query({ minMissionDuration: params.minMissionDuration })
+        .query({ maxMissionDuration: params.maxMissionDuration })
         .query({ sourceId: params.sourceId })
         .query({ boundingShapeType: params.boundingShapeType })
         .query({ boundingShapeCoordinates: params.boundingShapeCoordinates })
@@ -299,13 +308,13 @@ function getAndExpectVideoCompartments(amount, params) {
         });
 }
 
-function getVideoCompartmentAndExpectError(done, params) {
+function getMissionAndExpectError(done, params) {
     request(sails.hooks.http.app)
-        .get('/video')
-        .query({ fromVideoTime: params.fromVideoTime })
-        .query({ toVideoTime: params.toVideoTime })
-        .query({ minVideoDuration: params.minVideoDuration })
-        .query({ maxVideoDuration: params.maxVideoDuration })
+        .get('/mission')
+        .query({ fromMissionTime: params.fromMissionTime })
+        .query({ toMissionTime: params.toMissionTime })
+        .query({ minMissionDuration: params.minMissionDuration })
+        .query({ maxMissionDuration: params.maxMissionDuration })
         .query({ sourceId: params.sourceId })
         .query({ boundingShapeType: params.boundingShapeType })
         .query({ boundingShapeCoordinates: params.boundingShapeCoordinates })
@@ -315,26 +324,26 @@ function getVideoCompartmentAndExpectError(done, params) {
         .expect(500, done);
 }
 
-function updateVideoAndExpectOK(videoId, tag) {
+function updateMissionAndExpectOK(missionId, tag) {
     return request(sails.hooks.http.app)
-        .put(util.format('/video/%s', videoId))
+        .put(util.format('/mission/%s', missionId))
         .send({ tag: tag })
         .expect(200);
 }
 
-function updateVideoCompartmentAndExpectError(videoId, tag) {
+function updateMissionAndExpectError(missionId, tag) {
     request(sails.hooks.http.app)
-        .put(util.format('/video/%s', videoId))
+        .put(util.format('/mission/%s', missionId))
         .send({ tag: tag })
         .expect(500);
 }
 
-function createVideoCompartmentQuery() {
+function createMissionQuery() {
     return {
-        fromVideoTime: new Date(),
-        toVideoTime: new Date(),
-        minVideoDuration: 0,
-        maxVideoDuration: 1000,
+        fromMissionTime: new Date(),
+        toMissionTime: new Date(),
+        minMissionDuration: 0,
+        maxMissionDuration: 1000,
         copyright: 'test',
         minTraceHeight: 100,
         minTraceWidth: 100,
@@ -347,12 +356,12 @@ function createVideoCompartmentQuery() {
 }
 
 function validateTagUpdated(tag) {
-    return VideoCompartment
+    return Mission
         .find()
         .populate('tags')
-        .then(function (videos) {
-            expect(videos).to.be.lengthOf(1);
-            expect(videos[0].tags[0].title).to.equal(tag);
+        .then(function (missions) {
+            expect(missions).to.be.lengthOf(1);
+            expect(missions[0].tags[0].title).to.equal(tag);
         });
 }
 

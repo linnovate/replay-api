@@ -18,7 +18,6 @@ module.exports = {
     // and then building and performing a mongo query.
     // at last, it returns the mission results.
     find: function (req, res, next) {
-        console.log('In mission controller');
         var _parsedQuery;
         validateFindRequest(req)
             .then(() => QueryService.saveQuery(req.query))
@@ -34,6 +33,7 @@ module.exports = {
                 return res.json(results);
             })
             .catch(function (err) {
+                console.log(err);
                 return res.serverError(err);
             });
     },

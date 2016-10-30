@@ -8,6 +8,9 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
+var User = require('replay-schemas/User');
+var replayJwtMiddleware = require('replay-jwt-middleware'),
+  jwtMiddlewareStub = require('../test/utils').jwtMiddlewareStub;
 
 module.exports.http = {
 
@@ -59,8 +62,7 @@ module.exports.http = {
     //     console.log("Requested :: ", req.method, req.url);
     //     return next();
     // },
-    replayJwtMiddleware: process.env.NODE_ENV === 'testing'? undefined : require('replay-jwt-middleware')
-
+    replayJwtMiddleware: process.env.NODE_ENV === 'testing'? jwtMiddlewareStub : replayJwtMiddleware,
 
     /***************************************************************************
     *                                                                          *

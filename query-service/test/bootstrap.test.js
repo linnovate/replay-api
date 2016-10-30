@@ -1,7 +1,10 @@
 var sails = require('sails'),
   chai = require('chai');
 
-var VideoCompartment = require('replay-schemas/VideoCompartment'),
+var utils = require('./utils');
+
+var Mission = require('replay-schemas/Mission'),
+  User = require('replay-schemas/User'),
   VideoMetadata = require('replay-schemas/VideoMetadata'),
   Query = require('replay-schemas/Query'),
   Tag = require('replay-schemas/Tag'),
@@ -28,29 +31,53 @@ before(function (done) {
 
   // Increase the Mocha timeout so that Sails has enough time to lift.
   this.timeout(8000);
-  
+
   sails.lift({
     // configuration for testing purposes
     environment: 'testing',
-    hooks: { grunt: false },
-    http: {}
+    hooks: { grunt: false }
   }, function (err, server) {
     if (err) return done(err);
     // here you can load fixtures, etc.
-    done(err, sails);
+    utils.createUser()
+      .then(utils.mockAuthorizationService)
+      .then(() => done(err, sails))
+      .catch(err => {
+        if (err) {
+          console.log('Error initializing tests.');
+          done(err);
+        }
+      })
   });
 });
 
 after(function (done) {
   // here you can clear fixtures, etc.
-  sails.lower(done);
+  wipeUserCollection()
+    .then(() => {
+      sails.lower(done);
+      return Promise.resolve();
+    })
+    .catch(err => {
+      if (err) {
+        console.log('Failed cleaning after tests.');
+        done(err);
+      }
+    })
 });
 
 // wipe mongo collections
 function wipeMongoCollections() {
-  return VideoCompartment.remove({})
+  return Mission.remove({})
     .then(() => VideoMetadata.remove({}))
     .then(() => Query.remove({}))
     .then(() => StreamingSource.remove({}))
     .then(() => Tag.remove({}));
 };
+
+// user for mocking authentication, therefore needs to be wiped only at the end
+function wipeUserCollection() {
+  return User.remove({});
+}
+
+
