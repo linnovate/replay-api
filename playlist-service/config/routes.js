@@ -32,6 +32,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  'GET /playlist': 'PlaylistController.find',
   'POST /playlist': 'PlaylistController.create',
   'DELETE /playlist/:id': 'PlaylistController.destroy'
 

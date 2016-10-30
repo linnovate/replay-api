@@ -1,5 +1,12 @@
 var Playlist = require('replay-schemas/Playlist');
 
+module.exports.findPlaylistsByOwnerId = function(ownerId) {
+	console.log('Finding playlists of ownerId:', ownerId);
+	return Playlist.find({
+		ownerId: ownerId
+	});
+}
+
 module.exports.createPlaylist = function(userId, name) {
 	console.log('Creating playlist for userId: %s, with name: %s.', userId, name);
 	return Playlist.create({

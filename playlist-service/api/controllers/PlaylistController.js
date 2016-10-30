@@ -7,7 +7,17 @@
 
 module.exports = {
 	find: function (req, res, next) {
-		PlaylistService.findPlaylists()
+		PlaylistService.findPlaylistsByOwnerId(req.userId)
+			.then(playlists => {
+				console.log('Returning %s playlists.', playlists.length);
+				return res.json(playlists);
+			})
+			.catch(err => {
+				if(err) {
+					console.log(err);
+					next(err);
+				}
+			})
 	},
 	create: function (req, res, next) {
 		if(!validateCreateRequest(req)) {
