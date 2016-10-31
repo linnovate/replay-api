@@ -40,7 +40,8 @@ before(function (done) {
   }, function (err, server) {
     if (err) return done(err);
     // here you can load fixtures, etc.
-    authorizationMock.createUser()
+    authorizationMock.wipeUserCollection()
+      .then(authorizationMock.createUser)
       .then(() => authorizationMock.mockAuthorizationService(AuthorizationService.getAuthorizationServiceUrl()))
       .then(() => done(err, sails))
       .catch(err => {
