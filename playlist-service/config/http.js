@@ -9,7 +9,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 var replayJwtMiddleware = require('replay-jwt-middleware'),
-  jwtMiddlewareStub = require('../test/utils').jwtMiddlewareStub;
+  jwtMiddlewareStub = require('replay-test-utils/auhtorization-mock').jwtMiddlewareStub;
 
 module.exports.http = {
 
