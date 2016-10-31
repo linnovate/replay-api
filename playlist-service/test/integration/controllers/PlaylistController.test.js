@@ -33,22 +33,24 @@ describe('PlaylistController', () => {
         });
     });
 
-    // describe('#update()', () => {
-    //     it('should update playlist name', done => {
-    //         var _playlist, _originalName, _newName = 'newName'; 
+    describe('#update()', () => {
+        it('should update playlist name', done => {
+            var _playlistId;
+            var _updateField = 'name';
+            var _updateValue = 'newName';
 
-    //         createPlaylistsInMongo(1)
-    //             .then(playlist => {
-    //                 _playlist = playlist;
-    //                 _originalName = playlist.name; 
-    //                 return updatePlaylistAndExpectOK(playlist, _newName);
-    //             })
-    //             // .then(() => {
-    //             //     return validateMissionAddedToPlaylist(_playlistId, _missionId);
-    //             // })
-    //             .then(() => done())
-    //             .catch(done);
-    //     });
+            createPlaylistsInMongo(1)
+                .then(playlists => {
+                    _playlistId = playlists[0].id;
+                    return updatePlaylistAndExpectOK(_playlistId, _updateField, _updateValue);
+                })
+                .then(() => {
+                    return validatePlaylistUpdated(_playlistId, _updateField, _updateValue);
+                })
+                .then(() => done())
+                .catch(done);
+        });
+    });
 
     describe('#update()', () => {
         it('should add a mission to playlist', done => {
@@ -78,7 +80,7 @@ describe('PlaylistController', () => {
     describe('#delete()', () => {
         it('should delete a playlist', done => {
             var _playlistId;
-            
+
             createPlaylistsInMongo(1)
                 .then(playlists => {
                     _playlistId = playlists[0].id;
@@ -94,6 +96,25 @@ describe('PlaylistController', () => {
         it('should reject due to lack of name', done => {
             var playlist = {};
             createPlaylistAndExpectBadRequest(playlist, done);
+        });
+    });
+
+    describe('#update() bad input tests', () => {
+        it('should reject due to lack of name', done => {
+            var updateParams = { name: undefined };
+            createPlaylistsInMongo(1)
+                .then(playlists => updatePlaylistAndExpectBadRequest(playlists[0].id, updateParams))
+                .then(() => done())
+                .catch(done);
+        });
+
+        it('should reject due to lack of id', done => {
+            var updateParams = { name: 'someName' };
+            var id = 'someId';
+
+            updatePlaylistAndExpectBadRequest(id, updateParams)
+                .then(() => done())
+                .catch(done);
         });
     });
 
@@ -139,7 +160,7 @@ function getPlaylistsAndExpectOK(amount) {
         });
 }
 
-function generatePlaylist(){
+function generatePlaylist() {
     return {
         name: 'test',
         ownerId: authorizationMock.getUser().id
@@ -167,26 +188,50 @@ function createPlaylistAndExpectBadRequest(playlist, done) {
 function validatePlaylistCreated(playlist) {
     return Playlist.findOne(playlist)
         .then(playlist => {
-            if(playlist) {
+            if (playlist) {
                 return Promise.resolve();
             }
-            
+
             return Promise.reject(new Error('Playlist was not found in mongo.'));
         })
 }
 
-function updatePlaylistAndExpectOK(updateParams, newPlaylist) {
+function updatePlaylistAndExpectOK(playlistId, field, value) {
     var updateUrl = '/playlist/' + playlistId;
+    var updateParams = {};
+    updateParams[field] = value;
 
     return request(sails.hooks.http.app)
-        .post(updateUrl)
+        .put(updateUrl)
+        .send(updateParams)
         .set('Accept', 'application/json')
         .expect(200);
 }
 
+function updatePlaylistAndExpectBadRequest(playlistId, updateParams) {
+    var updateUrl = '/playlist/' + playlistId;
+
+    return request(sails.hooks.http.app)
+        .put(updateUrl)
+        .send(updateParams)
+        .set('Accept', 'application/json')
+        .expect(400);
+}
+
+function validatePlaylistUpdated(playlistId, field, value) {
+    return Playlist.findOne({ _id: playlistId })
+        .then(playlist => {
+            if (playlist && playlist[field] === value) {
+                return Promise.resolve();
+            }
+
+            return Promise.reject(new Error(`Playlist field: ${field} did not update to value: ${value}.`));
+        });
+}
+
 function addMissionToPlaylistAndExpectOK(playlistId, missionId) {
     var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
-    
+
     return request(sails.hooks.http.app)
         .put(updateUrl)
         .set('Accept', 'application/json')
@@ -194,9 +239,9 @@ function addMissionToPlaylistAndExpectOK(playlistId, missionId) {
 }
 
 function validateMissionAddedToPlaylist(playlistId, missionId) {
-    return Playlist.findOne({_id:playlistId})
+    return Playlist.findOne({ _id: playlistId })
         .then(permission => {
-            if(permission && permission.missions[0].toString() === missionId) {
+            if (permission && permission.missions[0].toString() === missionId) {
                 return Promise.resolve();
             }
 
@@ -215,7 +260,7 @@ function deletePlaylistAndExpectOK(playlistId) {
 
 function deletePlaylistAndExpectBadRequest(playlistId, done) {
     var deleteUrl = '/playlist/' + playlistId;
-   
+
     return request(sails.hooks.http.app)
         .delete(deleteUrl)
         .set('Accept', 'application/json')
@@ -223,12 +268,12 @@ function deletePlaylistAndExpectBadRequest(playlistId, done) {
 }
 
 function validatePlaylistDeleted(playlistId) {
-    return Playlist.findOne({_id: playlistId})
+    return Playlist.findOne({ _id: playlistId })
         .then(playlist => {
-            if(!playlist) {
+            if (!playlist) {
                 return Promise.resolve();
             }
-            
+
             return Promise.reject(new Error('Playlist was in mongo.'));
         })
 }
