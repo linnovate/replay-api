@@ -1,7 +1,7 @@
 var sails = require('sails'),
   chai = require('chai');
 
-var utils = require('./utils');
+var authorizationMock = require('replay-test-utils/authorization-mock');
 
 var Mission = require('replay-schemas/Mission'),
   User = require('replay-schemas/User'),
@@ -39,8 +39,8 @@ before(function (done) {
   }, function (err, server) {
     if (err) return done(err);
     // here you can load fixtures, etc.
-    utils.createUser()
-      .then(utils.mockAuthorizationService)
+    authorizationMock.createUser()
+      .then(() => authorizationMock.mockAuthorizationService(PermissionsService.getAuthorizationServiceUrl()))
       .then(() => done(err, sails))
       .catch(err => {
         if (err) {
@@ -53,7 +53,7 @@ before(function (done) {
 
 after(function (done) {
   // here you can clear fixtures, etc.
-  wipeUserCollection()
+  authorizationMock.wipeUserCollection()
     .then(() => {
       sails.lower(done);
       return Promise.resolve();
@@ -74,10 +74,4 @@ function wipeMongoCollections() {
     .then(() => StreamingSource.remove({}))
     .then(() => Tag.remove({}));
 };
-
-// user for mocking authentication, therefore needs to be wiped only at the end
-function wipeUserCollection() {
-  return User.remove({});
-}
-
 
