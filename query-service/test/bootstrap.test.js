@@ -2,6 +2,7 @@ var sails = require('sails'),
   chai = require('chai');
 
 var authorizationMock = require('replay-test-utils/authorization-mock');
+var AuthorizationService = require('replay-request-services/authorization');
 
 var Mission = require('replay-schemas/Mission'),
   User = require('replay-schemas/User'),
@@ -40,7 +41,7 @@ before(function (done) {
     if (err) return done(err);
     // here you can load fixtures, etc.
     authorizationMock.createUser()
-      .then(() => authorizationMock.mockAuthorizationService(PermissionsService.getAuthorizationServiceUrl()))
+      .then(() => authorizationMock.mockAuthorizationService(AuthorizationService.getAuthorizationServiceUrl()))
       .then(() => done(err, sails))
       .catch(err => {
         if (err) {

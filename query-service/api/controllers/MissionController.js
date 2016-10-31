@@ -12,6 +12,8 @@ var Promise = require('bluebird'),
     Mission = require('replay-schemas/Mission'),
     Tag = require('replay-schemas/Tag');
 
+var AuthorizationService = require('replay-request-services/authorization');
+
 module.exports = {
 
     // validates request, saves the query, fetches permissions of user,
@@ -23,7 +25,7 @@ module.exports = {
             .then(() => QueryService.saveQuery(req.query))
             .then(query => {
                 _parsedQuery = query;
-                return PermissionsService.findPermissionsByUserId(req.userId);
+                return AuthorizationService.findPermissionsByUserId(req.userId);
             })
             .then(permissions => {
                 return MissionService.buildMongoQuery(_parsedQuery, permissions);
@@ -42,7 +44,7 @@ module.exports = {
     // and returns HTTP 200.
     update: function (req, res, next) {
         validateUpdateRequest(req)
-            .then(() => PermissionsService.findPermissionsByUserId(req.userId))
+            .then(() => AuthorizationService.findPermissionsByUserId(req.userId))
             .then(permissions => MissionService.updateMission(req.params.id, permissions, req.body))
             .then(mission => {
                 if (mission) {
