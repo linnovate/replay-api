@@ -52,7 +52,7 @@ describe('PlaylistController', () => {
         });
     });
 
-    describe('#update()', () => {
+    describe('#updateMission()', () => {
         it('should add a mission to playlist', done => {
             var _playlistId, _missionId;
 
@@ -73,7 +73,25 @@ describe('PlaylistController', () => {
         });
 
         it('should remove a mission from playlist', done => {
-            done();
+            var _playlistId, _missionId;
+
+            createPlaylistsInMongo(1)
+                .then(playlists => {
+                    _playlistId = playlists[0].id;
+                    return createMissionInMongo();
+                })
+                .then(mission => {
+                    _missionId = mission.id;
+                    return addMissionToPlaylistAndExpectOK(_playlistId, _missionId);
+                })
+                .then(() => {
+                    return removeMissionFromPlaylistAndExpectOK(_playlistId, _missionId);
+                })
+                .then(() => {
+                    return validateMissionRemovedFromPlaylist(_playlistId);
+                })
+                .then(() => done())
+                .catch(done);
         });
     });
 
@@ -108,13 +126,29 @@ describe('PlaylistController', () => {
                 .catch(done);
         });
 
-        it('should reject due to lack of id', done => {
+        it('should reject due to lack of playlist id', done => {
             var updateParams = { name: 'someName' };
             var id = 'someId';
 
             updatePlaylistAndExpectBadRequest(id, updateParams)
                 .then(() => done())
                 .catch(done);
+        });
+    });
+
+    describe('#updateMission() bad input tests', () => {
+        it('should reject due to lack of playlist id', done => {
+            var _playlistId = 'someId';
+            var _missionId = new mongoose.Types.ObjectId();
+
+            updatePlaylistMissionAndExpectBadRequest(_playlistId, _missionId, done);
+        });
+
+        it('should reject due to lack of mission id', done => {
+            var _playlistId = new mongoose.Types.ObjectId();
+            var _missionId = 'someId';
+
+            updatePlaylistMissionAndExpectBadRequest(_playlistId, _missionId, done);
         });
     });
 
@@ -218,6 +252,15 @@ function updatePlaylistAndExpectBadRequest(playlistId, updateParams) {
         .expect(400);
 }
 
+function updatePlaylistMissionAndExpectBadRequest(playlistId, missionId, done) {
+    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+
+    return request(sails.hooks.http.app)
+        .put(updateUrl)
+        .set('Accept', 'application/json')
+        .expect(400, done);
+}
+
 function validatePlaylistUpdated(playlistId, field, value) {
     return Playlist.findOne({ _id: playlistId })
         .then(playlist => {
@@ -242,6 +285,26 @@ function validateMissionAddedToPlaylist(playlistId, missionId) {
     return Playlist.findOne({ _id: playlistId })
         .then(permission => {
             if (permission && permission.missions[0].toString() === missionId) {
+                return Promise.resolve();
+            }
+
+            return Promise.reject(new Error('Mission was not added to playlist.'));
+        });
+}
+
+function removeMissionFromPlaylistAndExpectOK(playlistId, missionId) {
+    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+
+    return request(sails.hooks.http.app)
+        .delete(updateUrl)
+        .set('Accept', 'application/json')
+        .expect(200);
+}
+
+function validateMissionRemovedFromPlaylist(playlistId) {
+    return Playlist.findOne({ _id: playlistId })
+        .then(permission => {
+            if (permission && permission.missions.length === 0) {
                 return Promise.resolve();
             }
 
