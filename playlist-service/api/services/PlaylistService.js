@@ -34,7 +34,7 @@ module.exports.validateUserOwnsPlaylist = function(userId, playlistId) {
 				return Promise.reject(new Error(`User with id: ${userId} does not own playlist with id: ${playlist}`));
 			}
 
-			return Promise.reject(new Error(`Could not found playlist with id: ${playlistId}`));
+			return Promise.reject(new Error(`Could not find playlist with id: ${playlistId}`));
 		})
 }
 

@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var mongoose = require('mongoose');
+	_ = require('lodash');
+	
 var AuthorizationService = require('replay-request-services/authorization');
 
 module.exports = {
@@ -178,7 +180,18 @@ function validateAlterMissionRequest(req) {
 }
 
 function validateDeleteRequest(req) {
-	if (!req.params || !req.params.id) {
+	if (!req.params) {
+		return false;
+	}
+
+	if(req.params.id) {
+		try {
+			mongoose.Types.ObjectId(req.params.id);
+		} catch (e) {
+			return false;
+		}
+	} 
+	else {
 		return false;
 	}
 
