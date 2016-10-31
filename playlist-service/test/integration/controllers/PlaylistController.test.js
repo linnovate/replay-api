@@ -1,4 +1,5 @@
 var Playlist = require('replay-schemas/Playlist'),
+    Mission = require('replay-schemas/Mission'),
     request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
@@ -29,6 +30,33 @@ describe('PlaylistController', () => {
                 .then(() => validatePlaylistCreated(playlist))
                 .then(() => done())
                 .catch(done);
+        });
+    });
+
+    
+
+    describe('#update()', () => {
+        it('should add a mission to playlist', done => {
+            var _playlistId, _missionId;
+
+            createPlaylistsInMongo(1)
+                .then(playlists => {
+                    _playlistId = playlists[0].id;
+                    return createMissionInMongo();
+                })
+                .then(mission => {
+                    _missionId = mission.id;
+                    return addMissionToPlaylistAndExpect(_playlistId, _missionId);
+                })
+                .then(() => {
+                    return validateMissionAddedToPlaylist(_playlistId, _missionId);
+                })
+                .then(() => done())
+                .catch(done);
+        });
+
+        it('should remove a mission from playlist', done => {
+            done();
         });
     });
 
@@ -71,6 +99,18 @@ function createPlaylistsInMongo(amount) {
         promises.push(Playlist.create(playlist));
     }
     return Promise.all(promises);
+}
+
+function createMissionInMongo() {
+    var mission = {
+        missionName: 'test',
+        sourceId: '123',
+        startTime: Date.now(),
+        endTime: Date.now(),
+        destination: 'System 1'
+    };
+
+    return Mission.create(mission);
 }
 
 function getAndExpectPlaylists(amount) {
@@ -120,8 +160,37 @@ function validatePlaylistCreated(playlist) {
         })
 }
 
+function updatePlaylistAndExpect(playlistId) {
+    var updateUrl = '/playlist/' + playlistId;
+
+    return request(sails.hooks.http.app)
+        .post(updateUrl)
+        .set('Accept', 'application/json')
+        .expect(200);
+}
+
+function addMissionToPlaylistAndExpect(playlistId, missionId) {
+    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+    
+    return request(sails.hooks.http.app)
+        .put(updateUrl)
+        .set('Accept', 'application/json')
+        .expect(200);
+}
+
+function validateMissionAddedToPlaylist(playlistId, missionId) {
+    return Playlist.findOne({_id:playlistId})
+        .then(permission => {
+            if(permission && permission.missions[0].toString() === missionId) {
+                return Promise.resolve();
+            }
+
+            return Promise.reject(new Error('Mission was not added to playlist.'));
+        });
+}
+
 function deleteAndExpectPlaylist(playlistId) {
-    var deleteUrl = '/playlist' + '/' + playlistId;
+    var deleteUrl = '/playlist/' + playlistId;
 
     return request(sails.hooks.http.app)
         .delete(deleteUrl)
@@ -130,7 +199,7 @@ function deleteAndExpectPlaylist(playlistId) {
 }
 
 function deletePlaylistAndExpectBadRequest(playlistId, done) {
-    var deleteUrl = '/playlist' + '/' + playlistId;
+    var deleteUrl = '/playlist/' + playlistId;
    
     return request(sails.hooks.http.app)
         .delete(deleteUrl)
