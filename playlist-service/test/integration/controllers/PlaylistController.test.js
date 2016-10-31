@@ -30,6 +30,13 @@ describe('PlaylistController', () => {
                 .catch(done);
         });
     });
+
+    describe('#create() bad input tests', () => {
+        it('should reject due to lack of name', done => {
+            var playlist = {};
+            createPlaylistAndExpectBadRequest(playlist, done);
+        });
+    });
 });
 
 function createPlaylistsInMongo(amount) {
@@ -68,6 +75,15 @@ function createAndExpectPlaylist(playlist) {
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200);
+}
+
+function createPlaylistAndExpectBadRequest(playlist, done) {
+    return request(sails.hooks.http.app)
+        .post('/playlist')
+        .send(playlist)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(400, done);
 }
 
 function validatePlaylistCreated(playlist) {
