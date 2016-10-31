@@ -25,12 +25,6 @@ module.exports = {
   },
   settings: {
     'token_secret': process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8'
-  },
-  services: {
-    'authorization_service': {
-      host: process.env.AUTHORIZATION_SERVICE_HOST || 'http://localhost',
-      port: process.env.AUTHORIZATION_SERVICE_PORT || '1340'
-    }
   }
 
 };

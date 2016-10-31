@@ -29,7 +29,7 @@ Set environment variables to config the app:
 | PORT                          | The port which the service will listen to    | 1338             |
 | TOKEN_SECRET				    | Secret for creating JWT    	               | some_random      |
 | AUTHORIZATION_SERVICE_HOST    | Authorization service host name              | http://localhost |
-| AUTHORIZATION_SERVICE_PORT    |  Authorization service host port             | 1340             |
+| AUTHORIZATION_SERVICE_PORT    | Authorization service host port              | 1340             |
 
 ## Usage
 Run with:
