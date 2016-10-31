@@ -11,13 +11,13 @@ describe('PlaylistController', () => {
         var tagStubsAmount = 3;
         it(`should return ${tagStubsAmount} playlists`, done => {
             createPlaylistsInMongo(tagStubsAmount)
-                .then(() => getAndExpectPlaylists(tagStubsAmount))
+                .then(() => getPlaylistsAndExpectOK(tagStubsAmount))
                 .then(done)
                 .catch(done);
         });
 
         it('should return 0 playlists', done => {
-            getAndExpectPlaylists(0)
+            getPlaylistsAndExpectOK(0)
                 .then(done)
                 .catch(done);
         });
@@ -33,7 +33,22 @@ describe('PlaylistController', () => {
         });
     });
 
-    
+    // describe('#update()', () => {
+    //     it('should update playlist name', done => {
+    //         var _playlist, _originalName, _newName = 'newName'; 
+
+    //         createPlaylistsInMongo(1)
+    //             .then(playlist => {
+    //                 _playlist = playlist;
+    //                 _originalName = playlist.name; 
+    //                 return updatePlaylistAndExpectOK(playlist, _newName);
+    //             })
+    //             // .then(() => {
+    //             //     return validateMissionAddedToPlaylist(_playlistId, _missionId);
+    //             // })
+    //             .then(() => done())
+    //             .catch(done);
+    //     });
 
     describe('#update()', () => {
         it('should add a mission to playlist', done => {
@@ -46,7 +61,7 @@ describe('PlaylistController', () => {
                 })
                 .then(mission => {
                     _missionId = mission.id;
-                    return addMissionToPlaylistAndExpect(_playlistId, _missionId);
+                    return addMissionToPlaylistAndExpectOK(_playlistId, _missionId);
                 })
                 .then(() => {
                     return validateMissionAddedToPlaylist(_playlistId, _missionId);
@@ -67,7 +82,7 @@ describe('PlaylistController', () => {
             createPlaylistsInMongo(1)
                 .then(playlists => {
                     _playlistId = playlists[0].id;
-                    return deleteAndExpectPlaylist(_playlistId);
+                    return deletePlaylistAndExpectOK(_playlistId);
                 })
                 .then(() => validatePlaylistDeleted(_playlistId))
                 .then(() => done())
@@ -113,7 +128,7 @@ function createMissionInMongo() {
     return Mission.create(mission);
 }
 
-function getAndExpectPlaylists(amount) {
+function getPlaylistsAndExpectOK(amount) {
     return request(sails.hooks.http.app)
         .get('/playlist')
         .set('Accept', 'application/json')
@@ -160,7 +175,7 @@ function validatePlaylistCreated(playlist) {
         })
 }
 
-function updatePlaylistAndExpect(playlistId) {
+function updatePlaylistAndExpectOK(updateParams, newPlaylist) {
     var updateUrl = '/playlist/' + playlistId;
 
     return request(sails.hooks.http.app)
@@ -169,7 +184,7 @@ function updatePlaylistAndExpect(playlistId) {
         .expect(200);
 }
 
-function addMissionToPlaylistAndExpect(playlistId, missionId) {
+function addMissionToPlaylistAndExpectOK(playlistId, missionId) {
     var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
     
     return request(sails.hooks.http.app)
@@ -189,7 +204,7 @@ function validateMissionAddedToPlaylist(playlistId, missionId) {
         });
 }
 
-function deleteAndExpectPlaylist(playlistId) {
+function deletePlaylistAndExpectOK(playlistId) {
     var deleteUrl = '/playlist/' + playlistId;
 
     return request(sails.hooks.http.app)
