@@ -5,8 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var mongoose = require('mongoose');
+var AuthorizationService = require('replay-request-services/authorization');
 
 module.exports = {
+	// retrieves the authenticated user's permissions
 	find: function (req, res, next) {
 		PlaylistService.findPlaylistsByOwnerId(req.userId)
 			.then(playlists => {
@@ -20,6 +22,7 @@ module.exports = {
 				}
 			});
 	},
+	// creates an empty playlist with just a name and the authenticated user's id as ownerId
 	create: function (req, res, next) {
 		if (!validateCreateRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));
@@ -38,6 +41,7 @@ module.exports = {
 				}
 			});
 	},
+	// update playlist's fields which aren't missions (only name at the moment)
 	update: function (req, res, next) {
 		if (!validateUpdateRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));
@@ -58,6 +62,7 @@ module.exports = {
 				}
 			})
 	},
+	// add or remove a mission from playlist
 	updateMission: function (req, res, next) {
 		if (!validateAlterMissionRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));
@@ -66,7 +71,8 @@ module.exports = {
 		var playlistId = req.params.id;
 		var missionId = req.params.missionId;
 		PlaylistService.validateUserOwnsPlaylist(req.userId, playlistId)
-			.then(() => MissionService.validateMissionExists(missionId))
+			.then(() => AuthorizationService.findPermissionsByUserId(req.userId))
+			.then(permissions => MissionService.validateMissionExists(missionId, permissions))
 			.then(() => {
 				if(req.method === 'PUT') {
 					return PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } });
@@ -88,6 +94,7 @@ module.exports = {
 				}
 			})
 	},
+	// delete a user's playlist
 	destroy: function (req, res, next) {
 		if (!validateDeleteRequest(req)) {
 			return res.badRequest(new Error('Some parameters are missing.'));
