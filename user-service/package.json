@@ -9,7 +9,7 @@
     "rc": "1.0.1",
     "replay-jwt-middleware": "^1.0.1",
     "replay-request-services": "^1.0.0",
-    "replay-schemas": "^1.0.47",
+    "replay-schemas": "^1.0.48",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9"
   },

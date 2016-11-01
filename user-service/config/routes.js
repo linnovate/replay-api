@@ -32,7 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /user/:id': 'UserController.findOne'
+  'GET /user/:id': 'UserController.findOne',
+  'PUT /user/:id/favorite/:missionId': 'UserController.updateFavorite',
+  'DELETE /user/:id/favorite/:missionId': 'UserController.updateFavorite'
 
   /***************************************************************************
   *                                                                          *
