@@ -15,7 +15,7 @@
  * For more information on configuring policies, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
-
+var replayJwtMiddleware = require('replay-jwt-middleware');
 
 module.exports.policies = {
 
@@ -27,7 +27,9 @@ module.exports.policies = {
   ***************************************************************************/
 
   // '*': true,
-
+  UserController: {
+    '*': replayJwtMiddleware
+  }
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
