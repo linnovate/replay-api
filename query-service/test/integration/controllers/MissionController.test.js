@@ -5,6 +5,9 @@ var Mission = require('replay-schemas/Mission'),
     mongoose = require('mongoose'),
     util = require('util');
 
+var missionUpdateUrlFormat = '/mission/%s',
+    missionUrlFormat = '/mission';
+
 describe('MissionController', function () {
     describe('#find()', function () {
         var missionStubsAmount = 3;
@@ -251,7 +254,7 @@ describe('MissionController', function () {
                 .then(() => getMissions())
                 .then((missions) => {
                     return request(sails.hooks.http.app)
-                        .put(util.format('/mission/%s', missions[0].id))
+                        .put(util.format(missionUpdateUrlFormat, missions[0].id))
                         .send({
                             tag: tag,
                             sourceId: 'newSourceId'
@@ -290,7 +293,7 @@ function getMissions() {
 
 function getAndExpectMissions(amount, params) {
     return request(sails.hooks.http.app)
-        .get('/mission')
+        .get(missionUrlFormat)
         .query(params)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -302,7 +305,7 @@ function getAndExpectMissions(amount, params) {
 
 function getMissionAndExpectError(done, params) {
     request(sails.hooks.http.app)
-        .get('/mission')
+        .get(missionUrlFormat)
         .query(params)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -311,14 +314,14 @@ function getMissionAndExpectError(done, params) {
 
 function updateMissionAndExpectOK(missionId, tag) {
     return request(sails.hooks.http.app)
-        .put(util.format('/mission/%s', missionId))
+        .put(util.format(missionUpdateUrlFormat, missionId))
         .send({ tag: tag })
         .expect(200);
 }
 
 function updateMissionAndExpectError(missionId, tag) {
     request(sails.hooks.http.app)
-        .put(util.format('/mission/%s', missionId))
+        .put(util.format(missionUpdateUrlFormat, missionId))
         .send({ tag: tag })
         .expect(500);
 }

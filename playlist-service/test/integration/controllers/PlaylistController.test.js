@@ -3,7 +3,13 @@ var Playlist = require('replay-schemas/Playlist'),
     request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
+    util = require('util'),
     authorizationMock = require('replay-test-utils/authorization-mock');
+
+var playlistUrl = '/playlist',
+    playlistUpdateUrlFormat = '/playlist/%s',
+    playlistDeleteUrlFormat = '/playlist/%s',
+    playlistUpdateMissionUrlFormat = '/playlist/%s/mission/%s';
 
 describe('PlaylistController', () => {
 
@@ -185,7 +191,7 @@ function createMissionInMongo() {
 
 function getPlaylistsAndExpectOK(amount) {
     return request(sails.hooks.http.app)
-        .get('/playlist')
+        .get(playlistUrl)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -203,7 +209,7 @@ function generatePlaylist() {
 
 function createAndExpectPlaylist(playlist) {
     return request(sails.hooks.http.app)
-        .post('/playlist')
+        .post(playlistUrl)
         .send(playlist)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -212,7 +218,7 @@ function createAndExpectPlaylist(playlist) {
 
 function createPlaylistAndExpectBadRequest(playlist, done) {
     return request(sails.hooks.http.app)
-        .post('/playlist')
+        .post(playlistUrl)
         .send(playlist)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -231,7 +237,7 @@ function validatePlaylistCreated(playlist) {
 }
 
 function updatePlaylistAndExpectOK(playlistId, field, value) {
-    var updateUrl = '/playlist/' + playlistId;
+    var updateUrl = util.format(playlistUpdateUrlFormat, playlistId);
     var updateParams = {};
     updateParams[field] = value;
 
@@ -243,7 +249,7 @@ function updatePlaylistAndExpectOK(playlistId, field, value) {
 }
 
 function updatePlaylistAndExpectBadRequest(playlistId, updateParams) {
-    var updateUrl = '/playlist/' + playlistId;
+    var updateUrl = util.format(playlistUpdateUrlFormat, playlistId);
 
     return request(sails.hooks.http.app)
         .put(updateUrl)
@@ -253,7 +259,7 @@ function updatePlaylistAndExpectBadRequest(playlistId, updateParams) {
 }
 
 function updatePlaylistMissionAndExpectBadRequest(playlistId, missionId, done) {
-    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+    var updateUrl = util.format(playlistUpdateMissionUrlFormat, playlistId, missionId);
 
     return request(sails.hooks.http.app)
         .put(updateUrl)
@@ -273,7 +279,7 @@ function validatePlaylistUpdated(playlistId, field, value) {
 }
 
 function addMissionToPlaylistAndExpectOK(playlistId, missionId) {
-    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+    var updateUrl = util.format(playlistUpdateMissionUrlFormat, playlistId, missionId);
 
     return request(sails.hooks.http.app)
         .put(updateUrl)
@@ -293,7 +299,7 @@ function validateMissionAddedToPlaylist(playlistId, missionId) {
 }
 
 function removeMissionFromPlaylistAndExpectOK(playlistId, missionId) {
-    var updateUrl = '/playlist/' + playlistId + '/mission/' + missionId;
+    var updateUrl = util.format(playlistUpdateMissionUrlFormat, playlistId, missionId);
 
     return request(sails.hooks.http.app)
         .delete(updateUrl)
@@ -313,7 +319,7 @@ function validateMissionRemovedFromPlaylist(playlistId) {
 }
 
 function deletePlaylistAndExpectOK(playlistId) {
-    var deleteUrl = '/playlist/' + playlistId;
+    var deleteUrl = util.format(playlistDeleteUrlFormat, playlistId);
 
     return request(sails.hooks.http.app)
         .delete(deleteUrl)
@@ -322,7 +328,7 @@ function deletePlaylistAndExpectOK(playlistId) {
 }
 
 function deletePlaylistAndExpectBadRequest(playlistId, done) {
-    var deleteUrl = '/playlist/' + playlistId;
+    var deleteUrl = util.format(playlistDeleteUrlFormat, playlistId);
 
     return request(sails.hooks.http.app)
         .delete(deleteUrl)

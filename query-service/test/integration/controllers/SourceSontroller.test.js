@@ -3,8 +3,9 @@ var StreamingSource = require('replay-schemas/StreamingSource'),
     Promise = require('bluebird'),
     util = require('util');
 
-describe('SourceController', function () {
+var sourceUrl = '/source';
 
+describe('SourceController', function () {
     describe('#find()', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s streaming sources', tagStubsAmount), function (done) {
@@ -47,7 +48,7 @@ function createStreamingSources(amount) {
 
 function getAndExpectStreamingSources(amount) {
     return request(sails.hooks.http.app)
-        .get('/source')
+        .get(sourceUrl)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
