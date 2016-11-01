@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var mongoose = require('mongoose');
-	_ = require('lodash');
+	_ = require('lodash'),
+	Mission = require('replay-schemas/Mission');
 	
 var AuthorizationService = require('replay-request-services/authorization');
 
@@ -74,7 +75,7 @@ module.exports = {
 		var missionId = req.params.missionId;
 		PlaylistService.validateUserOwnsPlaylist(req.userId, playlistId)
 			.then(() => AuthorizationService.findPermissionsByUserId(req.userId))
-			.then(permissions => MissionService.validateMissionExists(missionId, permissions))
+			.then(permissions => Mission.validateMissionExists(missionId, permissions))
 			.then(() => {
 				if(req.method === 'PUT') {
 					return PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } });
