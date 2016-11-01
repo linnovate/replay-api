@@ -16,6 +16,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
 
+var replayJwtMiddleware = require('replay-jwt-middleware');
 
 module.exports.policies = {
 
@@ -25,8 +26,9 @@ module.exports.policies = {
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/
-
-  // '*': true,
+  'PlaylistController': {
+    '*': replayJwtMiddleware
+  }
 
   /***************************************************************************
   *                                                                          *

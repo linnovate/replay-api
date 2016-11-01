@@ -30,6 +30,7 @@ Set environment variables to config the app:
 | PORT                        | The port which the service will listen to    | 1335                  |
 | QUERY_SERVICE_URL           | Url of query service                         | http://localhost:1339 |
 | MEDIA_PROVIDER_URL          | Url of media url provider service            | http://localhost:1338 |
+| PLAYLIST_SERVICE_URL        | Url of playlist service                      | http://localhost:1341 |
 | SWAGGER_DOCS_PORT           | Internal port for swagger-combined module    | 1111                  |
 
 ## Usage

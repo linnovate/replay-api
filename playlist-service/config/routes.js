@@ -40,7 +40,7 @@ module.exports.routes = {
   // delete mission with missionId from playlist with playlistId
   'DELETE /playlist/:id/mission/:missionId': 'PlaylistController.updateMission',
   'DELETE /playlist/:id': 'PlaylistController.destroy'
-
+  
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

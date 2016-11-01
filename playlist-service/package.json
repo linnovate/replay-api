@@ -13,7 +13,8 @@
     "replay-schemas": "^1.0.43",
     "replay-test-utils": "^1.0.1",
     "sails": "~0.12.3",
-    "sails-disk": "~0.10.9"
+    "sails-disk": "~0.10.9",
+    "sails-swagger": "^0.5.1"
   },
   "scripts": {
     "debug": "node debug app.js",

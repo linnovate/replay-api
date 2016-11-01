@@ -15,7 +15,8 @@ var baseUrl = baseUrl + ':' + port;
 
 // external swagger services urls
 var QUERY_SERVICE_URL = process.env.QUERY_SERVICE_URL || 'http://localhost:1338',
-  MEDIA_PROVIDER_URL = process.env.MEDIA_PROVIDER_URL || 'http://localhost:1339';
+  MEDIA_PROVIDER_URL = process.env.MEDIA_PROVIDER_URL || 'http://localhost:1339',
+  PLAYLIST_SERVICE_URL = process.env.PLAYLIST_SERVICE_URL || 'http://localhost:1341';
 
 module.exports = {
 
@@ -37,11 +38,10 @@ module.exports = {
         docs: QUERY_SERVICE_URL + '/swagger/doc',
         base_path: QUERY_SERVICE_URL,
         route_match: [
-          '/video*',
+          '/mission*',
           '/query*',
           '/source*',
-          '/tag*',
-          '/videometadata*'
+          '/tag*'
         ],
         route_filter: []
       },
@@ -50,6 +50,14 @@ module.exports = {
         base_path: MEDIA_PROVIDER_URL,
         route_match: [
           '/media*'
+        ],
+        route_filter: []
+      },
+      {
+        docs: PLAYLIST_SERVICE_URL + '/swagger/doc',
+        base_path: PLAYLIST_SERVICE_URL,
+        route_match: [
+          '/playlist*'
         ],
         route_filter: []
       }

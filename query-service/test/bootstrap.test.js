@@ -1,7 +1,9 @@
 var sails = require('sails'),
   chai = require('chai');
 
-var authorizationMock = require('replay-test-utils/authorization-mock');
+var authorizationMock = require('replay-test-utils/authorization-mock'),
+  jwtMiddlewareStub = require('replay-test-utils/authorization-mock').jwtMiddlewareStub;
+
 var AuthorizationService = require('replay-request-services/authorization');
 
 var Mission = require('replay-schemas/Mission'),
@@ -36,7 +38,8 @@ before(function (done) {
   sails.lift({
     // configuration for testing purposes
     environment: 'testing',
-    hooks: { grunt: false }
+    hooks: { grunt: false },
+    policies: { 'MissionController': jwtMiddlewareStub }
   }, function (err, server) {
     if (err) return done(err);
     // here you can load fixtures, etc.

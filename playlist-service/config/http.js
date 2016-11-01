@@ -8,8 +8,6 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
-var replayJwtMiddleware = require('replay-jwt-middleware'),
-  jwtMiddlewareStub = require('replay-test-utils/authorization-mock').jwtMiddlewareStub;
 
 module.exports.http = {
 
@@ -33,7 +31,6 @@ module.exports.http = {
     ***************************************************************************/
 
     order: [
-      'replayJwtMiddleware',
       // 'startRequestTimer',
       // 'cookieParser',
       // 'session',
@@ -62,7 +59,6 @@ module.exports.http = {
     //     return next();
     // }
 
-    replayJwtMiddleware: process.env.NODE_ENV === 'testing' ? jwtMiddlewareStub : replayJwtMiddleware,
     /***************************************************************************
     *                                                                          *
     * The body parser that will handle incoming multipart HTTP requests. By    *
