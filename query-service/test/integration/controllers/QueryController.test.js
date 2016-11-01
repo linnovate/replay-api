@@ -1,6 +1,7 @@
 var Query = require('replay-schemas/Query'),
     request = require('supertest'),
     Promise = require('bluebird'),
+    authorizationMock = require('replay-test-utils/authorization-mock'),
     util = require('util');
 
 describe('QueryController', function () {
@@ -43,9 +44,13 @@ describe('QueryController', function () {
 });
 
 function createEmptyQueries(amount) {
+    var query = {
+        userId: authorizationMock.getUser().id
+    };
+
     var promises = [];
     for (var i = 0; i < amount; i++) {
-        promises.push(Query.create({}));
+        promises.push(Query.create(query));
     }
     return Promise.all(promises);
 }

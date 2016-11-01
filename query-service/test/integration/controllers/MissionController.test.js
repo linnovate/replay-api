@@ -1,6 +1,6 @@
 var Mission = require('replay-schemas/Mission'),
     Tag = require('replay-schemas/Tag')
-request = require('supertest-as-promised'),
+    request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
     util = require('util');

@@ -11,7 +11,7 @@ var Promise = require('bluebird'),
 module.exports = {
 	find: function(req, res, next) {
 		validateRequest(req)
-			.then(() => QueryService.getQueries(req.query))
+			.then(() => QueryService.getQueries(req.userId, req.query))
 			.then(function(results) {
 				return res.json(results);
 			})

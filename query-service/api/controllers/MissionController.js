@@ -22,7 +22,7 @@ module.exports = {
     find: function (req, res, next) {
         var _parsedQuery;
         validateFindRequest(req)
-            .then(() => QueryService.saveQuery(req.query))
+            .then(() => QueryService.saveQuery(req.userId, req.query))
             .then(query => {
                 _parsedQuery = query;
                 return AuthorizationService.findPermissionsByUserId(req.userId);

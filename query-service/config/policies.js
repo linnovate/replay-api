@@ -30,6 +30,9 @@ module.exports.policies = {
 
   MissionController: {
     '*': replayJwtMiddleware
+  },
+  QueryController: {
+    '*': replayJwtMiddleware
   }
 
   /***************************************************************************

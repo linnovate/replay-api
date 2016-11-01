@@ -39,7 +39,10 @@ before(function (done) {
     // configuration for testing purposes
     environment: 'testing',
     hooks: { grunt: false },
-    policies: { 'MissionController': jwtMiddlewareStub }
+    policies: { 
+      MissionController: jwtMiddlewareStub,
+      QueryController: jwtMiddlewareStub
+    }
   }, function (err, server) {
     if (err) return done(err);
     // here you can load fixtures, etc.
