@@ -126,7 +126,7 @@ describe('PlaylistController', () => {
                 .catch(done);
         });
 
-        it('should reject due to lack of playlist id', done => {
+        it('should reject due to bad playlist id', done => {
             var updateParams = { name: 'someName' };
             var id = 'someId';
 
@@ -137,14 +137,14 @@ describe('PlaylistController', () => {
     });
 
     describe('#updateMission() bad input tests', () => {
-        it('should reject due to lack of playlist id', done => {
+        it('should reject due to bad playlist id', done => {
             var _playlistId = 'someId';
             var _missionId = new mongoose.Types.ObjectId();
 
             updatePlaylistMissionAndExpectBadRequest(_playlistId, _missionId, done);
         });
 
-        it('should reject due to lack of mission id', done => {
+        it('should reject due to bad mission id', done => {
             var _playlistId = new mongoose.Types.ObjectId();
             var _missionId = 'someId';
 

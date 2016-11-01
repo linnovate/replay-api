@@ -15,7 +15,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/**/**/*.test.js"
   },
   "main": "app.js",
   "repository": {
@@ -23,5 +24,14 @@
     "url": "git://github.com/linnovate1/user-service.git"
   },
   "author": "linnovate1",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "mongoose": "^4.6.5",
+    "nock": "^9.0.2",
+    "replay-test-utils": "^1.0.0",
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.1"
+  }
 }
