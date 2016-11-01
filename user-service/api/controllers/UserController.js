@@ -28,7 +28,7 @@ module.exports = {
 					console.log(err);
 					next(err);
 				}
-			})
+			});
 	},
 	updateFavorite: function(req, res, next) {
 		if(!validateUpdateFavoriteRequest(req)) {
@@ -61,7 +61,7 @@ module.exports = {
 					console.log(err);
 					next(err);
 				}
-			})
+			});
 	},
 	
 };
