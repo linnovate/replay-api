@@ -32,6 +32,7 @@
     "nock": "^9.0.2",
     "replay-test-utils": "^1.0.0",
     "supertest": "^2.0.1",
-    "supertest-as-promised": "^4.0.1"
+    "supertest-as-promised": "^4.0.1",
+    "url-join": "^1.1.0"
   }
 }

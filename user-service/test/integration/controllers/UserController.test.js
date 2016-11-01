@@ -3,12 +3,17 @@ var User = require('replay-schemas/User'),
     request = require('supertest-as-promised'),
     Promise = require('bluebird'),
     mongoose = require('mongoose'),
+    util = require('util'),
     authorizationMock = require('replay-test-utils/authorization-mock');
+
+var userFindOneUrlFormat = '/user/%s';
 
 describe('UserController', () => {
     describe('#findOne()', () => {
         it('should find user', done => {
-            done();
+            getUserAndExpectOK()
+                .then(done)
+                .catch(done);
         });
     });
 
@@ -42,3 +47,17 @@ describe('UserController', () => {
         });
     });
 });
+
+function getUserAndExpectOK() {
+    var userId = authorizationMock.getUser().id;
+    var userUrl = util.format(userFindOneUrlFormat, userId);
+    
+    return request(sails.hooks.http.app)
+        .get(userUrl)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then((res) => {
+            expect(res.body._id).to.have.equal(userId);
+        });
+}
