@@ -5,6 +5,7 @@ var authorizationMock = require('replay-test-utils/authorization-mock'),
   jwtMiddlewareStub = require('replay-test-utils/authorization-mock').jwtMiddlewareStub;
   
 var Playlist = require('replay-schemas/Playlist'),
+  Mission = require('replay-schemas/Mission'),
   AuthorizationService = require('replay-request-services/authorization');
 
 // config chai
@@ -68,6 +69,7 @@ after(function (done) {
 // wipe mongo collections
 function wipeMongoCollections() {
   return Playlist.remove({})
+    .then(() => Mission.remove({}));
 };
 
 
