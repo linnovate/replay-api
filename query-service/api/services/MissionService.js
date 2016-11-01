@@ -1,12 +1,11 @@
 var Mission = require('replay-schemas/Mission'),
-    VideoCompartment = require('replay-schemas/VideoCompartment'),
     Tag = require('replay-schemas/Tag');
 
 module.exports.buildMongoQuery = function (query, permissions) {
     // build the baseline of the query
     var mongoQuery = {
         $and: [
-            VideoCompartment.buildQueryCondition(permissions)
+            Mission.buildPermissionsQueryCondition(permissions)
         ]
     };
 
@@ -85,7 +84,7 @@ module.exports.updateMission = function (id, permissions, body) {
 
                 var updateQuery = {
                     $and: [
-                        VideoCompartment.buildQueryCondition(permissions),
+                        Mission.buildPermissionsQueryCondition(permissions),
                         { _id: id }
                     ]
                 }
