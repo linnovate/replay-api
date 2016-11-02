@@ -20,6 +20,13 @@ describe('UserController', () => {
     });
 
     describe('#updateFavorite()', () => {
+        afterEach(done => {
+            var userId = authorizationMock.getUser().id;
+            User.update({ _id: userId }, { $set: { favorites: [] } })
+                .then(() => done())
+                .catch(done);
+        });
+
         it('should add favorite mission to user', done => {
             var userId = authorizationMock.getUser().id;
             var missionId;
@@ -63,24 +70,6 @@ describe('UserController', () => {
     });
 
     describe('#updateFavorite() bad input tests', () => {
-        afterEach(done => {
-            var userId = authorizationMock.getUser().id;
-            User.findById(userId)
-                .then(user => {
-                    user.favorites = [];
-                    return user.save();
-                })
-                .then(() => {
-                    return User.findById(userId)
-                        .then(user => {
-                            console.log('User favorites:', user.favorites);
-                            return Promise.resolve();
-                        })
-                })
-                .then(() => done())
-                .catch(done);
-        });
-
         it('should reject due to bad user id', done => {
             var userId = 'someId';
             var missionId = new mongoose.Types.ObjectId();
@@ -99,7 +88,7 @@ describe('UserController', () => {
 
 function getUserAndExpectOK(userId) {
     var userUrl = util.format(userFindOneUrlFormat, userId);
-    
+
     return request(sails.hooks.http.app)
         .get(userUrl)
         .set('Accept', 'application/json')
@@ -112,7 +101,7 @@ function getUserAndExpectOK(userId) {
 
 function getUserAndExpectErrorCode(errCode, userId, done) {
     var userUrl = util.format(userFindOneUrlFormat, userId);
-    
+
     return request(sails.hooks.http.app)
         .get(userUrl)
         .set('Accept', 'application/json')
@@ -121,7 +110,7 @@ function getUserAndExpectErrorCode(errCode, userId, done) {
 
 function updateUserFavoriteAndExpectBadRequest(userId, missionId, done) {
     var userUrl = util.format(userUpdateFavoriteFormat, userId, missionId);
-    
+
     return request(sails.hooks.http.app)
         .put(userUrl)
         .set('Accept', 'application/json')
@@ -129,7 +118,7 @@ function updateUserFavoriteAndExpectBadRequest(userId, missionId, done) {
 }
 
 function createMissionInMongo() {
-     var mission = {
+    var mission = {
         missionName: 'test',
         sourceId: '123',
         startTime: Date.now(),
@@ -142,7 +131,7 @@ function createMissionInMongo() {
 
 function addFavoriteMissionToUser(userId, missionId) {
     var userUrl = util.format(userUpdateFavoriteFormat, userId, missionId);
-    
+
     return request(sails.hooks.http.app)
         .put(userUrl)
         .set('Accept', 'application/json')
@@ -152,7 +141,7 @@ function addFavoriteMissionToUser(userId, missionId) {
 function validateFavoriteAddedToUser(userId, missionId) {
     return User.findById(userId)
         .then(user => {
-            if(user && user.favorites[0].toString() === missionId) {
+            if (user && user.favorites[0].toString() === missionId) {
                 return Promise.resolve();
             }
 
@@ -162,7 +151,6 @@ function validateFavoriteAddedToUser(userId, missionId) {
 
 function removeFavoriteMissionFromUser(userId, missionId) {
     var userUrl = util.format(userUpdateFavoriteFormat, userId, missionId);
-    console.log('delete url:', userUrl);
     return request(sails.hooks.http.app)
         .delete(userUrl)
         .set('Accept', 'application/json')
@@ -172,8 +160,7 @@ function removeFavoriteMissionFromUser(userId, missionId) {
 function validateFavoriteRemovedFromUser(userId, missionId) {
     return User.findById(userId)
         .then(user => {
-            console.log('favorites:', user.favorites);
-            if(user && user.favorites.length === 0) {
+            if (user && user.favorites.length === 0) {
                 return Promise.resolve();
             }
 
