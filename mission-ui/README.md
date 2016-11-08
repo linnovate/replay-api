@@ -11,13 +11,14 @@ npm install
 ## Configurations
 Set environment variables to config the app:
 
-| Name              | Description                  | Default    |
-|-------------------|------------------------------|------------|
-| MONGO_HOST        | Mongo host URI               | localhost  |
-| MONGO_PORT        | Mongo port                   | 27017      |
-| MONGO_DATABASE    | Mongo database name          | replay_dev |
-| MONGO_USERNAME    | Mongo user name              | replay     |
-| MONGO_PASSWORD    | Mongo password               | replay     |
+| Name              | Description                                | Default    |
+|-------------------|--------------------------------------------|------------|
+| MONGO_HOST        | Mongo host URI                             | localhost  |
+| MONGO_PORT        | Mongo port                                 | 27017      |
+| MONGO_DATABASE    | Mongo database name                        | replay_dev |
+| MONGO_USERNAME    | Mongo user name                            | replay     |
+| MONGO_PASSWORD    | Mongo password                             | replay     |
+| PORT              | The port which the service will listen to  | 1550       |
 
 ## Usage
 Run with:
