@@ -1,0 +1,12 @@
+version: '2'
+services:
+  mongo:
+    image: mongodb-server
+    ports:
+      - "27017:27017"
+  api-service:
+    image: rafaelb/api-service:v1
+    ports:
+      - "1337:1337"
+    depends_on:
+      - mongo
