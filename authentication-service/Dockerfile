@@ -6,6 +6,7 @@ RUN npm -g install sails
 RUN npm install grunt -g
 RUN npm install
 
+EXPOSE 1337
 ARG HOST_IP
 
 ENV RABBITMQ_HOST=$HOST_IP MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev
