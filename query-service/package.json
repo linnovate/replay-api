@@ -14,7 +14,7 @@
     "lodash": "^4.15.0",
     "mongoose": "^4.6.0",
     "rc": "^1.1.6",
-    "replay-schemas": "^1.0.30",
+    "replay-schemas": "^1.1.0",
     "sails": "^0.12.4",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.1",
