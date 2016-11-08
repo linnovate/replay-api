@@ -24,6 +24,8 @@ Set environment variables to config the app:
 | MONGO_HOST                    | Mongo host URI                               | localhost      |
 | MONGO_PORT                    | Mongo port                                   | 27017          |
 | MONGO_DATABASE                | Mongo database name                          | replay_dev     |
+| MONGO_USERNAME                | Mongo username                               | replay         |
+| MONGO_PASSWORD                | Mongo password                               | replay         |
 | ELASTIC_HOST                  | Elastic host URI                             | localhost      |
 | ELASTIC_PORT                  | Elastic port                                 | 9200           |
 | PORT                          | The port which the service will listen to    | 1338           |
