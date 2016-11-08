@@ -42,6 +42,8 @@ Set environment variables to config the app:
 | MONGO_HOST                    | Mongo host URI                        | localhost          |
 | MONGO_PORT                    | Mongo port                            | 27017              |
 | MONGO_DATABASE                | Mongo database name                   | replay_dev         |
+| MONGO_USERNAME                | Mongo username                        | replay             |
+| MONGO_PASSWORD                | Mongo password                        | replay             |
 | BASE_URL                      | Service base url                      | https://localhost  |
 | PORT         		            | Service listening port                | 1337               |
 | FRONTEND_URL                  | Frontend url                          | http://localhost   |
