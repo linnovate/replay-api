@@ -5,5 +5,8 @@ RUN git checkout develop
 RUN npm -g install sails
 RUN npm install grunt -g
 RUN npm install
-ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-prod MONGO_PORT=27017 MONGO_DATABASE=replay_dev
+
+ARG HOST_IP
+
+ENV RABBITMQ_HOST=$HOST_IP MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev
 CMD ["sails", "lift"]
