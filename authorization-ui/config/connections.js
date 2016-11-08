@@ -28,13 +28,11 @@ module.exports.connections = {
   * Installed by default.                                                    *
   *                                                                          *
   ***************************************************************************/
-  sailsMongoDBServer: {
-  	adapter: 'sails-mongo',
-  	host: 'localhost',
-  	port: 27017,
-  	database: 'replay_dev'
-	}
-
+  /*
+  localDiskDb: {
+    adapter: 'sails-disk'
+  },
+*/
   /***************************************************************************
   *                                                                          *
   * MySQL is the world's most popular relational database.                   *
