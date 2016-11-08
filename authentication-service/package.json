@@ -12,7 +12,7 @@
     "passport-saml": "^0.15.0",
     "rc": "1.0.1",
     "replay-jwt-middleware": "^1.0.0",
-    "replay-schemas": "^1.0.31",
+    "replay-schemas": "^1.1.0",
     "request": "^2.74.0",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",

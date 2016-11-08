@@ -26,6 +26,8 @@ Set environment variables to config the app:
 | MONGO_HOST                    | Mongo host URI                               | localhost        |
 | MONGO_PORT                    | Mongo port                                   | 27017            |
 | MONGO_DATABASE                | Mongo database name                          | replay_dev       |
+| MONGO_USERNAME                | Mongo username                               | replay           |
+| MONGO_PASSWORD                | Mongo password                               | replay           |
 | PORT                          | The port which the service will listen to    | 1338             |
 | TOKEN_SECRET				    | Secret for creating JWT    	               | some_random      |
 | AUTHORIZATION_SERVICE_HOST    | Authorization service host name              | http://localhost |

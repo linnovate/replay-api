@@ -15,7 +15,7 @@ module.exports.bootstrap = function (cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  connectMongo(sails.config.mongo.host, sails.config.mongo.port, sails.config.mongo.database)
+  connectMongo(sails.config.mongo.host, sails.config.mongo.port, sails.config.mongo.database, sails.config.mongo.username, sails.config.mongo.password)
     .then(function () {
       PassportService.initialize();
       return Promise.resolve();
