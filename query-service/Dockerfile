@@ -3,7 +3,7 @@ RUN git clone https://github.com/linnovate/replay-api.git
 WORKDIR /replay-api/query-service
 RUN git checkout develop
 RUN npm -g install sails
-RUN npm install
+RUN npm install; npm test
 
 EXPOSE 1338:1338
 ARG HOST_IP
