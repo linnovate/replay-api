@@ -5,7 +5,7 @@ RUN git checkout develop
 RUN npm -g install sails
 RUN npm install
 
-EXPOSE 1335
+EXPOSE 1335:1335
 ARG HOST_IP
 
 #TODO: ADD QUERY_SERVICE_URL,MEDIA_PROVIDER_URL(,SWAGGER_DOCS_PORT)
