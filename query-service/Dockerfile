@@ -5,7 +5,7 @@ RUN git checkout develop
 RUN npm -g install sails
 RUN npm install
 
-EXPOSE 1338
+EXPOSE 1338:1338
 ARG HOST_IP
 
 ENV MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev PORT=1338
