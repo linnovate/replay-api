@@ -7,7 +7,7 @@ RUN npm -g install sails
 RUN npm install grunt -g
 RUN npm install
 
-EXPOSE 1337
+EXPOSE 1337:1337
 ARG HOST_IP
 
 # GOOGLE_SECRET,TOKEN_SECRET Provided by command
