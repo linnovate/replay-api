@@ -13,13 +13,13 @@ module.exports.buildMongoQuery = function (query, permissions) {
 
     if (query.fromMissionTime) {
         mongoQuery.$and.push({
-            startTime: { $gte: query.fromMissionTime }
+            endTime: { $gte: query.fromMissionTime }
         });
     }
 
     if (query.toMissionTime) {
         mongoQuery.$and.push({
-            endTime: { $lte: query.toMissionTime }
+            startTime: { $lte: query.toMissionTime }
         });
     }
 
