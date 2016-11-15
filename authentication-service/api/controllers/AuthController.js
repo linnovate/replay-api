@@ -6,6 +6,8 @@ var User = require('replay-schemas/User');
 module.exports = {
 
   googleCallback: function (req, res, next) {
+    if (req.method != 'POST') return res.status(405).send({error: 'method not supported'});
+
     var accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
     var peopleApiUrl = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect';
     var params = {
@@ -17,12 +19,23 @@ module.exports = {
     };
 
     // Step 1. Exchange authorization code for access token.
-    request.post(accessTokenUrl, { json: true, form: params }, function (err, response, token) {
+    request.post({
+      url: accessTokenUrl,
+      json: true,
+      form: params,
+      agentOptions: {
+        keepAlive: true // required because if not ECONNRESET was thrown
+      }
+    }, function (err, response, token) {
+      if (err) return res.status(500).send(err);
+
       var accessToken = token.access_token;
       var headers = { Authorization: 'Bearer ' + accessToken };
 
       // Step 2. Retrieve profile information about the current user.
       request.get({ url: peopleApiUrl, headers: headers, json: true }, function (err, response, profile) {
+        if (err) return res.status(500).send(err);
+
         if (profile.error) {
           return res.status(500).send({ message: profile.error.message });
         }
