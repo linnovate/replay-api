@@ -38,6 +38,6 @@ module.exports = {
 	mongo: {
 		host: process.env.MONGO_HOST || '127.0.0.1',
 		port: process.env.MONGO_PORT || 27017,
-		database: process.env.MONGO_DATABASE || 'replay_test'
+		database: 'replay_test_media_url_provider'
 	}
 };
