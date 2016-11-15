@@ -1,30 +1,27 @@
 const MANIFEST_SUFFIX = '/manifest.mpd';
-var Promise = require('bluebird'),
-	Video = require('replay-schemas/Video'),
-	VideoCompartment = require('replay-schemas/VideoCompartment');
-var VideoCompartmentSchema = VideoCompartment.VideoCompartment,
-	generateCompartmentCondition = VideoCompartment.generateCompartmentCondition;
+var Promise = require('bluebird');
 
 function ManifestRequestBuilder() {
 	var self = this;
-	self.buildManifestRequest = function(id, user) {
-		return buildManifestRequest(id, user);
+	self.server = sails.config.settings.services.wowza.server;
+	self.port = sails.config.settings.services.wowza.port;
+	self.instance = sails.config.settings.services.wowza.instance;
+	self.contentInstance = sails.config.settings.services.wowza.content_instance;
+	self.getVideoCompartmentManifestRequest = function(videoCompartment) {
+		return getVideoCompartmentManifestRequest(videoCompartment);
 	};
 
-	function buildManifestRequest(id, user) {
-		self.server = sails.config.settings.services.wowza.server;
-		self.port = sails.config.settings.services.wowza.port;
-		self.instance = sails.config.settings.services.wowza.instance;
-		self.contentInstance = sails.config.settings.services.wowza.content_instance;
-		return buildCompartmentQuery(id, user)
-			.then(getVideoAndTimeCompassParamsByCompartmentQuery)
-			.then(assembleUrlRequest)
-			.catch(function(err) {
-				return Promise.reject(err);
-			});
+	function getVideoCompartmentManifestRequest(videoCompartment) {
+		console.log('building manifest');
+		return validateVideoCompartmentObject(videoCompartment)
+		.catch(function(err) {
+			console.log(err);
+		})
+		.then(assembleUrlRequest);
 	}
 
 	function assembleUrlRequest(manifestParams) {
+		console.log("assembling");
 		var requestUrl = self.server + ':' +
 			self.port + '/' +
 			self.instance + '/' +
@@ -40,65 +37,26 @@ function ManifestRequestBuilder() {
 	}
 }
 
-function buildCompartmentQuery(id, user) {
-	var query = {
-		$and: [
-			{ _id: id }
-		]
+function validateVideoCompartmentObject(videoCompartment) {
+	if (videoCompartment.relativeStartTime !== undefined &&
+		videoCompartment.durationInSeconds !== undefined &&
+		videoCompartment.videoId.contentDirectoryPath !== undefined &&
+		videoCompartment.videoId.requestFormat !== undefined &&
+		videoCompartment.videoId.baseName !== undefined) {
+		return Promise.resolve(getManifestParams(videoCompartment));
+	}
+	return Promise.reject('failed validation');
+}
+
+function getManifestParams(videoCompartment) {
+	var manifestParams = {
+		wowzaplaystart: videoCompartment.relativeStartTime,
+		wowzaplayduration: videoCompartment.durationInSeconds,
+		contentDirectoryPath: videoCompartment.videoId.contentDirectoryPath,
+		requestFormat: videoCompartment.videoId.requestFormat,
+		baseName: videoCompartment.videoId.baseName
 	};
-	return generateCompartmentCondition(user)
-		.then(function(compartmentQuery) {
-			if (!compartmentQuery) {
-				return Promise.reject('empty compartment query');
-			}
-			query.$and.push(compartmentQuery);
-			return Promise.resolve(query);
-		});
-}
-
-function getVideoAndTimeCompassParamsByCompartmentQuery(query) {
-	var manifestParams = {};
-	return getVideoCompartment(query)
-		.then(function(videoCompartment) {
-			manifestParams.wowzaplaystart = videoCompartment.startAsset;
-			manifestParams.wowzaplayduration = videoCompartment.duration;
-			return Promise.resolve(videoCompartment.videoId);
-		})
-		.then(getVideo)
-		.then(function(video) {
-			manifestParams.contentDirectoryPath = video.contentDirectoryPath;
-			manifestParams.requestFormat = video.requestFormat;
-			manifestParams.baseName = video.baseName;
-			return Promise.resolve(manifestParams);
-		});
-}
-
-function getVideoCompartment(query) {
-	return new Promise(function(resolve, reject) {
-		return VideoCompartmentSchema
-			.findOne(query, function(err, videoCompartment) {
-				if (err || !videoCompartment) {
-					reject('Video compartment does not exist');
-				}
-				resolve(videoCompartment);
-			});
-	});
-}
-
-function getVideo(id) {
-	return new Promise(function(resolve, reject) {
-		return Video
-			.findOne({ _id: id })
-			.then(function(video) {
-				if (!video) {
-					reject('Video does not exist');
-				}
-				resolve(video);
-			})
-			.catch(function(err) {
-				throw err;
-			});
-	});
+	return manifestParams;
 }
 
 module.exports = new ManifestRequestBuilder();

@@ -17,6 +17,7 @@
     "rc": "^1.1.6",
     "replay-jwt-middleware": "^1.0.1",
     "replay-request-services": "^1.0.0",
+    "replay-schemas": "^1.1.1",
     "replay-test-utils": "^1.0.1",
     "request": "^2.76.0",
     "request-promise": "^4.1.1",
