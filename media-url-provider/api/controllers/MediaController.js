@@ -6,11 +6,12 @@
  */
 module.exports = {
 	findOne: function(req, res, next) {
-		var id = req.params.id;
-		var user = req.headers.Authorization;
-		ManifestRequestBuilder.buildManifestRequest(id, user)
-			.then(function(mpd) {
-				res.json({ url: mpd });
+		var missionId = req.query.missionId;
+		var userId = req.query.userId;
+		MediaPlaybackRequest.missionPlayback(missionId, userId)
+			.then(function(playlist) {
+				console.log(playlist);
+				res.json(playlist);
 			})
 			.catch(function(err) {
 				if (err) {

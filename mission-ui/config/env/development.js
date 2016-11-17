@@ -1,5 +1,5 @@
 module.exports = {
-	port: process.env.PORT || 1337,
+	port: process.env.PORT || 1550,
 	mongo: {
 		host: process.env.MONGO_HOST || 'localhost',
 		port: process.env.MONGO_PORT || 27017,

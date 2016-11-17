@@ -1,7 +1,7 @@
 var assert = require('chai').assert;
 var nock = require('nock');
 var fs = require('fs');
-var sails = require('../../../config/env/test.js');
+var sails = require('sails');
 var VideoCompartment = require('replay-schemas/VideoCompartment').VideoCompartment,
 	Video = require('replay-schemas/Video');
 
@@ -10,28 +10,31 @@ const MANIFEST_SUFFIX = '/manifest.mpd';
 
 // Tested module
 var ManifestRequestBuilder = require('../../../api/services/ManifestRequestBuilder.js');
-
 // Mock Params for compartment service
-var compartmentBaseUrl = 'http://' + sails.settings.services.compartment.host + ':' + sails.settings.services.compartment.port,
-	compartmentRoute = '/compartment/getCompartment';
+var compartmentBaseUrl, compartmentRoute;
+
 // run buildManifestRequest methods tests
 describe('buildManifestRequest tests', buildManifestRequest);
 // buildManifestRequest methods tests
 function buildManifestRequest() {
 	var originProcessPath;
-	before(function(done) {
+	
+	before(function (done) {
+		compartmentBaseUrl = 'http://' + sails.config.settings.services.compartment.host + ':' + sails.config.settings.services.compartment.port,
+		compartmentRoute = '/compartment/getCompartment';
+
 		originProcessPath = process.cwd();
 		process.chdir(__dirname);
 		mongoFill()
-			.then(function() {
+			.then(function () {
 				done();
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				done(err);
 			});
 	});
 
-	after(function(done) {
+	after(function (done) {
 		wipeMongo(done);
 		process.chdir(originProcessPath);
 	});
@@ -39,9 +42,9 @@ function buildManifestRequest() {
 	describe('Normal behavior', function normalBehavior() {
 		var id = '57a70996d7230637394ccc62',
 			userId = 'abc123';
-		describe('retrive mpd url by videoCompartment id', function() {
+		describe('retrive mpd url by videoCompartment id', function () {
 			var videoFileName;
-			before(function(done) {
+			before(function (done) {
 				try {
 					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
@@ -54,11 +57,11 @@ function buildManifestRequest() {
 					return done(err);
 				}
 
-				VideoCompartment.findOne({ _id: id }, function(err, videoComp) {
+				VideoCompartment.findOne({ _id: id }, function (err, videoComp) {
 					if (err || videoComp === null) {
 						done(err);
 					} else {
-						Video.findOne({ _id: videoComp.videoId }, function(err, video) {
+						Video.findOne({ _id: videoComp.videoId }, function (err, video) {
 							if (err || videoComp === null) {
 								done(err);
 							} else {
@@ -69,23 +72,23 @@ function buildManifestRequest() {
 					}
 				});
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should return valid mpd request url', function(done) {
+			it('should return valid mpd request url', function (done) {
 				ManifestRequestBuilder.buildManifestRequest(id, userId)
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.include(mpd, MANIFEST_SUFFIX);
 						assert.include(mpd, videoFileName);
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						done(err);
 					});
 			});
 		});
-		describe('empty user compartments', function() {
-			before(function(done) {
+		describe('empty user compartments', function () {
+			before(function (done) {
 				try {
 					var compartmentData = fs.readFileSync('../assets/emptyUserCompartment.xml');
 					nock(compartmentBaseUrl)
@@ -99,16 +102,16 @@ function buildManifestRequest() {
 					return done(err);
 				}
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should not return mpd url', function(done) {
+			it('should not return mpd url', function (done) {
 				ManifestRequestBuilder.buildManifestRequest(id, userId)
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.typeOf(err, 'error', 'got the error');
 						done();
 					});
@@ -117,8 +120,8 @@ function buildManifestRequest() {
 	});
 
 	describe('Error handling', function errorHandling() {
-		describe('non existing id', function() {
-			before(function(done) {
+		describe('non existing id', function () {
+			before(function (done) {
 				try {
 					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
@@ -132,36 +135,36 @@ function buildManifestRequest() {
 					return done(err);
 				}
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should not find video compartment', function(done) {
+			it('should not find video compartment', function (done) {
 				ManifestRequestBuilder.buildManifestRequest('not_real_id', 'someUser')
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.equal(err, 'Video compartment does not exist');
 						done();
 					});
 			});
 		});
-		describe('compartment service not found', function() {
-			it('should reject with error not found', function(done) {
+		describe('compartment service not found', function () {
+			it('should reject with error not found', function (done) {
 				ManifestRequestBuilder.buildManifestRequest()
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.typeOf(err, 'error', 'got the error');
 						done();
 					});
 			});
 		});
-		describe('bad http response from compartment service', function() {
-			before(function(done) {
+		describe('bad http response from compartment service', function () {
+			before(function (done) {
 				try {
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
@@ -174,23 +177,23 @@ function buildManifestRequest() {
 					return done(err);
 				}
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should reject on bad response', function(done) {
+			it('should reject on bad response', function (done) {
 				ManifestRequestBuilder.buildManifestRequest()
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.typeOf(err, 'error', 'got the error');
 						done();
 					});
 			});
 		});
-		describe('bad xml response from compartment service', function() {
-			before(function(done) {
+		describe('bad xml response from compartment service', function () {
+			before(function (done) {
 				try {
 					nock(compartmentBaseUrl)
 						.defaultReplyHeaders({
@@ -203,24 +206,24 @@ function buildManifestRequest() {
 					return done(err);
 				}
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should reject on invalid xml return', function(done) {
+			it('should reject on invalid xml return', function (done) {
 				ManifestRequestBuilder.buildManifestRequest()
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.typeOf(err, 'error', 'got the error');
 						done();
 					});
 			});
 		});
-		describe('no video matching compartment id', function() {
+		describe('no video matching compartment id', function () {
 			var id;
-			before(function(done) {
+			before(function (done) {
 				try {
 					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
 					nock(compartmentBaseUrl)
@@ -239,7 +242,7 @@ function buildManifestRequest() {
 						duration: '30000',
 						destination: 'System 2'
 					});
-					videoComp.save(function(err, result) {
+					videoComp.save(function (err, result) {
 						if (err) {
 							done(err);
 						} else {
@@ -250,16 +253,16 @@ function buildManifestRequest() {
 					done(err);
 				}
 			});
-			after(function() {
+			after(function () {
 				nock.cleanAll();
 			});
-			it('should reject when no match for video', function(done) {
+			it('should reject when no match for video', function (done) {
 				ManifestRequestBuilder.buildManifestRequest(id, 'someUser')
-					.then(function(mpd) {
+					.then(function (mpd) {
 						assert.fail(undefined, undefined, 'should have been rejected');
 						done();
 					})
-					.catch(function(err) {
+					.catch(function (err) {
 						assert.equal(err, 'Video does not exist');
 						done();
 					});
@@ -274,7 +277,7 @@ function mongoFill() {
 }
 
 function createVideoCompartmentRecordInMongo() {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var videoComp = new VideoCompartment({
 			_id: '57a70996d7230637394ccc62',
 			videoId: '57a70996d7230637394bbb62',
@@ -284,7 +287,7 @@ function createVideoCompartmentRecordInMongo() {
 			duration: '30000',
 			destination: 'System 2'
 		});
-		videoComp.save(function(err, result) {
+		videoComp.save(function (err, result) {
 			if (err) {
 				console.log(err);
 				reject(err);
@@ -297,7 +300,7 @@ function createVideoCompartmentRecordInMongo() {
 }
 
 function createVideoRecordInMongo() {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var video = new Video({
 			_id: '57a70996d7230637394bbb62',
 			durationInSeconds: 1800,
@@ -319,7 +322,7 @@ function createVideoRecordInMongo() {
 			tags: [],
 			status: 'ready'
 		});
-		video.save(function(err, result) {
+		video.save(function (err, result) {
 			if (err) {
 				console.log(err);
 				reject(err);
@@ -332,11 +335,11 @@ function createVideoRecordInMongo() {
 }
 
 function wipeMongo(done) {
-	Video.remove({}, function(err) {
+	Video.remove({}, function (err) {
 		if (err) {
 			console.log(err);
 		}
-		VideoCompartment.remove({}, function(err) {
+		VideoCompartment.remove({}, function (err) {
 			if (err) {
 				console.log(err);
 			}
