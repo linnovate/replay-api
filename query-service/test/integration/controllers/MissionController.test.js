@@ -4,7 +4,7 @@ request = require('supertest-as-promised'),
 	Promise = require('bluebird'),
 	mongoose = require('mongoose'),
 	util = require('util');
-var testUtils = require('replay-common/replay-test-utils/test-data');
+var testUtils = require('replay-test-utils/test-data');
 
 var missionUpdateUrlFormat = '/mission/%s',
 	missionUrlFormat = '/mission';
@@ -299,6 +299,8 @@ function getAndExpectMissionWithPolygonTimes(params) {
 		.expect('Content-Type', /json/)
 		.expect(200)
 		.then((res) => {
+			console.log('dolev: ', params);
+			console.log('dolev: ', res.body);
 			var jsonResult = JSON.parse(JSON.stringify(res.body));
 			expect(jsonResult[0].videoCompartments[0].polygonTimes.toString()).not.to.have.lengthOf(0);
 		});
