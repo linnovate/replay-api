@@ -39,8 +39,24 @@ function getMission(missionId, permissions) {
 }
 
 function getMissionPlaylist(mission) {
+	var duration = 0;
+	mission.videoCompartments.sort(function(a, b) {
+		return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
+	});
 	return Promise.map(mission.videoCompartments, function(videoCompartment) {
-		return ManifestRequestBuiler.getVideoCompartmentManifestRequest(videoCompartment);
+		return ManifestRequestBuiler.getVideoCompartmentManifestRequest(videoCompartment)
+			.catch(function(err) {
+				console.log(err);
+			})
+			.then(function(url) {
+				duration += videoCompartment.durationInSeconds;
+				return {
+					id: videoCompartment._id,
+					start: (duration - videoCompartment.durationInSeconds),
+					end: duration,
+					url: url
+				};
+			});
 	});
 }
 module.exports = new MediaPlaybackRequest();

@@ -7,10 +7,8 @@ before(function(done) {
 		if (err) {
 			return done(err);
 		}
-		// here you can load fixtures, etc.
-		setEnvironmentVariables(function() {
-			done(undefined, sails);
-		});
+		process.env.MONGO_DATABASE = sails.config.mongo.database;
+		done(undefined, server);
 	});
 });
 
@@ -18,9 +16,3 @@ after(function(done) {
 	// here you can clear fixtures, etc.
 	sails.lower(done);
 });
-
-function setEnvironmentVariables(callback) {
-	process.env.COMPARTMENT_HOST = sails.config.settings.services.compartment.host;
-	process.env.COMPARTMENT_PORT = sails.config.settings.services.compartment.port;
-	callback();
-}

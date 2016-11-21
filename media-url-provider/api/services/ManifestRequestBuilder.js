@@ -1,4 +1,6 @@
-const MANIFEST_SUFFIX = '/manifest.mpd';
+const MANIFEST_SUFFIX = '/manifest.mpd',
+	SEC_TO_MILISEC = 1000;
+
 var Promise = require('bluebird');
 
 function ManifestRequestBuilder() {
@@ -14,9 +16,6 @@ function ManifestRequestBuilder() {
 	function getVideoCompartmentManifestRequest(videoCompartment) {
 		console.log('building manifest');
 		return validateVideoCompartmentObject(videoCompartment)
-		.catch(function(err) {
-			console.log(err);
-		})
 		.then(assembleUrlRequest);
 	}
 
@@ -31,18 +30,19 @@ function ManifestRequestBuilder() {
 			manifestParams.baseName + '.' +
 			manifestParams.requestFormat +
 			MANIFEST_SUFFIX + '?wowzaplaystart=' +
-			manifestParams.wowzaplaystart + '&wowzaplayduration=' +
-			manifestParams.wowzaplayduration;
+			(manifestParams.wowzaplaystart * SEC_TO_MILISEC) + '&wowzaplayduration=' +
+			(manifestParams.wowzaplayduration * SEC_TO_MILISEC);
 		return requestUrl;
 	}
 }
 
 function validateVideoCompartmentObject(videoCompartment) {
-	if (videoCompartment.relativeStartTime !== undefined &&
-		videoCompartment.durationInSeconds !== undefined &&
-		videoCompartment.videoId.contentDirectoryPath !== undefined &&
-		videoCompartment.videoId.requestFormat !== undefined &&
-		videoCompartment.videoId.baseName !== undefined) {
+	if (!isNaN(videoCompartment.relativeStartTime) &&
+		!isNaN(videoCompartment.durationInSeconds) &&
+		videoCompartment.videoId &&
+		videoCompartment.videoId.contentDirectoryPath &&
+		videoCompartment.videoId.requestFormat &&
+		videoCompartment.videoId.baseName) {
 		return Promise.resolve(getManifestParams(videoCompartment));
 	}
 	return Promise.reject('failed validation');

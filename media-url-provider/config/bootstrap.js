@@ -18,5 +18,6 @@ module.exports.bootstrap = function(cb) {
 		.catch(function(err) {
 			console.log('An error occured in bootstrap.');
 			console.log(err);
+			cb(err);
 		});
 };

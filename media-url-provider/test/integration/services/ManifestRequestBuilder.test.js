@@ -1,349 +1,220 @@
-var assert = require('chai').assert;
-var nock = require('nock');
-var fs = require('fs');
-var sails = require('sails');
-var VideoCompartment = require('replay-schemas/VideoCompartment').VideoCompartment,
-	Video = require('replay-schemas/Video');
-
-// mpd requests standard for manifests
+// MPD requests standard for manifests
 const MANIFEST_SUFFIX = '/manifest.mpd';
 
-// Tested module
-var ManifestRequestBuilder = require('../../../api/services/ManifestRequestBuilder.js');
-// Mock Params for compartment service
-var compartmentBaseUrl, compartmentRoute;
+// Required libs
+var assert = require('chai').assert;
+var Promise = require('bluebird');
+var sails = require('sails');
+// Project Modules
+var dataInit = require('replay-test-utils/test-data');
+// Mongoose schemas
+var Mission = require('replay-schemas/Mission'),
+	VideoCompartment = require('replay-schemas/VideoCompartment'),
+	Video = require('replay-schemas/Video');
 
-// run buildManifestRequest methods tests
-describe('buildManifestRequest tests', buildManifestRequest);
+// Tested module !< ManifestRequestBuilder >!
+describe('getVideoCompartmentManifestRequest tests', getVideoCompartmentManifestRequest);
 // buildManifestRequest methods tests
-function buildManifestRequest() {
+function getVideoCompartmentManifestRequest() {
 	var originProcessPath;
-	
-	before(function (done) {
-		compartmentBaseUrl = 'http://' + sails.config.settings.services.compartment.host + ':' + sails.config.settings.services.compartment.port,
-		compartmentRoute = '/compartment/getCompartment';
-
+	before(function(done) {
 		originProcessPath = process.cwd();
 		process.chdir(__dirname);
 		mongoFill()
-			.then(function () {
-				done();
-			})
-			.catch(function (err) {
+			.then(done)
+			.catch(function(err) {
 				done(err);
 			});
 	});
 
-	after(function (done) {
-		wipeMongo(done);
-		process.chdir(originProcessPath);
-	});
-
-	describe('Normal behavior', function normalBehavior() {
-		var id = '57a70996d7230637394ccc62',
-			userId = 'abc123';
-		describe('retrive mpd url by videoCompartment id', function () {
-			var videoFileName;
-			before(function (done) {
-				try {
-					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(200, compartmentData);
-				} catch (err) {
-					return done(err);
-				}
-
-				VideoCompartment.findOne({ _id: id }, function (err, videoComp) {
-					if (err || videoComp === null) {
-						done(err);
-					} else {
-						Video.findOne({ _id: videoComp.videoId }, function (err, video) {
-							if (err || videoComp === null) {
-								done(err);
-							} else {
-								videoFileName = video.videoFileName;
-								done();
-							}
-						});
-					}
-				});
-			});
-			after(function () {
-				nock.cleanAll();
-			});
-			it('should return valid mpd request url', function (done) {
-				ManifestRequestBuilder.buildManifestRequest(id, userId)
-					.then(function (mpd) {
-						assert.include(mpd, MANIFEST_SUFFIX);
-						assert.include(mpd, videoFileName);
-						done();
-					})
-					.catch(function (err) {
-						done(err);
-					});
-			});
-		});
-		describe('empty user compartments', function () {
-			before(function (done) {
-				try {
-					var compartmentData = fs.readFileSync('../assets/emptyUserCompartment.xml');
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(200, compartmentData);
-					done();
-				} catch (err) {
-					return done(err);
-				}
-			});
-			after(function () {
-				nock.cleanAll();
-			});
-			it('should not return mpd url', function (done) {
-				ManifestRequestBuilder.buildManifestRequest(id, userId)
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
-					})
-					.catch(function (err) {
-						assert.typeOf(err, 'error', 'got the error');
-						done();
-					});
-			});
-		});
-	});
-
-	describe('Error handling', function errorHandling() {
-		describe('non existing id', function () {
-			before(function (done) {
-				try {
-					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(200, compartmentData);
-					done();
-				} catch (err) {
-					return done(err);
-				}
-			});
-			after(function () {
-				nock.cleanAll();
-			});
-			it('should not find video compartment', function (done) {
-				ManifestRequestBuilder.buildManifestRequest('not_real_id', 'someUser')
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
-					})
-					.catch(function (err) {
-						assert.equal(err, 'Video compartment does not exist');
-						done();
-					});
-			});
-		});
-		describe('compartment service not found', function () {
-			it('should reject with error not found', function (done) {
-				ManifestRequestBuilder.buildManifestRequest()
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
-					})
-					.catch(function (err) {
-						assert.typeOf(err, 'error', 'got the error');
-						done();
-					});
-			});
-		});
-		describe('bad http response from compartment service', function () {
-			before(function (done) {
-				try {
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(404);
-					done();
-				} catch (err) {
-					return done(err);
-				}
-			});
-			after(function () {
-				nock.cleanAll();
-			});
-			it('should reject on bad response', function (done) {
-				ManifestRequestBuilder.buildManifestRequest()
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
-					})
-					.catch(function (err) {
-						assert.typeOf(err, 'error', 'got the error');
-						done();
-					});
-			});
-		});
-		describe('bad xml response from compartment service', function () {
-			before(function (done) {
-				try {
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(200, '<this><is><wierd><xml></xml></wierd></is></this>');
-					done();
-				} catch (err) {
-					return done(err);
-				}
-			});
-			after(function () {
-				nock.cleanAll();
-			});
-			it('should reject on invalid xml return', function (done) {
-				ManifestRequestBuilder.buildManifestRequest()
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
-					})
-					.catch(function (err) {
-						assert.typeOf(err, 'error', 'got the error');
-						done();
-					});
-			});
-		});
-		describe('no video matching compartment id', function () {
-			var id;
-			before(function (done) {
-				try {
-					var compartmentData = fs.readFileSync('../assets/compartmentDummy.xml');
-					nock(compartmentBaseUrl)
-						.defaultReplyHeaders({
-							'Content-Type': 'application/xml'
-						})
-						.get(compartmentRoute)
-						.reply(200, compartmentData);
-					id = '57a70996d7230637394ddd62';
-					var videoComp = new VideoCompartment({
-						_id: '57a70996d7230637394ddd62',
-						videoId: '57a70996d7230637394eee62',
-						startTime: '2016-08-07T10:12:57.417Z',
-						endTime: '2016-08-07T10:13:27.417Z',
-						startAsset: '20000',
-						duration: '30000',
-						destination: 'System 2'
-					});
-					videoComp.save(function (err, result) {
-						if (err) {
-							done(err);
+	describe('Normal behavior tests', function() {
+		describe('retrive mpd url for Mission\'s videoCompartment single object', function() {
+			var mpdUrl = '';
+			var videoName;
+			var duration;
+			before(function(done) {
+				getMissionPopulated()
+					.then(function(mission) {
+						if (mission.videoCompartments.length > 0) {
+							videoName = mission.videoCompartments[0].videoId.baseName;
+							duration = mission.videoCompartments[0].durationInSeconds;
+							ManifestRequestBuilder.getVideoCompartmentManifestRequest(mission.videoCompartments[0])
+								.then(function(url) {
+									console.log(url);
+									mpdUrl = JSON.stringify(url);
+									done();
+								})
+								.catch(function(err) {
+									done(err);
+								});
 						} else {
-							done();
+							done('no video compartments found');
 						}
 					});
-				} catch (err) {
-					done(err);
-				}
 			});
-			after(function () {
-				nock.cleanAll();
+
+			it('should return valid mpd request url with video base name, mpd suffix,wowza play duration', function(done) {
+				assert.include(mpdUrl, MANIFEST_SUFFIX);
+				assert.include(mpdUrl, videoName);
+				assert.include(mpdUrl, 'wowzaplayduration=' + (duration * 1000));
+				done();
 			});
-			it('should reject when no match for video', function (done) {
-				ManifestRequestBuilder.buildManifestRequest(id, 'someUser')
-					.then(function (mpd) {
-						assert.fail(undefined, undefined, 'should have been rejected');
-						done();
+		});
+	});
+
+	describe('error handling tests', function() {
+		describe('videoCompartment validation tests', function() {
+			var videoComp;
+
+			beforeEach(function() {
+				videoComp = {
+					relativeStartTime: 0,
+					durationInSeconds: 120,
+					videoId: {
+						contentDirectoryPath: 'BigBuckBunny',
+						requestFormat: 'mp4',
+						baseName: 'BigBuckBunny'
+					}
+				};
+			});
+
+			it('should fail validation with bad relative start time', function(done) {
+				videoComp.relativeStartTime = 'avner';
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
 					})
-					.catch(function (err) {
-						assert.equal(err, 'Video does not exist');
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no relative start time', function(done) {
+				videoComp.relativeStartTime = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with bad duration', function(done) {
+				videoComp.durationInSeconds = 'avner';
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no duration', function(done) {
+				videoComp.relativeStartTime = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no videoId population', function(done) {
+				videoComp.videoId = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no video content directory path', function(done) {
+				videoComp.videoId.contentDirectoryPath = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no video request format', function(done) {
+				videoComp.videoId.requestFormat = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
+						done();
+					});
+			});
+
+			it('should fail validation with no video baseName', function(done) {
+				videoComp.videoId.baseName = undefined;
+				ManifestRequestBuilder.getVideoCompartmentManifestRequest(videoComp)
+					.then(function(url) {
+						done('shouldn\'t resolve');
+					})
+					.catch(function(err) {
+						assert.include(err, 'failed validation');
 						done();
 					});
 			});
 		});
+	});
+
+	after(function(done) {
+		wipeMongo(done);
+		process.chdir(originProcessPath);
 	});
 }
 
 function mongoFill() {
-	return createVideoRecordInMongo()
-		.then(createVideoCompartmentRecordInMongo);
-}
-
-function createVideoCompartmentRecordInMongo() {
-	return new Promise(function (resolve, reject) {
-		var videoComp = new VideoCompartment({
-			_id: '57a70996d7230637394ccc62',
-			videoId: '57a70996d7230637394bbb62',
-			startTime: '2016-08-07T10:12:57.417Z',
-			endTime: '2016-08-07T10:13:27.417Z',
-			startAsset: '20000',
-			duration: '30000',
-			destination: 'System 2'
-		});
-		videoComp.save(function (err, result) {
-			if (err) {
-				console.log(err);
-				reject(err);
-			} else {
-				console.log('created videoCompartment object');
-				resolve();
-			}
-		});
-	});
-}
-
-function createVideoRecordInMongo() {
-	return new Promise(function (resolve, reject) {
-		var video = new Video({
-			_id: '57a70996d7230637394bbb62',
-			durationInSeconds: 1800,
-			endTime: '2016-08-07T10:42:37.417Z',
-			jobStatusId: '57a709954f3c38a839a0605c',
-			videoFileName: 'BigBuckBunny.smil',
-			receivingMethod: {
-				standard: 'VideoStandard',
-				version: '1.0',
-				_id: '57a70996d7230637394bbb63'
-			},
-			falvors: ['Big_Buck_Bunny_480p.mp4', 'Big_Buck_Bunny_720p.mp4', 'Big_Buck_Bunny_1080p.mp4'],
-			requestFormat: 'smil',
-			baseName: 'BigBuckBunny',
-			contentDirectoryPath: 'BigBuckBunny',
-			sourceId: '102',
-			startTime: '2016-08-07T10:12:37.417Z',
-			updatedAt: '2016-08-07T10:13:04.451Z',
-			tags: [],
-			status: 'ready'
-		});
-		video.save(function (err, result) {
-			if (err) {
-				console.log(err);
-				reject(err);
-			} else {
-				console.log('created video object');
-				resolve();
-			}
-		});
-	});
+	console.log(process.env.MONGO_DATABASE);
+	return dataInit.insertVideos(dataInit.videoPath)
+		.then(dataInit.insertNewMission(dataInit.missionWithVideoPath));
 }
 
 function wipeMongo(done) {
-	Video.remove({}, function (err) {
+	console.log('after');
+	Video.remove({}, function(err) {
 		if (err) {
 			console.log(err);
 		}
-		VideoCompartment.remove({}, function (err) {
+		Mission.remove({}, function(err) {
 			if (err) {
 				console.log(err);
 			}
 			done();
 		});
+	});
+}
+
+function getMissionPopulated() {
+	return new Promise(function(resolve, reject) {
+		return Mission.findOne()
+			.populate({
+				path: 'videoCompartments.videoId',
+				model: 'Video'
+			})
+			.exec(function(err, mission) {
+				if (err) {
+					reject(err);
+				}
+				resolve(mission);
+			});
 	});
 }
