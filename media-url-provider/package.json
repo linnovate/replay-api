@@ -11,6 +11,7 @@
     "mocha": "^3.1.2",
     "nock": "^9.0.2",
     "rc": "1.1.6",
+    "replay-jwt-middleware": "^1.0.1",
     "replay-request-services": "^1.0.0",
     "replay-schemas": "^1.1.0",
     "replay-test-utils": "^1.0.7",

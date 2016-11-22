@@ -7,7 +7,7 @@
 module.exports = {
 	findOne: function(req, res, next) {
 		var missionId = req.query.missionId;
-		var userId = req.query.userId;
+		var userId = req.userId;
 		MediaPlaybackRequest.missionPlayback(missionId, userId)
 			.then(function(playlist) {
 				console.log(playlist);

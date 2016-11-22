@@ -20,7 +20,7 @@ function ManifestRequestBuilder() {
 	}
 
 	function assembleUrlRequest(manifestParams) {
-		console.log("assembling");
+		console.log('assembling');
 		var requestUrl = self.server + ':' +
 			self.port + '/' +
 			self.instance + '/' +

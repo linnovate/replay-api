@@ -9,7 +9,6 @@ var sails = require('sails');
 var dataInit = require('replay-test-utils/test-data');
 // Mongoose schemas
 var Mission = require('replay-schemas/Mission'),
-	VideoCompartment = require('replay-schemas/VideoCompartment'),
 	Video = require('replay-schemas/Video');
 
 // Tested module !< ManifestRequestBuilder >!

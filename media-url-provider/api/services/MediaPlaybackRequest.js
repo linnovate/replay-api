@@ -1,6 +1,6 @@
 var Promise = require('bluebird'),
 	Mission = require('replay-schemas/Mission'),
-	VideoCompartment = require('replay-schemas/VideoCompartment'),
+	Video = require('replay-schemas/Video'),
 	AuthorizationService = require('replay-request-services/authorization');
 
 var ManifestRequestBuiler = require('./ManifestRequestBuilder');
