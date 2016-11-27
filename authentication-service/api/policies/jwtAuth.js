@@ -12,8 +12,10 @@ var jwt = require('jwt-simple');
 
 module.exports = function (req, res, next) {
   if (!req.header('Authorization')) {
-    console.log('Request lacks Authorization header.');
-    return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
+    return res
+        .set('WWW-Authenticate', 'missing authorization header')
+        .status(401)
+        .send();
   }
   var token = req.header('Authorization').split(' ')[1];
 
@@ -23,14 +25,20 @@ module.exports = function (req, res, next) {
   }
   catch (err) {
     console.log('Error decoding JWT:', err);
-    return res.status(401).send({ message: err.message });
+    return res
+        .set('WWW-Authenticate', err.message)
+        .status(401)
+        .send();
   }
 
   if (payload.exp <= moment().unix()) {
-    console.log('Request token has expired.');
-    return res.status(401).send({ message: 'Token has expired' });
+    console.log('JWT has expired.');
+    return res
+        .set('WWW-Authenticate', 'JWT has expired')
+        .status(401)
+        .send();
   }
   req.user = payload.sub;
   console.log('JWT is valid.');
-  next();
+  return next();
 };
