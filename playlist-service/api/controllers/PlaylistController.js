@@ -5,9 +5,9 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var mongoose = require('mongoose');
-	_ = require('lodash'),
+_ = require('lodash'),
 	Mission = require('replay-schemas/Mission');
-	
+
 var AuthorizationService = require('replay-request-services/authorization');
 
 module.exports = {
@@ -77,13 +77,13 @@ module.exports = {
 			.then(() => AuthorizationService.findPermissionsByUserId(req.userId))
 			.then(permissions => Mission.validateMissionExists(missionId, permissions))
 			.then(() => {
-				if(req.method === 'PUT') {
+				if (req.method === 'PUT') {
 					return PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } });
 				}
-				else if(req.method === 'DELETE') {
+				else if (req.method === 'DELETE') {
 					return PlaylistService.updatePlaylistById(playlistId, { $pull: { missions: missionId } });
 				}
-				
+
 				return Promise.reject(new Error('Unsupported HTTP method.'));
 			})
 			.then(() => {
@@ -128,10 +128,6 @@ function validateCreateRequest(req) {
 }
 
 function validateGeneralUpdateRequest(req) {
-	if (!req.body) {
-		return false;
-	}
-
 	// make sure params.id is a valid ObjectId
 	if (req.params.id) {
 		try {
@@ -149,6 +145,10 @@ function validateGeneralUpdateRequest(req) {
 
 function validateUpdateRequest(req) {
 	if (!validateGeneralUpdateRequest(req)) {
+		return false;
+	}
+
+	if (!req.body) {
 		return false;
 	}
 
@@ -185,13 +185,13 @@ function validateDeleteRequest(req) {
 		return false;
 	}
 
-	if(req.params.id) {
+	if (req.params.id) {
 		try {
 			mongoose.Types.ObjectId(req.params.id);
 		} catch (e) {
 			return false;
 		}
-	} 
+	}
 	else {
 		return false;
 	}
