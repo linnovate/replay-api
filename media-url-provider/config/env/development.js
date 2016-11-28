@@ -29,7 +29,8 @@ module.exports = {
 				instance: 'weplay',
 				content_instance: 'weplay'
 			}
-		}
+		},
+		token_secret: process.env.TOKEN_SECRET || 'gbrejhgkjrehogi54yu89u9nk8'
 	},
 	mongo: {
 		host: process.env.MONGO_HOST || 'localhost',

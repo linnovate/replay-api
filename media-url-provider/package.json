@@ -6,9 +6,15 @@
   "keywords": [],
   "dependencies": {
     "bluebird": "3.4.6",
+    "chai": "^3.5.0",
     "include-all": "0.1.6",
+    "mocha": "^3.1.2",
+    "nock": "^9.0.2",
     "rc": "1.1.6",
+    "replay-jwt-middleware": "^1.0.1",
+    "replay-request-services": "^1.0.0",
     "replay-schemas": "^1.1.0",
+    "replay-test-utils": "^1.0.7",
     "request": "2.74.0",
     "sails": "0.12.4",
     "sails-disk": "0.10.10",
@@ -18,7 +24,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/**/**/*.test.js"
+    "test": "node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/integration/**/*.test.js"
   },
   "main": "app.js",
   "repository": {
