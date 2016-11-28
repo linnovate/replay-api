@@ -17,7 +17,14 @@ module.exports = {
     };
 
     // Step 1. Exchange authorization code for access token.
-    request.post(accessTokenUrl, { json: true, form: params }, function (err, response, token) {
+    request.post({
+      url: accessTokenUrl,
+      json: true,
+      form: params,
+      agentOptions: {
+        keepAlive: true // required because if not ECONNRESET was thrown
+      }
+    }, function (err, response, token) {
       var accessToken = token.access_token;
       var headers = { Authorization: 'Bearer ' + accessToken };
 
