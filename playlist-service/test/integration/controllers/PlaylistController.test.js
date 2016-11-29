@@ -7,6 +7,7 @@ var Playlist = require('replay-schemas/Playlist'),
     authorizationMock = require('replay-test-utils/authorization-mock');
 
 var playlistUrl = '/playlist',
+    playlistFindOneUrlFormat = '/playlist/%s',
     playlistUpdateUrlFormat = '/playlist/%s',
     playlistDeleteUrlFormat = '/playlist/%s',
     playlistUpdateMissionUrlFormat = '/playlist/%s/mission/%s';
@@ -26,6 +27,19 @@ describe('PlaylistController', () => {
             getPlaylistsAndExpectOK(0)
                 .then(done)
                 .catch(done);
+        });
+    });
+
+    describe('#findOne()', () => {
+        it(`should return 1 playlist`, done => {
+            createPlaylistsInMongo(1)
+                .then(playlists => getPlaylistAndExpectOK(playlists[0].id))
+                .then(done)
+                .catch(done);
+        });
+
+        it('should return 404 due to no playlist', done => {
+            findPlaylistAndExpectNotFound(done);
         });
     });
 
@@ -116,6 +130,12 @@ describe('PlaylistController', () => {
         });
     });
 
+    describe('#findOne() bad input tests', () => {
+        it('should reject due to lack of id', done => {
+            findPlaylistAndExpectBadRequest(done);
+        });
+    });
+
     describe('#create() bad input tests', () => {
         it('should reject due to lack of name', done => {
             var playlist = {};
@@ -200,11 +220,43 @@ function getPlaylistsAndExpectOK(amount) {
         });
 }
 
+function getPlaylistAndExpectOK(id) {
+    var playlistFindOneUrl = util.format(playlistFindOneUrlFormat, id);
+
+    return request(sails.hooks.http.app)
+        .get(playlistFindOneUrl)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then((res) => {
+            expect(res.body).to.have.property('_id');
+            expect(res.body._id).to.equal(id);
+        });
+}
+
 function generatePlaylist() {
     return {
         name: 'test',
         ownerId: authorizationMock.getUser().id
     };
+}
+
+function findPlaylistAndExpectNotFound(done) {
+    var playlistFindOneUrl = util.format(playlistFindOneUrlFormat, new mongoose.Types.ObjectId());
+    
+    return request(sails.hooks.http.app)
+        .get(playlistFindOneUrl)
+        .set('Accept', 'application/json')
+        .expect(404, done);
+}
+
+function findPlaylistAndExpectBadRequest(done) {
+    var playlistFindOneUrl = util.format(playlistFindOneUrlFormat, 'someNotExistedId');
+    
+    return request(sails.hooks.http.app)
+        .get(playlistFindOneUrl)
+        .set('Accept', 'application/json')
+        .expect(400, done);
 }
 
 function createAndExpectPlaylist(playlist) {
