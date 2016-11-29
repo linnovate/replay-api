@@ -11,12 +11,32 @@ _ = require('lodash'),
 var AuthorizationService = require('replay-request-services/authorization');
 
 module.exports = {
-	// retrieves the authenticated user's permissions
+	// retrieves the authenticated user's playlists
 	find: function (req, res, next) {
-		PlaylistService.findPlaylistsByOwnerId(req.userId)
+		PlaylistService.findPlaylists(req.userId)
 			.then(playlists => {
 				console.log('Returning %s playlists.', playlists.length);
 				return res.json(playlists);
+			})
+			.catch(err => {
+				if (err) {
+					console.log(err);
+					next(err);
+				}
+			});
+	},
+	findOne: function (req, res, next) {
+		if (!validateReqHasId(req)) {
+			return res.badRequest(new Error('Some parameters are missing.'));
+		}
+
+		PlaylistService.findPlaylistById(req.userId, req.params.id)
+			.then(playlist => {
+				if (playlist) {
+					console.log('Returning playlist:', JSON.stringify(playlist));
+					return res.json(playlist);
+				}
+				return res.notFound();
 			})
 			.catch(err => {
 				if (err) {
@@ -127,7 +147,7 @@ function validateCreateRequest(req) {
 	return true;
 }
 
-function validateGeneralUpdateRequest(req) {
+function validateReqHasId(req) {
 	// make sure params.id is a valid ObjectId
 	if (req.params.id) {
 		try {
@@ -144,7 +164,7 @@ function validateGeneralUpdateRequest(req) {
 }
 
 function validateUpdateRequest(req) {
-	if (!validateGeneralUpdateRequest(req)) {
+	if (!validateReqHasId(req)) {
 		return false;
 	}
 
@@ -161,7 +181,7 @@ function validateUpdateRequest(req) {
 }
 
 function validateAlterMissionRequest(req) {
-	if (!validateGeneralUpdateRequest(req)) {
+	if (!validateReqHasId(req)) {
 		return false;
 	}
 
