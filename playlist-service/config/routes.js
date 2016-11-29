@@ -33,6 +33,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   'GET /playlist': 'PlaylistController.find',
+  'GET /playlist/:id': 'PlaylistController.findOne',
   'POST /playlist': 'PlaylistController.create',
   'PUT /playlist/:id': 'PlaylistController.update',
   // add mission with missionId to playlist with playlistId
