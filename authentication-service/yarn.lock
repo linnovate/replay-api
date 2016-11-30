@@ -1988,7 +1988,7 @@ mock-res@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/mock-res/-/mock-res-0.3.0.tgz#0c2034cc6336d0595a3af109f7448283ee9c47f5"
 
-moment@^2.14.1:
+moment@^2.14.1, moment@^2.15.2:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.16.0.tgz#f38f2c97c9889b0ee18fc6cc392e1e443ad2da8e"
 
@@ -2500,15 +2500,23 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-replay-schemas@1.0.31:
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/replay-schemas/-/replay-schemas-1.0.31.tgz#01875f1a68399e7eebda077b1064b36effc252e3"
+replay-jwt-middleware@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/replay-jwt-middleware/-/replay-jwt-middleware-1.0.1.tgz#2c390835045a2fd46c7995b51eb8b31b7202db9f"
+  dependencies:
+    jwt-simple "^0.5.0"
+    moment "^2.15.2"
+
+replay-schemas@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/replay-schemas/-/replay-schemas-1.1.1.tgz#7aaccfdc56714caeaf78b9297bea6e689e43df0e"
   dependencies:
     bluebird "^3.4.1"
     lodash "^4.13.1"
     mongoose "^4.5.10"
     mongoose-geojson-schema "^2.1.2"
     mongoose-type-email "^1.0.2"
+    xml2js "^0.4.17"
 
 reportback@~0.1.8, reportback@~0.1.9:
   version "0.1.9"
@@ -3556,7 +3564,7 @@ xml-encryption@~0.7:
     xmldom "~0.1.15"
     xpath "0.0.5"
 
-xml2js@0.4.x:
+xml2js@^0.4.17, xml2js@0.4.x:
   version "0.4.17"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.17.tgz#17be93eaae3f3b779359c795b419705a8817e868"
   dependencies:

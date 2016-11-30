@@ -40,9 +40,6 @@ module.exports.routes = {
   'get /mission': 'MissionController.find',
   'put /mission/:id': 'MissionController.update',
 
-  // lacks query parameters |videoId
-  'get /videometadata': 'VideoMetadataController.find',
-
   // lacks query parameters |limit
   'get /query': 'QueryController.find',
 
