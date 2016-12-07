@@ -5,8 +5,6 @@ const MANIFEST_SUFFIX = '/manifest.mpd';
 var assert = require('chai').assert;
 var Promise = require('bluebird');
 var sails = require('sails');
-// Project Modules
-var dataInit = require('replay-test-utils/test-data');
 // Mongoose schemas
 var Mission = require('replay-schemas/Mission'),
 	Video = require('replay-schemas/Video');
@@ -183,6 +181,8 @@ function getVideoCompartmentManifestRequest() {
 
 function mongoFill() {
 	console.log(process.env.MONGO_DATABASE);
+	// Project Modules
+	var dataInit = require('replay-test-utils/test-data');
 	return dataInit.insertVideos(dataInit.videoPath)
 		.then(dataInit.insertNewMission(dataInit.missionWithVideoPath));
 }
@@ -213,6 +213,7 @@ function getMissionPopulated() {
 				if (err) {
 					reject(err);
 				}
+				console.log(JSON.stringify(mission));
 				resolve(mission);
 			});
 	});
