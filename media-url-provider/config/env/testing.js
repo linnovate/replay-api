@@ -39,7 +39,7 @@ module.exports = {
 		host: process.env.MONGO_HOST || '127.0.0.1',
 		port: process.env.MONGO_PORT || 27017,
 		database: 'replay_test_media_url_provider',
-		username: process.env.MONGO_USERNAME,
-		password: process.env.MONGO_PASSWORD
+		username: process.env.MONGO_USERNAME || 'replay',
+		password: process.env.MONGO_PASSWORD || 'replay'
 	}
 };
