@@ -25,6 +25,8 @@ Set environment variables to config the app:
 | MONGO_HOST                    | Mongo host URI                               | localhost      |
 | MONGO_PORT                    | Mongo port                                   | 27017          |
 | MONGO_DATABASE                | Mongo database name                          | replay_dev     |
+| MONGO_USERNAME                | Mongo username                               | replay         |
+| MONGO_PASSWORD                | Mongo password                               | replay         |
 
 ## Usage
 Run with:
@@ -52,4 +54,10 @@ for code coverage run
 
 ```
 npm run coverage
+```
+
+## Docker
+```
+docker build --no-cache -t media-url-provider
+docker run -d -p 1339:1339 --restart=always --link mongodb-prod:mongodb-prod --name media-url-provider media-url-provider
 ```

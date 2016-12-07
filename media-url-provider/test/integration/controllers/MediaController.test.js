@@ -95,6 +95,7 @@ function mongoFill() {
 }
 
 function createVideoCompartmentRecordInMongo() {
+	console.log('in comartment');
 	return new Promise(function(resolve, reject) {
 		var videoComp = new VideoCompartment({
 			_id: '57a70996d7230637394ccc62',

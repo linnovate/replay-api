@@ -1,32 +1,30 @@
 /**
- * AuthorizationXmlController
+ * CompartmentController
  *
  * @description :: Server-side logic for serving authorization xmls files
  */
 
-var fileSystem = require('fs');
-
+// Getting the user permissions by his ID.
+// NOTE: Supports authorizations for 'adfs-saml' authenticated users.
 module.exports = {
 
-	/**
-	 * `AuthorizationXmlController.serve()`
-	 */
-	getCompartment: function(req, res) {
-		var id = req.params.id;
-		var fileName = 'sys';
-		if (id) {
-			fileName += id;
-		}
-		var target = './assets/authorizationXml/' + fileName + '.xml';
-		fileSystem.exists(target, function(exists) {
-			if (!exists) {
-				return res.notFound('The requested file (' + fileName + ') does not exist.');
-			}
-			console.log('resolving');
-			res.writeHead(200, { 'Content-Type': 'text/xml' });
-			var readStream = fileSystem.createReadStream(target);
-			// We replaced all the event handlers with a simple call to readStream.pipe()
-			readStream.pipe(res);
-		});
+	find: function (req, res, next) {
+		var id = req.query.id;
+		return validateRequest(req.query)
+			.then(() => UserService.getUserById(id))
+			.then(user => CompartmentService.getCompartmentPermissions(user.providerDetails.id))
+			.then(function (result) {
+				res.send(result);
+			})
+			.catch(function (err) {
+				res.serverError(err);
+			});
 	}
 };
+
+function validateRequest(params) {
+	if (!params.id) {
+		return Promise.reject(new Error('Missing id in query parameters'));
+	}
+	return Promise.resolve();
+}

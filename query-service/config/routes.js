@@ -37,11 +37,8 @@ module.exports.routes = {
   'get /tag': 'TagController.find',
 
   // lacks query parameters |fromVideoTime,toVideoTime,minVideoDuration,maxVideoDuration,sourceId,tagsIds,boundingShapeType,boundingShapeCoordinates
-  'get /video': 'VideoController.find',
-  'put /video/:id': 'VideoController.update',
-
-  // lacks query parameters |videoId
-  'get /videometadata': 'VideoMetadataController.find',
+  'get /mission': 'MissionController.find',
+  'put /mission/:id': 'MissionController.update',
 
   // lacks query parameters |limit
   'get /query': 'QueryController.find',

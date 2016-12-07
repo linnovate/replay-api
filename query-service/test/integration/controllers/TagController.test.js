@@ -3,8 +3,9 @@ var Tag = require('replay-schemas/Tag'),
     Promise = require('bluebird'),
     util = require('util');
 
-describe('TagController', function () {
+var tagUrl = '/tag';
 
+describe('TagController', function () {
     describe('#find()', function () {
         var tagStubsAmount = 3;
         it(util.format('should return %s tags', tagStubsAmount), function (done) {
@@ -38,7 +39,7 @@ function createTags(amount) {
 
 function getAndExpectTags(amount) {
     return request(sails.hooks.http.app)
-        .get('/tag')
+        .get(tagUrl)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)

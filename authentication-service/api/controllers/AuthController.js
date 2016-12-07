@@ -27,8 +27,9 @@ module.exports = {
         keepAlive: true // required because if not ECONNRESET was thrown
       }
     }, function (err, response, token) {
-      if (err) return res.status(500).send(err);
-
+      if (err) {
+        return res.status(500).send(err);
+      }
       var accessToken = token.access_token;
       var headers = { Authorization: 'Bearer ' + accessToken };
 

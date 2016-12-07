@@ -1,7 +1,6 @@
-
 var Query = require('replay-schemas/Query');
 
-module.exports.saveQuery = function(query) {
+module.exports.saveQuery = function (userId, query) {
     var coordinates, tagsIds, boundingShape;
 
     // parse some specific fields if they exist
@@ -13,7 +12,7 @@ module.exports.saveQuery = function(query) {
         tagsIds = JSON.parse(query.tagsIds);
     }
 
-    if(query.boundingShapeType && query.boundingShapeCoordinates) {
+    if (query.boundingShapeType && query.boundingShapeCoordinates) {
         var boundingShape = {
             type: query.boundingShapeType,
             coordinates: coordinates
@@ -21,10 +20,12 @@ module.exports.saveQuery = function(query) {
     }
 
     return Query.create({
-        fromVideoTime: query.fromVideoTime,
-        toVideoTime: query.toVideoTime,
-        minVideoDuration: query.minVideoDuration,
-        maxVideoDuration: query.maxVideoDuration,
+        userId: userId,
+        missionName: query.missionName,
+        fromMissionTime: query.fromMissionTime,
+        toMissionTime: query.toMissionTime,
+        minMissionDuration: query.minMissionDuration,
+        maxMissionDuration: query.maxMissionDuration,
         copyright: query.copyright,
         minTraceHeight: query.minTraceHeight,
         minTraceWidth: query.minTraceWidth,
@@ -35,14 +36,14 @@ module.exports.saveQuery = function(query) {
     });
 }
 
-module.exports.getQueries = function(query) {
-	var limitAmount = parseInt(query.limit);
-    
-	// fetch all queries and sort by descending order
-	var mongoQuery = Query.find({}).sort({ createdAt: -1 });
-	// if limitAmount is set, limit the amount returned.
-	if (limitAmount) {
-		mongoQuery = mongoQuery.limit(limitAmount);
-	}
-	return mongoQuery.exec();
+module.exports.getQueries = function (userId, query) {
+    var limitAmount = parseInt(query.limit);
+
+    // fetch all queries and sort by descending order
+    var mongoQuery = Query.find({ userId: userId }).sort({ createdAt: -1 });
+    // if limitAmount is set, limit the amount returned.
+    if (limitAmount) {
+        mongoQuery = mongoQuery.limit(limitAmount);
+    }
+    return mongoQuery.exec();
 }

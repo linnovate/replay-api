@@ -11,19 +11,29 @@
   },
   "dependencies": {
     "bluebird": "^3.4.6",
-    "lodash": "^4.15.0",
-    "mongoose": "^4.6.0",
+    "lodash": "^4.16.6",
+    "mocha": "^3.1.2",
+    "mongoose": "^4.6.5",
     "rc": "^1.1.6",
-    "replay-schemas": "1.0.30",
-    "sails": "^0.12.4",
+    "replay-jwt-middleware": "^1.0.1",
+    "replay-request-services": "^1.0.0",
+    "replay-schemas": "^1.1.3",
+    "replay-test-utils": "^1.0.5",
+    "request": "^2.76.0",
+    "request-promise": "^4.1.1",
+    "sails": "^0.12.8",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.1",
-    "sails-swagger": "^0.5.1"
+    "sails-swagger": "^0.5.1",
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.0.2",
     "mongoose": "^4.5.10",
+    "nock": "^9.0.2",
+    "replay-test-utils": "^1.0.0",
     "supertest": "^2.0.0",
     "supertest-as-promised": "^4.0.0"
   }

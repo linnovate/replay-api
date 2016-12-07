@@ -1,10 +1,12 @@
 var Query = require('replay-schemas/Query'),
     request = require('supertest'),
     Promise = require('bluebird'),
+    authorizationMock = require('replay-test-utils/authorization-mock'),
     util = require('util');
 
-describe('QueryController', function () {
+var queryUrl = '/query';
 
+describe('QueryController', function () {
     describe('#find()', function () {
         var queryStubsAmount = 3;
         it(util.format('should return all %s queries without limit', queryStubsAmount), function (done) {
@@ -43,16 +45,20 @@ describe('QueryController', function () {
 });
 
 function createEmptyQueries(amount) {
+    var query = {
+        userId: authorizationMock.getUser().id
+    };
+
     var promises = [];
     for (var i = 0; i < amount; i++) {
-        promises.push(Query.create({}));
+        promises.push(Query.create(query));
     }
     return Promise.all(promises);
 }
 
 function getAndExpectQueries(amount, limit) {
     return request(sails.hooks.http.app)
-        .get('/query')
+        .get(queryUrl)
         .query({ limit: limit })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -64,7 +70,7 @@ function getAndExpectQueries(amount, limit) {
 
 function getQueriesAndExpectError(done, limit) {
     request(sails.hooks.http.app)
-        .get('/query')
+        .get(queryUrl)
         .query({ limit: limit })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
