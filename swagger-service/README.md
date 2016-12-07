@@ -7,7 +7,7 @@ serves their swagger json in /swagger/doc.
 ### Note the UI will not work if one of the referenced services is not up or responding.
 
 ## Installation
-Install sails globally
+Install sails globally:
 ```
 sudo npm -g install sails
 ```
