@@ -39,11 +39,31 @@ Run with:
 sails lift
 ```
 
-Querying examples:
+## API
+The examples here are just a small demo of the API.  
+For full documentation refer to our Swagger service, or just query the entity using it's fields.  
+
+Missions: 
 ```
-GET /videometadata?videoId=578396a5ccb2cf576203fe35
+GET /mission
+GET /mission?boundingShapeType=polygon&boundingShapeCoordinates=[[[35.527510, 27.105208],[35.524920, 27.106178],[35.525464, 27.109094],[35.527510, 27.105208]]]
+PUT /mission/:id // right now only adding a tag to mission is allowed, body is tag=<tag_name>
+```
+
+Tags:
+```
+GET /tag
+```
+
+Queries:
+```
+GET /query
 GET /query?limit=10
-GET /video?boundingShapeType=polygon&boundingShapeCoordinates=[[[35.527510, 27.105208],[35.524920, 27.106178],[35.525464, 27.109094],[35.527510, 27.105208]]]
+```
+
+Sources:
+```
+GET /source
 ```
 
 ## Some tips

@@ -40,6 +40,7 @@ sails lift
 Querying examples:
 ```
 GET /playlist
+GET /playlist/:id
 PUT /playlist/:id/mission/:id // adds mission to playlist
 DELETE /playlist/:id/mission/:id // removes mission from playlist
 DELETE /playlist/:id

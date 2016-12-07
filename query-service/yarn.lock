@@ -3330,7 +3330,7 @@ replay-request-services@^1.0.0:
   dependencies:
     request-promise "^4.1.1"
 
-replay-schemas@^1.0.43, replay-schemas@^1.1.0:
+replay-schemas@^1.0.43:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/replay-schemas/-/replay-schemas-1.1.0.tgz#c18e32be0b313e3a783debfa94e4a2a643d4081b"
   dependencies:
@@ -3341,9 +3341,20 @@ replay-schemas@^1.0.43, replay-schemas@^1.1.0:
     mongoose-type-email "^1.0.2"
     xml2js "^0.4.17"
 
-replay-test-utils@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/replay-test-utils/-/replay-test-utils-1.0.1.tgz#e5903f58b8302e9b63704892e367b661be8e4964"
+replay-schemas@^1.1.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/replay-schemas/-/replay-schemas-1.1.3.tgz#3609071b5826064de172ca3a74d9b76042da5eb3"
+  dependencies:
+    bluebird "^3.4.1"
+    lodash "^4.13.1"
+    mongoose "^4.5.10"
+    mongoose-geojson-schema "^2.1.2"
+    mongoose-type-email "^1.0.2"
+    xml2js "^0.4.17"
+
+replay-test-utils@^1.0.5:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/replay-test-utils/-/replay-test-utils-1.0.7.tgz#9f29f63a99f4b47c0404c17371777dc31cce2fc3"
   dependencies:
     nock "^9.0.2"
     replay-schemas "^1.0.43"

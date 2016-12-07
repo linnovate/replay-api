@@ -5,18 +5,38 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var mongoose = require('mongoose');
-	_ = require('lodash'),
+_ = require('lodash'),
 	Mission = require('replay-schemas/Mission');
-	
+
 var AuthorizationService = require('replay-request-services/authorization');
 
 module.exports = {
-	// retrieves the authenticated user's permissions
+	// retrieves the authenticated user's playlists
 	find: function (req, res, next) {
-		PlaylistService.findPlaylistsByOwnerId(req.userId)
+		PlaylistService.findPlaylists(req.userId)
 			.then(playlists => {
 				console.log('Returning %s playlists.', playlists.length);
 				return res.json(playlists);
+			})
+			.catch(err => {
+				if (err) {
+					console.log(err);
+					next(err);
+				}
+			});
+	},
+	findOne: function (req, res, next) {
+		if (!validateReqHasId(req)) {
+			return res.badRequest(new Error('Some parameters are missing.'));
+		}
+
+		PlaylistService.findPlaylistById(req.userId, req.params.id)
+			.then(playlist => {
+				if (playlist) {
+					console.log('Returning playlist:', JSON.stringify(playlist));
+					return res.json(playlist);
+				}
+				return res.notFound();
 			})
 			.catch(err => {
 				if (err) {
@@ -77,13 +97,13 @@ module.exports = {
 			.then(() => AuthorizationService.findPermissionsByUserId(req.userId))
 			.then(permissions => Mission.validateMissionExists(missionId, permissions))
 			.then(() => {
-				if(req.method === 'PUT') {
+				if (req.method === 'PUT') {
 					return PlaylistService.updatePlaylistById(playlistId, { $addToSet: { missions: missionId } });
 				}
-				else if(req.method === 'DELETE') {
+				else if (req.method === 'DELETE') {
 					return PlaylistService.updatePlaylistById(playlistId, { $pull: { missions: missionId } });
 				}
-				
+
 				return Promise.reject(new Error('Unsupported HTTP method.'));
 			})
 			.then(() => {
@@ -127,11 +147,7 @@ function validateCreateRequest(req) {
 	return true;
 }
 
-function validateGeneralUpdateRequest(req) {
-	if (!req.body) {
-		return false;
-	}
-
+function validateReqHasId(req) {
 	// make sure params.id is a valid ObjectId
 	if (req.params.id) {
 		try {
@@ -148,7 +164,11 @@ function validateGeneralUpdateRequest(req) {
 }
 
 function validateUpdateRequest(req) {
-	if (!validateGeneralUpdateRequest(req)) {
+	if (!validateReqHasId(req)) {
+		return false;
+	}
+
+	if (!req.body) {
 		return false;
 	}
 
@@ -161,7 +181,7 @@ function validateUpdateRequest(req) {
 }
 
 function validateAlterMissionRequest(req) {
-	if (!validateGeneralUpdateRequest(req)) {
+	if (!validateReqHasId(req)) {
 		return false;
 	}
 
@@ -185,13 +205,13 @@ function validateDeleteRequest(req) {
 		return false;
 	}
 
-	if(req.params.id) {
+	if (req.params.id) {
 		try {
 			mongoose.Types.ObjectId(req.params.id);
 		} catch (e) {
 			return false;
 		}
-	} 
+	}
 	else {
 		return false;
 	}
