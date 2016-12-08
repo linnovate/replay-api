@@ -12,5 +12,5 @@ ARG HOST_IP
 
 # GOOGLE_SECRET,TOKEN_SECRET Provided by command
 
-ENV MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev PORT=1337 FRONTEND_PORT=443 BASE_URL=ubuntu04.westeurope.cloudapp.azure.com FRONTEND_URL=ubuntu04.westeurope.cloudapp.azure.com
+ENV MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev PORT=1337 FRONTEND_PORT=443 BASE_URL=https://ubuntu04.westeurope.cloudapp.azure.com FRONTEND_URL=https://ubuntu04.westeurope.cloudapp.azure.com
 CMD ["sails", "lift"]
