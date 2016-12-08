@@ -11,11 +11,3 @@ ARG HOST_IP
 
 ENV MONGO_HOST=$HOST_IP MONGO_PORT=27017 MONGO_DATABASE=replay_dev
 CMD ["sails", "lift"]
-
-=======
-RUN git checkout master
-RUN npm -g install sails
-RUN npm install
-ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-prod MONGO_PORT=27017 MONGO_DATABASE=replay_dev
-CMD ["sails", "lift"]
->>>>>>> feature/docker
