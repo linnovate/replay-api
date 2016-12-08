@@ -5,7 +5,7 @@ RUN git checkout develop
 RUN npm install -g yarn
 RUN yarn global add sails
 RUN yarn
-ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-prod MONGO_PORT=27017 MONGO_DATABASE=replay_dev
+ENV RABBITMQ_HOST=rabbitmq-server MONGO_HOST=mongodb-prod MONGO_PORT=27017 MONGO_DATABASE=replay_dev AUTHORIZATION_SERVICE_HOST=http://172.17.0.1
 RUN npm test || true
 
 EXPOSE 1338:1338
