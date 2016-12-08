@@ -7,12 +7,10 @@ Apart from running the microservices in this repo, the UI can be found [here](ht
 
 In order to be able to run replay-infra, which consists the app backend for capturing videos and processing them, refer to [replay-infra repo](https://github.com/linnovate/replay-infra).
 
-<<<<< HEAD
 ## Nginx
 In order to fully run the frontend and the microservices in this repo, one must have a working nginx which will route the requests from frontend to their appropriate microservice.  
 Please refer [here](https://github.com/linnovate/replay-infra/tree/develop/ops/nginx) to instructions regarding nginx. 
->
-=======
+
 ## Docker
 
 Requirements:
@@ -36,4 +34,3 @@ Then copy dist folder from above and nginx folder from https://github.com/linnov
 Move dist into nginx folder and follow these instructions:
 https://github.com/linnovate/replay-infra/blob/feature/docker/ops/README.md
 
->>>>>>> feature/docker
