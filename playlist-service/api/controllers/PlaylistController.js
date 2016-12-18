@@ -30,7 +30,7 @@ module.exports = {
 			return res.badRequest(new Error('Some parameters are missing.'));
 		}
 
-		PlaylistService.findPlaylistById(req.userId, req.params.id)
+		PlaylistService.findPlaylistById(req.userId, req.params.id, true)
 			.then(playlist => {
 				if (playlist) {
 					console.log('Returning playlist:', JSON.stringify(playlist));
