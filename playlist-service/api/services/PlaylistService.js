@@ -7,9 +7,13 @@ module.exports.findPlaylists = function (ownerId) {
 	}).populate('missions');
 }
 
-function findPlaylistById(ownerId, playlistId) {
+function findPlaylistById(ownerId, playlistId, populate) {
 	console.log('Finding playlist with id %s of ownerId %s', playlistId, ownerId);
-	return Playlist.findOne({ _id: playlistId, ownerId: ownerId });
+  var playlistPromise = Playlist.findOne({ _id: playlistId, ownerId: ownerId });
+  if(populate){
+   playlistPromise = playlistPromise.populate('missions');
+  }
+  return playlistPromise;
 }
 module.exports.findPlaylistById = findPlaylistById;
 
