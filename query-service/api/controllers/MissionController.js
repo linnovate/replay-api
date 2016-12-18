@@ -50,7 +50,7 @@ module.exports = {
 			.then(permissions => MissionService.updateMission(req.params.id, permissions, req.body))
 			.then(mission => {
 				if (mission) {
-					return res.ok();
+					return res.json(mission);
 				} else {
 					return res.badRequest('No such mission was found.');
 				}
