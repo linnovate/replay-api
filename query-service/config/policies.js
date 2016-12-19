@@ -26,8 +26,6 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  '*': ['corsDisabler'],
-
   MissionController: {
     '*': replayJwtMiddleware
   },
